@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:soal_app/src/util/constants.dart';
-import 'package:soal_app/src/util/router.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
+import 'package:soal_app/core/util/constants.dart';
+import 'package:soal_app/core/util/router.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,9 +12,13 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Flutter Demo',
-      theme:  ScreenUtilInit(
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider<ChangeBottomExplorer>(
+          create: (_) => ChangeBottomExplorer(),
+        ),
+      ],
+      child: ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: () => MaterialApp(
           debugShowCheckedModeBanner: false,
@@ -27,6 +33,22 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+
+
+
+class ChangeBottomExplorer extends ChangeNotifier {
+  ValueNotifier<int> page = ValueNotifier(0);
+  ValueNotifier<int> get _pagina => this.page;
+
+  void changePage(int index) {
+    print('index $index');
+    page.value = index;
+    notifyListeners();
+  }
+}
+
+
+
 
 class MyHomePage extends StatefulWidget {
   MyHomePage({Key? key, }) : super(key: key);

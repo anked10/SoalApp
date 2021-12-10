@@ -1,6 +1,8 @@
-import 'package:bufi_remake/core/config/colors.dart';
-import 'package:bufi_remake/core/util/utils.dart';
+
+
 import 'package:flutter/material.dart';
+import 'package:soal_app/core/config/colors.dart';
+import 'package:soal_app/core/util/utils.dart';
 
 class ConnectionError extends StatelessWidget {
   const ConnectionError({

@@ -1,8 +1,7 @@
 import 'dart:math';
 
-import 'package:bufi_remake/src/preferences/preferences.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+
 
 class Utils {
   double screenSafeAreaHeight(BuildContext context) {

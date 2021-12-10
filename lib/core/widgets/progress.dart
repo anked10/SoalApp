@@ -1,5 +1,7 @@
-import 'package:bufi_remake/core/util/utils.dart';
+
+
 import 'package:flutter/material.dart';
+import 'package:soal_app/core/util/utils.dart';
 
 class Progress extends StatelessWidget {
 

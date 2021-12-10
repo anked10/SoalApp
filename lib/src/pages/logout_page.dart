@@ -1,8 +1,10 @@
 
 
 import 'package:flutter/material.dart';
-import 'package:soal_app/src/preferences/preferences.dart';
-import 'package:soal_app/src/util/constants.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:soal_app/core/sharedpreferences/storage_manager.dart';
+import 'package:soal_app/core/util/constants.dart';
+
 
 class LogoutPage extends StatefulWidget {
   const LogoutPage({Key? key}) : super(key: key);
@@ -89,7 +91,7 @@ class _LogoutPageState extends State<LogoutPage> {
                       ),
                       InkWell(
                         onTap: () {
-                          Preferences.deleteAllData();
+                          StorageManager.deleteAllData();
                           Navigator.pushNamedAndRemoveUntil(context, LOGIN_ROUTE, (r) => false);
                         },
                         child: Text(
@@ -114,7 +116,7 @@ class _LogoutPageState extends State<LogoutPage> {
   }
 
   void firstName() async {
-    String? nomb = await Preferences.readData('personName');
+    String? nomb = await StorageManager.readData('personName');
     if (nomb!.length > 0) {
       var nombres = nomb.split(' ');
       print(nombres[0]);
