@@ -1,5 +1,3 @@
-
-
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -7,16 +5,15 @@ import 'package:soal_app/core/sharedpreferences/storage_manager.dart';
 import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/src/models/api_result_model.dart';
 
-class LoginApi {
-  Future<ApiResultModel> login(String user, String pass) async {
+class ProveedoresApi {
+  Future<ApiResultModel> obtenerProveedores() async {
     ApiResultModel result = ApiResultModel();
     try {
-      final url = '$API_BASE_URL/api/Login/login_app';
-
+      final url = '$API_BASE_URL/api/Proveedor/listar_proveedores_app';
+      String? token = await StorageManager.readData('token');
       final response = await http.post(Uri.parse(url), body: {
-        'user': user,
-        'pass': pass,
         'app': 'true',
+        'tn': token,
       });
 
       final decodedData = json.decode(response.body);

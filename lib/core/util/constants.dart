@@ -1,6 +1,6 @@
 const String CACHED_TOKEN = 'CACHED_TOKEN';
 
-const String API_BASE_URL = 'https://bufeotec.com/bufi'; // add the base url here
+const String API_BASE_URL = 'https://intranet.proonix.com.pe'; // add the base url here
 const String LOGIN_USER = 'tokens';
 const String CREATE_USER = 'create';
 

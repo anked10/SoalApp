@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -41,13 +39,10 @@ class _LoginPageState extends State<LoginPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     SizedBox(
-                      height: ScreenUtil().setHeight(150),
-                    ),
-                    Container(
-                      child: SvgPicture.asset('assets/svg/bufi.svg'),
+                      height: ScreenUtil().setHeight(50),
                     ),
                     Text(
-                      'Bienvenido a Bufi',
+                      'Bienvenido ',
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: ScreenUtil().setSp(24),
@@ -57,11 +52,22 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: ScreenUtil().setHeight(10),
                     ),
+                    
+                    Container(
+                      height: ScreenUtil().setHeight(200),
+                      width: double.infinity,
+                      child: Image(
+                        image: AssetImage('assets/images/logo.png'),
+                      ),
+                    ),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(40),
+                    ),
                     Text(
                       'Iniciar sesión',
                       style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: ScreenUtil().setSp(16),
+                        fontWeight: FontWeight.w600,
+                        fontSize: ScreenUtil().setSp(19),
                         fontStyle: FontStyle.normal,
                       ),
                     ),
@@ -212,31 +218,6 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: ScreenUtil().setHeight(150),
                     ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '¿No tiene una cuenta?',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: ScreenUtil().setSp(14),
-                            fontStyle: FontStyle.normal,
-                          ),
-                        ),
-                        SizedBox(
-                          width: ScreenUtil().setWidth(8),
-                        ),
-                        Text(
-                          'Regístrese',
-                          style: TextStyle(
-                            color: Color(0XFF2684FE),
-                            fontWeight: FontWeight.w500,
-                            fontSize: ScreenUtil().setSp(14),
-                            fontStyle: FontStyle.normal,
-                          ),
-                        ),
-                      ],
-                    )
                   ],
                 ),
               ),

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 
 //Dashboard
 const Color colorPrimary = Color(0xff152535);
+const Color tabSelected = Color(0xff454799);
+const Color tabNoSelected = Color(0xffacacac);
 const Color CONNECTION_ERROR = Color(0xffFF0000);
 /* const Color DASHBOARD_FIRSTCARD_SECONDCOLOR = Color(0xffef6537);
 const Color DASHBOARD_SECONDCARD_FIRSTCOLOR = Color(0xffec3d6d);
