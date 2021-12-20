@@ -7,7 +7,7 @@ class ClasesModel {
   String? idLogisticaClase;
   String? idLogisticaTipo;
   String? logisticaClaseNombre;
-
+ 
   static List<ClasesModel> fromJsonList(List<dynamic> json) => json.map((i) => ClasesModel.fromJson(i)).toList();
 
 
@@ -15,7 +15,7 @@ class ClasesModel {
   Map<String, dynamic> toJson() => {
     "idLogisticaClase": idLogisticaClase,
     "idLogisticaTipo": idLogisticaTipo,
-    "ruc": logisticaClaseNombre,
+    "logisticaClaseNombre": logisticaClaseNombre,
   };
   factory ClasesModel.fromJson(Map<String, dynamic> json) => ClasesModel(
         idLogisticaClase: json["idLogisticaClase"],

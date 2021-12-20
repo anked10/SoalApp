@@ -11,13 +11,13 @@ class ClasesDatabase {
       final Database db = await dbprovider.getDatabase();
 
       await db.insert(
-        'Clases',
+        'Clase',
         clasesModel.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
      
      } catch (e) {
-      print("$e Error en la tabla Clases");
+      print("$e Error en la tabla Clase");
     }
   }
 
@@ -25,12 +25,12 @@ class ClasesDatabase {
     try {
       final Database db = await dbprovider.getDatabase();
       List<ClasesModel> list = [];
-      List<Map> maps = await db.rawQuery("SELECT * FROM Clases");
+      List<Map> maps = await db.rawQuery("SELECT * FROM Clase");
 
       if (maps.length > 0) list = ClasesModel.fromJsonList(maps);
       return list;
     } catch (e) {
-      print(" $e Error en la  tabla Clases");
+      print(" $e Error en la  tabla Clase");
       return [];
     }
   }
@@ -41,7 +41,7 @@ class ClasesDatabase {
     try {
       final Database db = await dbprovider.getDatabase();
       List<ClasesModel> list = [];
-      List<Map> maps = await db.rawQuery("SELECT * FROM Clases where idLogisticaClase= '$id'");
+      List<Map> maps = await db.rawQuery("SELECT * FROM Clase where idLogisticaClase= '$id'");
 
       if (maps.length > 0) list = ClasesModel.fromJsonList(maps);
       return list;

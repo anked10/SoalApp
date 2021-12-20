@@ -23,7 +23,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
     'DIRECCIÓN',
     'TELEFONO',
     'CONTACTO',
-    'CLASE',
+    '     CLASE      ',
     'CLASE\nGENERAL',
     'INFORMACIÒN\nBANCARIA',
   ];
@@ -161,6 +161,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                       }
                                       index = index - 1;
 
+                                      int lineas = 4;
                                       var lineasCaptadas = maxLines(
                                         '${snapshot.data![index].contacto} \n${snapshot.data![index].email}',
                                         ScreenUtil().setWidth(150),
@@ -169,11 +170,14 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                           fontSize: ScreenUtil().setSp(14),
                                         ),
                                       );
+                                      if (lineasCaptadas > 4) {
+                                        lineas = lineasCaptadas;
+                                      }
                                       return Column(
                                         children: [
                                           focusGeneral(
                                               Container(
-                                                height: lineasCaptadas * ScreenUtil().setHeight(25),
+                                                height: lineas * ScreenUtil().setHeight(25),
                                                 child: Container(
                                                   child: Row(
                                                     children: [
@@ -212,7 +216,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                       return Container(
                                         width: (maxAncho(
                                           itemsCabeceraTabla[index],
-                                          ScreenUtil().setWidth(150),
+                                          ScreenUtil().setWidth(180),
                                           TextStyle(
                                             fontWeight: FontWeight.w600,
                                             fontSize: ScreenUtil().setSp(18),
@@ -227,7 +231,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                           itemBuilder: (context, index2) {
                                             var ayno = maxLines(
                                               'INFORMACIÒN\nBANCARIA',
-                                              ScreenUtil().setWidth(150),
+                                              ScreenUtil().setWidth(180),
                                               TextStyle(
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: ScreenUtil().setSp(14),
@@ -254,14 +258,19 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                               );
                                             }
                                             index2 = index2 - 1;
+                                            int lineas = 4;
                                             var lineasCaptadas = maxLines(
-                                              '${snapshot.data![index2].contacto} \n${snapshot.data![index2].email}',
-                                              ScreenUtil().setWidth(150),
+                                              '${snapshot.data![index].contacto} \n${snapshot.data![index].email}',
+                                              ScreenUtil().setWidth(180),
                                               TextStyle(
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: ScreenUtil().setSp(14),
                                               ),
                                             );
+
+                                            if (lineasCaptadas > 4) {
+                                              lineas = lineasCaptadas;
+                                            }
                                             return Column(
                                               children: [
                                                 focusGeneral(
@@ -269,7 +278,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                                       padding: EdgeInsets.symmetric(
                                                         horizontal: ScreenUtil().setWidth(5),
                                                       ),
-                                                      height: lineasCaptadas * ScreenUtil().setHeight(25),
+                                                      height: lineas * ScreenUtil().setHeight(25),
                                                       child: Container(
                                                         child: Center(
                                                           child: (itemsCabeceraTabla[index] == 'RUC    ')
@@ -297,7 +306,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                                                                   '${snapshot.data![index2].email}',
                                                                                   style: TextStyle(fontSize: ScreenUtil().setSp(15)),
                                                                                 )
-                                                                              : (itemsCabeceraTabla[index] == 'CLASE')
+                                                                              : (itemsCabeceraTabla[index] == '     CLASE      ')
                                                                                   ? Text(
                                                                                       '${snapshot.data![index2].clase1}\n${snapshot.data![index2].clase2}\n${snapshot.data![index2].clase3}\n${snapshot.data![index2].clase4}',
                                                                                       style: TextStyle(

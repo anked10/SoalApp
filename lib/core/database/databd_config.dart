@@ -9,7 +9,7 @@ class DatabaseHelper {
   Future<Database> get database async => _database ??= await getDatabase();
 
   Future<Database> getDatabase() async {
-    final String path = join(await getDatabasesPath(), 'soalv1.db');
+    final String path = join(await getDatabasesPath(), 'soal.db');
     return openDatabase(path, onCreate: (db, version) {
       db.execute(tableProveedorSql);
       db.execute(tableClaseSql);
