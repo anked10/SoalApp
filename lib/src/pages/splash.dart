@@ -1,9 +1,7 @@
-
-
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soal_app/core/sharedpreferences/storage_manager.dart';
 import 'package:soal_app/core/util/constants.dart';
-
 
 class Splash extends StatefulWidget {
   const Splash({Key? key}) : super(key: key);
@@ -18,9 +16,9 @@ class _SplashState extends State<Splash> {
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
       String? token = await StorageManager.readData('token');
       if (token == null || token.isEmpty) {
-        Navigator.pushNamed(context, LOGIN_ROUTE);
+        Navigator.pushNamedAndRemoveUntil(context, LOGIN_ROUTE, (route) => false);
       } else {
-        Navigator.pushNamed(context, HOME_ROUTE);
+        Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
       }
     });
     super.initState();
@@ -28,6 +26,15 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return Scaffold(
+        body: Center(
+      child: Container(
+        height: ScreenUtil().setHeight(200),
+        width: double.infinity,
+        child: Image(
+          image: AssetImage('assets/images/logo.png'),
+        ),
+      ),
+    ));
   }
 }

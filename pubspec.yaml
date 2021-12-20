@@ -50,6 +50,10 @@ dependencies:
   flutter_svg: ^0.21.0+1
   #image cached
   cached_network_image: ^3.2.0
+  #Menu Focus
+  focused_menu: ^1.0.5
+  #fonts 
+  google_fonts: ^2.0.0
 
   #toast
   fluttertoast: ^8.0.8

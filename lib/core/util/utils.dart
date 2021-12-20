@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -38,4 +39,29 @@ class Utils {
 
 void showToast2(String? texto, Color color) {
   Fluttertoast.showToast(msg: "$texto", toastLength: Toast.LENGTH_LONG, timeInSecForIosWeb: 3, backgroundColor: color, textColor: Colors.white);
+}
+
+
+
+maxLines(String text, double ancho, TextStyle style) {
+  final span = TextSpan(
+    text: text,
+    style: style,
+  );
+  final tp = TextPainter(text: span, textDirection: ui.TextDirection.ltr);
+  tp.layout(maxWidth: ancho);
+  //print('${tp.width.toInt()} $text');
+  return tp.computeLineMetrics().length;
+}
+
+
+maxAncho(String text, double ancho, TextStyle style) {
+  final span = TextSpan(
+    text: text,
+    style: style,
+  );
+  final tp = TextPainter(text: span, textDirection: ui.TextDirection.ltr);
+  tp.layout(maxWidth: ancho);
+  print('${tp.width.toInt()} $text');
+  return tp.width * 1.7;
 }
