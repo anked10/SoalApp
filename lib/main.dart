@@ -5,6 +5,7 @@ import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/core/util/router.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/pages/Proveedores/busqueda_proveedores.dart';
+import 'package:soal_app/src/pages/Proveedores/editar_proveedor.dart';
 import 'package:soal_app/src/pages/home_page.dart';
 import 'injection_container.dart' as di;
 
@@ -22,8 +23,12 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider<ChangeBottomExplorer>(
             create: (_) => ChangeBottomExplorer(),
-          ), ChangeNotifierProvider<EstadoListener>(
+          ),
+          ChangeNotifierProvider<EstadoListener>(
             create: (_) => EstadoListener(),
+          ),
+          ChangeNotifierProvider<EditProveedorBloc>(
+            create: (_) => EditProveedorBloc(),
           ),
         ],
         child: ScreenUtilInit(

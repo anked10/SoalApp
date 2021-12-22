@@ -41,4 +41,68 @@ class DatabaseHelper {
       'idLogisticaClase TEXT PRIMARY KEY, '
       'idLogisticaTipo TEXT,'
       'logisticaClaseNombre TEXT)';
+
+       static const String tableBancosSql = 'CREATE TABLE Bancos('
+      'idBanco TEXT PRIMARY KEY, '
+      'bancoNombre TEXT)';
+
+       static const String tableMonedaSql = 'CREATE TABLE Monedas('
+      'idMoneda TEXT PRIMARY KEY, '
+      'monedaNombre TEXT)';
 }
+
+
+/*
+
+// To parse this JSON data, do
+//
+//     final bancos = bancosFromJson(jsonString);
+
+import 'dart:convert';
+
+Bancos bancosFromJson(String str) => Bancos.fromJson(json.decode(str));
+
+String bancosToJson(Bancos data) => json.encode(data.toJson());
+
+class Bancos {
+    Bancos({
+        this.result,
+    });
+
+    Result result;
+
+    factory Bancos.fromJson(Map<String, dynamic> json) => Bancos(
+        result: Result.fromJson(json["result"]),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "result": result.toJson(),
+    };
+}
+
+class Result {
+    Result({
+        this.code,
+        this.bancos,
+        this.monedas,
+    });
+
+    int code;
+    List<String> bancos;
+    List<String> monedas;
+
+    factory Result.fromJson(Map<String, dynamic> json) => Result(
+        code: json["code"],
+        bancos: List<String>.from(json["bancos"].map((x) => x)),
+        monedas: List<String>.from(json["monedas"].map((x) => x)),
+    );
+
+    Map<String, dynamic> toJson() => {
+        "code": code,
+        "bancos": List<dynamic>.from(bancos.map((x) => x)),
+        "monedas": List<dynamic>.from(monedas.map((x) => x)),
+    };
+}
+
+
+ */

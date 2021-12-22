@@ -184,7 +184,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                                       Expanded(
                                                         child: Text(
                                                           '${snapshot.data![index].nombre}',
-                                                          maxLines: 2,
+                                                          textAlign: TextAlign.center,
                                                           style: TextStyle(
                                                             fontWeight: FontWeight.w400,
                                                             fontSize: ScreenUtil().setSp(14),
@@ -334,7 +334,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                                       ),
                                                     ),
                                                     snapshot.data!,
-                                                    index),
+                                                    index2),
                                                 Divider()
                                               ],
                                             );
@@ -368,7 +368,11 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
     );
   }
 
-  FocusedMenuHolder focusGeneral(Widget childs, List<ProveedorModel> proveedores, int index) {
+  FocusedMenuHolder focusGeneral(
+    Widget childs,
+    List<ProveedorModel> proveedores,
+    int index,
+  ) {
     return FocusedMenuHolder(
         blurBackgroundColor: Colors.black.withOpacity(0.2),
         blurSize: 0,
