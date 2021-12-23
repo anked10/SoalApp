@@ -34,28 +34,28 @@ class _DetailProveedorState extends State<DetailProveedor> {
                   Spacer(),
                   IconButton(
                     onPressed: () {
-                       Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation, secondaryAnimation) {
-                                    return EditProvider(proveedor: widget.proveedor);
-                                  },
-                                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                    var begin = Offset(0.0, 1.0);
-                                    var end = Offset.zero;
-                                    var curve = Curves.ease;
+                      Navigator.push(
+                        context,
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) {
+                            return EditProvider(proveedor: widget.proveedor);
+                          },
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            var begin = Offset(0.0, 1.0);
+                            var end = Offset.zero;
+                            var curve = Curves.ease;
 
-                                    var tween = Tween(begin: begin, end: end).chain(
-                                      CurveTween(curve: curve),
-                                    );
+                            var tween = Tween(begin: begin, end: end).chain(
+                              CurveTween(curve: curve),
+                            );
 
-                                    return SlideTransition(
-                                      position: animation.drive(tween),
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
+                            return SlideTransition(
+                              position: animation.drive(tween),
+                              child: child,
+                            );
+                          },
+                        ),
+                      );
                     },
                     icon: Icon(Icons.edit),
                     color: Colors.black,
@@ -154,6 +154,20 @@ class _DetailProveedorState extends State<DetailProveedor> {
                       height: ScreenUtil().setHeight(6),
                     ),
                     textDato('${widget.proveedor.telefono}'),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(6),
+                    ),
+                    Text(
+                      ' Estado',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(19),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(6),
+                    ),
+                    ('${widget.proveedor.estado}' == '1') ? textDato('HABILITADO') : textDato('DESHABILITADO'),
                     SizedBox(
                       height: ScreenUtil().setHeight(6),
                     ),

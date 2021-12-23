@@ -42,7 +42,7 @@ class ProveedoresApi {
           proveedor.banco1 = decodedData['result']['data'][i]['proveedor_banco1'];
           proveedor.banco2 = decodedData['result']['data'][i]['proveedor_banco2'];
           proveedor.banco3 = decodedData['result']['data'][i]['proveedor_banco3'];
-          proveedor.estado = decodedData['result']['data'][i]['estado'];
+          proveedor.estado = decodedData['result']['data'][i]['proveedor_estado'];
 
           await proveedorDatabase.insertarProveedor(proveedor);
         }

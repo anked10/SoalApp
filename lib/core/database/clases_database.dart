@@ -35,6 +35,20 @@ class ClasesDatabase {
     }
   }
 
+  Future<List<ClasesModel>> getClaseaForType(String type) async {
+    try {
+      final Database db = await dbprovider.getDatabase();
+      List<ClasesModel> list = [];
+      List<Map> maps = await db.rawQuery("SELECT * FROM Clase where idLogisticaTipo ='$type'");
+
+      if (maps.length > 0) list = ClasesModel.fromJsonList(maps);
+      return list;
+    } catch (e) {
+      print(" $e Error en la  tabla Clase");
+      return [];
+    }
+  }
+
 
 
   Future<List<ClasesModel>> getClasesForId(String id) async {
