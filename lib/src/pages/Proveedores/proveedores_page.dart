@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:soal_app/core/util/utils.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/proveedores_model.dart';
+import 'package:soal_app/src/pages/Proveedores/agregar_proveedor.dart';
 import 'package:soal_app/src/pages/Proveedores/busqueda_proveedores.dart';
 import 'package:soal_app/src/pages/Proveedores/detail_proveedor.dart';
 
@@ -60,7 +61,28 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                           ),
                           Spacer(),
                           IconButton(
-                            onPressed: () {},
+                            onPressed: () { Navigator.push(
+                                context,
+                                PageRouteBuilder(
+                                  pageBuilder: (context, animation, secondaryAnimation) {
+                                    return AddProvider();
+                                  },
+                                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                    var begin = Offset(0.0, 1.0);
+                                    var end = Offset.zero;
+                                    var curve = Curves.ease;
+
+                                    var tween = Tween(begin: begin, end: end).chain(
+                                      CurveTween(curve: curve),
+                                    );
+
+                                    return SlideTransition(
+                                      position: animation.drive(tween),
+                                      child: child,
+                                    );
+                                  },
+                                ),
+                              );},
                             iconSize: ScreenUtil().setSp(35),
                             icon: Icon(
                               Icons.add,

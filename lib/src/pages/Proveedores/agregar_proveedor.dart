@@ -11,15 +11,16 @@ import 'package:soal_app/src/models/clases_model.dart';
 import 'package:soal_app/src/models/proveedores_model.dart';
 import 'package:soal_app/src/pages/Proveedores/bloc_editar_proveedor.dart';
 
-class EditProvider extends StatefulWidget {
-  final ProveedorModel proveedor;
-  const EditProvider({Key? key, required this.proveedor}) : super(key: key);
+class AddProvider extends StatefulWidget {
+  const AddProvider({
+    Key? key,
+  }) : super(key: key);
 
   @override
-  _EditProviderState createState() => _EditProviderState();
+  _AddProviderState createState() => _AddProviderState();
 }
 
-class _EditProviderState extends State<EditProvider> {
+class _AddProviderState extends State<AddProvider> {
   final TextEditingController _rucController = new TextEditingController();
   final TextEditingController _nombreController = new TextEditingController();
   final TextEditingController _telefonoController = new TextEditingController();
@@ -75,67 +76,6 @@ class _EditProviderState extends State<EditProvider> {
     super.dispose();
   }
 
-  initState() {
-    _rucController.text = widget.proveedor.ruc.toString();
-    _nombreController.text = widget.proveedor.nombre.toString();
-    _telefonoController.text = widget.proveedor.telefono.toString();
-    _direccionController.text = widget.proveedor.direccion.toString();
-    _contactoController.text = widget.proveedor.contacto.toString();
-    dropBien1 = widget.proveedor.clase1.toString();
-    dropBien2 = widget.proveedor.clase2.toString();
-    dropBien3 = widget.proveedor.clase3.toString();
-    dropServicio1 = widget.proveedor.clase4.toString();
-    dropServicio2 = widget.proveedor.clase5.toString();
-    dropServicio3 = widget.proveedor.clase6.toString();
-    estadoPro = ('${widget.proveedor.estado.toString()}' == '1') ? 'HABILITADO' : 'DESHABILITADO';
-
-    var banco1Datos = widget.proveedor.banco1.toString().split('/../');
-    entidad1 = (banco1Datos.length > 0)
-        ? (banco1Datos[0].trim() == '')
-            ? 'Seleccione'
-            : '${banco1Datos[0].trim()}'
-        : '';
-
-    moneda1 = (banco1Datos.length > 1)
-        ? (banco1Datos[1].trim() == '')
-            ? 'Seleccione'
-            : '${banco1Datos[1].trim()}'
-        : '';
-    _nroCuenta1.text = (banco1Datos.length > 2) ? banco1Datos[2].trim() : '';
-    _cci1.text = (banco1Datos.length > 3) ? banco1Datos[3].trim() : '';
-
-    var banco2Datos = widget.proveedor.banco2.toString().split('/../');
-    entidad2 = (banco2Datos.length > 0)
-        ? (banco2Datos[0].trim() == '')
-            ? 'Seleccione'
-            : '${banco2Datos[0].trim()}'
-        : '';
-    moneda2 = (banco2Datos.length > 1)
-        ? (banco2Datos[1].trim() == '')
-            ? 'Seleccione'
-            : '${banco2Datos[1].trim()}'
-        : '';
-    _nroCuenta2.text = (banco2Datos.length > 2) ? banco2Datos[2].trim() : '';
-    _cci2.text = (banco2Datos.length > 3) ? banco2Datos[3].trim() : '';
-
-    var banco3Datos = widget.proveedor.banco3.toString().split('/../');
-    entidad3 = (banco3Datos.length > 0)
-        ? (banco2Datos[0].trim() == '')
-            ? 'Seleccione'
-            : '${banco3Datos[0].trim()}'
-        : '';
-    moneda3 = (banco3Datos.length > 1)
-        ? (banco2Datos[1].trim() == '')
-            ? 'Seleccione'
-            : '${banco3Datos[1].trim()}'
-        : '';
-    _nroCuenta3.text = (banco3Datos.length > 2) ? '${banco3Datos[2].trim()}' : '';
-    _cci3.text = (banco3Datos.length > 3) ? '${banco3Datos[3].trim()}' : '';
-
-    _emailController.text = widget.proveedor.email.toString();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<EditProveedorBloc>(context, listen: false);
@@ -153,9 +93,14 @@ class _EditProviderState extends State<EditProvider> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
+        centerTitle: false,
         title: Text(
-          "Editar Proveedor",
-          style: TextStyle(color: Colors.black),
+          "Nuevo Proveedor",
+          style: TextStyle(
+            color: Colors.black,
+            fontWeight: FontWeight.w500,
+            fontSize: ScreenUtil().setSp(28),
+          ),
         ),
         iconTheme: IconThemeData(color: Colors.black),
       ),
@@ -410,7 +355,6 @@ class _EditProviderState extends State<EditProvider> {
 
                                 ProveedorModel proveedor = ProveedorModel();
 
-                                proveedor.idProveedor = widget.proveedor.idProveedor;
                                 proveedor.nombre = _nombreController.text;
                                 proveedor.ruc = _rucController.text;
                                 proveedor.estado = (estadoPro == 'HABILITADO') ? '1' : '0';

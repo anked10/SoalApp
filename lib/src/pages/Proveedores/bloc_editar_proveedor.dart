@@ -60,6 +60,10 @@ class EditProveedorBloc with ChangeNotifier {
   ValueNotifier<estadoEditProveedor> _page = ValueNotifier(estadoEditProveedor.datos);
   ValueNotifier<estadoEditProveedor> get page => this._page;
 
+
+   ValueNotifier<bool> _cargando = ValueNotifier(false);
+  ValueNotifier<bool> get cargando => this._cargando;
+
   BuildContext? context;
 
   EditProveedorBloc({this.context}) {

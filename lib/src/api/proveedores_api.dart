@@ -56,4 +56,45 @@ class ProveedoresApi {
       return result;
     }
   }
+
+  Future<ApiResultModel> editProvider(ProveedorModel proveedor) async {
+    ApiResultModel result = ApiResultModel();
+
+    try {
+      final url = '$API_BASE_URL/api/Proveedor/guardar_proveedor';
+      String? token = await StorageManager.readData('token');
+      final response = await http.post(Uri.parse(url), body: {
+        'app': 'true',
+        'tn': token,
+        'id_proveedor': '${proveedor.idProveedor}',
+        'proveedor_nombre': '${proveedor.nombre}',
+        'proveedor_ruc': '${proveedor.ruc}',
+        'proveedor_estado': '${proveedor.estado}',
+        'proveedor_telefono': '${proveedor.telefono}',
+        'proveedor_contacto': '${proveedor.contacto}',
+        'proveedor_email': '${proveedor.email}',
+        'proveedor_direccion': '${proveedor.direccion}',
+        'clase1': '${proveedor.clase1}',
+        'clase2': '${proveedor.clase2}',
+        'clase3': '${proveedor.clase3}',
+        'clase4': '${proveedor.clase4}',
+        'clase5': '${proveedor.clase5}',
+        'clase6': '${proveedor.clase6}',
+        'banco1': '${proveedor.banco1}',
+        'banco2': '${proveedor.banco2}',
+        'banco3': '${proveedor.banco3}',
+      });
+
+      final decodedData = json.decode(response.body);
+      final int code = decodedData['result']['code'];
+
+      result.code = code;
+      result.message = decodedData['result']['message'];
+      return result;
+    } catch (e) {
+      result.code = 2;
+      result.message = 'Ocurrió un error';
+      return result;
+    }
+  }
 }

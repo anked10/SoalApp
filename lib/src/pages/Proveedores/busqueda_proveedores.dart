@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/proveedores_model.dart';
+import 'package:soal_app/src/pages/Proveedores/detail_proveedor.dart';
 
 enum EstadoBusqueda { inicio, datos, vacio }
 
@@ -69,7 +70,7 @@ class _BusquedaProveedorState extends State<BusquedaProveedor> {
                           onPressed: () {
                             provider.changeInicio();
 
-                            _controller.text='';
+                            _controller.text = '';
                           },
                           icon: Icon(Icons.close)),
                       SizedBox(
@@ -97,7 +98,7 @@ class _BusquedaProveedorState extends State<BusquedaProveedor> {
                               );
                             } else {
                               return Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Container(
                                     height: ScreenUtil().setSp(200),
@@ -119,17 +120,18 @@ class _BusquedaProveedorState extends State<BusquedaProveedor> {
                       )
                     : (data == EstadoBusqueda.inicio)
                         ? Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: ScreenUtil().setSp(200),
-                              width: ScreenUtil().setSp(200),
-                              child: SvgPicture.asset(
-                                'assets/svg/truck.svg',
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: ScreenUtil().setSp(200),
+                                width: ScreenUtil().setSp(200),
+                                child: SvgPicture.asset(
+                                  'assets/svg/truck.svg',
+                                ),
                               ),
-                            ),Text('Buscar proveedor'),
-                          ],
-                        )
+                              Text('Buscar proveedor'),
+                            ],
+                          )
                         : (data == EstadoBusqueda.vacio)
                             ? Container()
                             : Container(),
@@ -166,6 +168,30 @@ class _BusquedaProveedorState extends State<BusquedaProveedor> {
         ),
       ),
       onTap: () {
+        Navigator.push(
+          context,
+          PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) {
+              return DetailProveedor(
+                proveedor: productosData,
+              );
+            },
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              var begin = Offset(0.0, 1.0);
+              var end = Offset.zero;
+              var curve = Curves.ease;
+
+              var tween = Tween(begin: begin, end: end).chain(
+                CurveTween(curve: curve),
+              );
+
+              return SlideTransition(
+                position: animation.drive(tween),
+                child: child,
+              );
+            },
+          ),
+        );
         /*  Navigator.push(
             context,
             PageRouteBuilder(
