@@ -61,7 +61,6 @@ maxAncho(String text, double ancho, TextStyle style) {
     style: style,
   );
   final tp = TextPainter(text: span, textDirection: ui.TextDirection.ltr);
-  tp.layout(maxWidth: ancho);
-  print('${tp.width.toInt()} $text');
+  tp.layout(maxWidth: ancho); 
   return tp.width * 1.7;
 }

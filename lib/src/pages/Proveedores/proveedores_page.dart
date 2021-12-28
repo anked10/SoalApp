@@ -139,7 +139,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                               vertical: ScreenUtil().setHeight(10),
                               horizontal: ScreenUtil().setWidth(5),
                             ),
-                            height: ScreenUtil().setHeight(45) * (snapshot.data!.length + 1) + ScreenUtil().setHeight(45),
+                            height: ScreenUtil().setHeight(120) * (snapshot.data!.length + 1),
                             child: Row(
                               children: [
                                 Container(
@@ -147,7 +147,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                   child: ListView.builder(
                                     physics: NeverScrollableScrollPhysics(),
                                     itemCount: snapshot.data!.length + 1,
-                                    itemBuilder: (context, index) {
+                                    itemBuilder: (context, indexPrimero) {
                                       var ayno = maxLines(
                                         'INFORMACIÒN\nBANCARIA',
                                         ScreenUtil().setWidth(150),
@@ -156,7 +156,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                           fontSize: ScreenUtil().setSp(14),
                                         ),
                                       );
-                                      if (index == 0) {
+                                      if (indexPrimero == 0) {
                                         return Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
@@ -181,11 +181,11 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                           ],
                                         );
                                       }
-                                      index = index - 1;
+                                      indexPrimero = indexPrimero - 1;
 
                                       int lineas = 4;
                                       var lineasCaptadas = maxLines(
-                                        '${snapshot.data![index].contacto} \n${snapshot.data![index].email}',
+                                        '${snapshot.data![indexPrimero].contacto} \n${snapshot.data![indexPrimero].email}',
                                         ScreenUtil().setWidth(150),
                                         TextStyle(
                                           fontWeight: FontWeight.w400,
@@ -205,7 +205,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                                     children: [
                                                       Expanded(
                                                         child: Text(
-                                                          '${snapshot.data![index].nombre}',
+                                                          '${snapshot.data![indexPrimero].nombre}',
                                                           textAlign: TextAlign.center,
                                                           style: TextStyle(
                                                             fontWeight: FontWeight.w400,
@@ -218,7 +218,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                                 ),
                                               ),
                                               snapshot.data!,
-                                              index),
+                                              indexPrimero),
                                           Divider()
                                         ],
                                       );
@@ -366,7 +366,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                     },
                                   ),
                                 )
-                              ],
+                               ],
                             ),
                           );
                         },

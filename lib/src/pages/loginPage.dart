@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/core/util/utils.dart';
+import 'package:soal_app/src/api/clases_api.dart';
 import 'package:soal_app/src/api/login_api.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
 
@@ -23,6 +24,17 @@ class _LoginPageState extends State<LoginPage> {
     _usuarioController.dispose();
     _passwdController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initState() {
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      final clasesApi = ClasesApi();
+
+      await clasesApi.getClases();
+
+      super.initState();
+    });
   }
 
   @override
@@ -51,7 +63,6 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: ScreenUtil().setHeight(10),
                     ),
-                    
                     Container(
                       height: ScreenUtil().setHeight(200),
                       width: double.infinity,
@@ -174,7 +185,7 @@ class _LoginPageState extends State<LoginPage> {
                               final res = await _login.login(_usuarioController.text, _passwdController.text);
 
                               if (res.code == 1) {
-                                Navigator.pushNamed(context, HOME_ROUTE);
+                                Navigator.of(context).pushNamedAndRemoveUntil(HOME_ROUTE, (Route<dynamic> route) => false);
                               } else {
                                 showToast2(res.message, Colors.black);
                               }
@@ -222,12 +233,13 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
             AnimatedBuilder(
-                animation: _controller,
-                builder: (context, snapshot) {
-                  return ShowLoadding(
-                    active: _controller.loadding,
-                  );
-                }),
+              animation: _controller,
+              builder: (context, snapshot) {
+                return ShowLoadding(
+                  active: _controller.loadding,
+                );
+              },
+            ),
           ],
         ),
       ),

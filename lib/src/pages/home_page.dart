@@ -21,8 +21,8 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     pageList.add(ProveedoresPage());
-    pageList.add(SolComprasPage());
     pageList.add(AlmacenPage());
+    pageList.add(SolComprasPage());
     pageList.add(CuentaPage());
     //pageList.add(UserPage());
 
@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 class ChangeBottomExplorer extends ChangeNotifier {
-  ValueNotifier<int> page = ValueNotifier(0);
+  ValueNotifier<int> page = ValueNotifier(2);
   ValueNotifier<int> get _pagina => this.page;
 
   void changePage(int index) {

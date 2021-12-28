@@ -10,6 +10,7 @@ import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/clases_model.dart';
 import 'package:soal_app/src/models/proveedores_model.dart';
 import 'package:soal_app/src/pages/Proveedores/bloc_editar_proveedor.dart';
+import 'package:soal_app/src/pages/Proveedores/edicion_completa.dart';
 
 class EditProvider extends StatefulWidget {
   final ProveedorModel proveedor;
@@ -435,6 +436,29 @@ class _EditProviderState extends State<EditProvider> {
                                   showToast2('${res.message}', Colors.green);
                                   final proveedoresBloc = ProviderBloc.provee(context);
                                   proveedoresBloc.obtenerProveedores();
+
+                                  Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      pageBuilder: (context, animation, secondaryAnimation) {
+                                        return EdicionCompleta();
+                                      },
+                                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                        var begin = Offset(0.0, 1.0);
+                                        var end = Offset.zero;
+                                        var curve = Curves.ease;
+
+                                        var tween = Tween(begin: begin, end: end).chain(
+                                          CurveTween(curve: curve),
+                                        );
+
+                                        return SlideTransition(
+                                          position: animation.drive(tween),
+                                          child: child,
+                                        );
+                                      },
+                                    ),
+                                  );
                                 } else {
                                   showToast2('${res.message}', Colors.red);
                                 }

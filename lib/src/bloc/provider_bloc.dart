@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:soal_app/src/bloc/busqueda_proveedor_bloc.dart';
 import 'package:soal_app/src/bloc/clases_bloc.dart';
 import 'package:soal_app/src/bloc/proveedoresBloc.dart';
+import 'package:soal_app/src/bloc/si_bloc.dart';
 
 //singleton para obtner una unica instancia del Bloc
 class ProviderBloc extends InheritedWidget {
@@ -11,6 +12,7 @@ class ProviderBloc extends InheritedWidget {
   final proveedoresBloc = ProveedoresBloc();
   final busquedaProveedorBloc = BusquedaProveedorBloc();
   final clasesBloc = ClasesBloc();
+  final siBloc = SiBloc();
 
  
   ProviderBloc({required Widget child}) : super(child: child);
@@ -28,5 +30,9 @@ class ProviderBloc extends InheritedWidget {
 
   static ClasesBloc cla(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.clasesBloc;
+  }
+
+  static SiBloc si(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.siBloc;
   }
 }

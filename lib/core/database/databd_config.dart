@@ -13,7 +13,7 @@ class DatabaseHelper {
     return openDatabase(path, onCreate: (db, version) {
       db.execute(tableProveedorSql);
       db.execute(tableClaseSql);
-      //db.execute(VehiclesLocalDataSourceImpl.tableSql); */
+      db.execute(tableSoliConmpraSql);
     }, version: 1, onDowngrade: onDatabaseDowngradeDelete);
   }
 
@@ -42,12 +42,31 @@ class DatabaseHelper {
       'idLogisticaTipo TEXT,'
       'logisticaClaseNombre TEXT)';
 
-       static const String tableBancosSql = 'CREATE TABLE Bancos('
+  static const String tableBancosSql = 'CREATE TABLE Bancos('
       'idBanco TEXT PRIMARY KEY, '
       'bancoNombre TEXT)';
 
-       static const String tableMonedaSql = 'CREATE TABLE Monedas('
+  static const String tableMonedaSql = 'CREATE TABLE Monedas('
       'idMoneda TEXT PRIMARY KEY, '
       'monedaNombre TEXT)';
-}
 
+  static const String tableSoliConmpraSql = 'CREATE TABLE SolicitudCompra('
+      'idSi TEXT PRIMARY KEY, '
+      'idSolicitante TEXT, '
+      'idAprobacion TEXT, '
+      'idEmpresa TEXT, '
+      'idDepartamento TEXT, '
+      'idSede TEXT, '
+      'idProyecto TEXT, '
+      'siObservaciones TEXT, '
+      'siDatetime TEXT, ' 
+      'siDatetimeAprobacion TEXT, '
+      'siNumero TEXT, '
+      'siEstado TEXT, '
+      'siActivo TEXT, '
+      'proyectoNombre TEXT, '
+      'personName TEXT, '
+      'personSurname TEXT, '
+      'personSurname2 TEXT, '
+      'sedeNombre TEXT)';
+}

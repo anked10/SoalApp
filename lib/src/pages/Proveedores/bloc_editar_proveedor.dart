@@ -4,6 +4,7 @@ String entidad1 = "Seleccione";
 
 List<DropdownMenuItem<String>> get dropdownItems {
   List<DropdownMenuItem<String>> menuItems = [
+    DropdownMenuItem(child: Text("Seleccione"), value: "Seleccione"),
     DropdownMenuItem(child: Text("BANBIF"), value: "BANBIF"),
     DropdownMenuItem(child: Text("BANCO DE COMERCIO"), value: "BANCO DE COMERCIO"),
     DropdownMenuItem(child: Text("BANCO DE LA NACION"), value: "BANCO DE LA NACION"),
@@ -23,7 +24,6 @@ List<DropdownMenuItem<String>> get dropdownItems {
     DropdownMenuItem(child: Text("MIBANCO"), value: "MIBANCO"),
     DropdownMenuItem(child: Text("SCOTIABANK"), value: "SCOTIABANK"),
     DropdownMenuItem(child: Text("EFECTIVO"), value: "EFECTIVO"),
-    DropdownMenuItem(child: Text("Seleccione"), value: "Seleccione"),
   ];
   return menuItems;
 }
@@ -33,9 +33,9 @@ String entidad3 = "Seleccione";
 String moneda1 = "Seleccione";
 List<DropdownMenuItem<String>> get dropdownMoneda1 {
   List<DropdownMenuItem<String>> menuItems = [
+    DropdownMenuItem(child: Text("Seleccione"), value: "Seleccione"),
     DropdownMenuItem(child: Text("SOLES"), value: "SOLES"),
     DropdownMenuItem(child: Text("DOLARES"), value: "DOLARES"),
-    DropdownMenuItem(child: Text("Seleccione"), value: "Seleccione"),
   ];
   return menuItems;
 }

@@ -35,32 +35,32 @@ class _AddProviderState extends State<AddProvider> {
   final TextEditingController _cci3 = new TextEditingController();
 
   int claseInt1 = 0;
-  String dropBien1 = '';
+  String dropBien1 = 'Seleccionar';
   List<String> bien1List = [];
 
   int claseInt2 = 0;
-  String dropBien2 = '';
+  String dropBien2 = 'Seleccionar';
   List<String> bien2List = [];
 
   int claseInt3 = 0;
-  String dropBien3 = '';
+  String dropBien3 = 'Seleccionar';
   List<String> bien3List = [];
 
   int claseSerInt1 = 0;
-  String dropServicio1 = '';
+  String dropServicio1 = 'Seleccionar';
   List<String> servicio1List = [];
 
   int claseSerInt2 = 0;
-  String dropServicio2 = '';
+  String dropServicio2 = 'Seleccionar';
   List<String> servicio2List = [];
 
   int claseSerInt3 = 0;
-  String dropServicio3 = '';
+  String dropServicio3 = 'Seleccionar';
   List<String> servicio3List = [];
 
   @override
   void dispose() {
-    _rucController.dispose();
+    _rucController.dispose(); 
     _nombreController.dispose();
     _telefonoController.dispose();
     _direccionController.dispose();
@@ -123,6 +123,9 @@ class _AddProviderState extends State<AddProvider> {
                             provider.changeToDatos();
                           },
                           child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: ScreenUtil().setWidth(10),
+                            ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -146,6 +149,25 @@ class _AddProviderState extends State<AddProvider> {
                                     fontSize: ScreenUtil().setSp(16),
                                   ),
                                 )
+                              ],
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            height: ScreenUtil().setHeight(80),
+                            child: Column(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.yellow.shade800,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  margin: EdgeInsets.only(
+                                    top: ScreenUtil().setHeight(30),
+                                  ),
+                                  height: ScreenUtil().setHeight(10),
+                                ),
                               ],
                             ),
                           ),
@@ -182,11 +204,33 @@ class _AddProviderState extends State<AddProvider> {
                             ),
                           ),
                         ),
+                        Expanded(
+                          child: Container(
+                            height: ScreenUtil().setHeight(80),
+                            child: Column(
+                              children: [
+                                Container(
+                                  decoration: BoxDecoration(
+                                    color: Colors.yellow.shade800,
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  margin: EdgeInsets.only(
+                                    top: ScreenUtil().setHeight(30),
+                                  ),
+                                  height: ScreenUtil().setHeight(10),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
                         InkWell(
                           onTap: () {
                             provider.changeToTipos();
                           },
                           child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: ScreenUtil().setWidth(10),
+                            ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -373,7 +417,7 @@ class _AddProviderState extends State<AddProvider> {
                                 proveedor.clase5 = '$clase5Dato';
                                 proveedor.clase6 = '$clase6Dato';
 
-                                final res = await proveedorApi.editProvider(proveedor);
+                                final res = await proveedorApi.addProvider(proveedor);
 
                                 if (res.code == 1) {
                                   showToast2('${res.message}', Colors.green);
@@ -795,7 +839,7 @@ class _AddProviderState extends State<AddProvider> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: 'RUC',
+                  hintText: 'Razón Social',
                   hintStyle: TextStyle(
                     fontSize: ScreenUtil().setSp(14),
                     color: Colors.grey[600],
@@ -929,7 +973,7 @@ class _AddProviderState extends State<AddProvider> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: 'RUC',
+                  hintText: 'Domicilio',
                   hintStyle: TextStyle(
                     fontSize: ScreenUtil().setSp(14),
                     color: Colors.grey[600],
@@ -1029,7 +1073,7 @@ class _AddProviderState extends State<AddProvider> {
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
-                  hintText: 'Persona de contacto',
+                  hintText: 'Email de contacto',
                   hintStyle: TextStyle(
                     fontSize: ScreenUtil().setSp(14),
                     color: Colors.grey[600],

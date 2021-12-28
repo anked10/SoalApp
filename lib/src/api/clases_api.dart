@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:soal_app/core/database/clases_database.dart';
-import 'package:soal_app/core/sharedpreferences/storage_manager.dart';
 import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/src/models/api_result_model.dart';
 import 'package:soal_app/src/models/clases_model.dart';
@@ -13,11 +12,9 @@ class ClasesApi {
   Future<ApiResultModel> getClases() async {
     ApiResultModel result = ApiResultModel();
     try {
-      final url = '$API_BASE_URL/api/Proveedor/listar_clases';
-      String? token = await StorageManager.readData('token');
+      final url = '$API_BASE_URL/api/Login/listar_clases';
       final response = await http.post(Uri.parse(url), body: {
         'app': 'true',
-        'tn': token,
       });
 
       final decodedData = json.decode(response.body);
