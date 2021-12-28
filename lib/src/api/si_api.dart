@@ -1,14 +1,17 @@
 import 'dart:convert';
 
+import 'package:soal_app/core/database/detalle_si_database.dart';
 import 'package:soal_app/core/database/si_database.dart';
 import 'package:soal_app/core/sharedpreferences/storage_manager.dart';
 import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/src/models/api_result_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:soal_app/src/models/detalle_si_model.dart';
 import 'package:soal_app/src/models/si_model.dart';
 
 class SiApi {
   final siDatabase = SiDatabase();
+  final detalleSiDatabase = DetalleSiDatabase();
   Future<ApiResultModel> getSI() async {
     ApiResultModel result = ApiResultModel();
     try {
@@ -42,6 +45,35 @@ class SiApi {
           si.siObservaciones = decodedData['result']['data'][i]['si_observaciones'];
           si.proyectoNombre = decodedData['result']['data'][i]['proyecto_nombre'];
           si.siDatetime = decodedData['result']['data'][i]['si_datetime'];
+
+          var detalle = decodedData['result']['data'][i]['detalle'];
+
+          if (detalle.length > 0) {
+            for (var x = 0; x < detalle.length; x++) {
+              DetalleSiModel detalleSiModel = DetalleSiModel();
+              detalleSiModel.idDetalleSi = detalle[x]['id_detallesi'];
+              detalleSiModel.idSi= detalle[x]['id_si'];
+              detalleSiModel.idRecurso= detalle[x]['id_recurso'];
+              detalleSiModel.descripcion= detalle[x]['detallesi_descripcion'];
+              detalleSiModel.um= detalle[x]['detallesi_um'];
+              detalleSiModel.cantidad= detalle[x]['detallesi_cantidad'];
+              detalleSiModel.estado= detalle[x]['detallesi_estado'];
+              detalleSiModel.atendido= detalle[x]['detallesi_atendido'];
+              detalleSiModel.cajaAlmacen= detalle[x]["detallesi_caja_almacen"];
+              detalleSiModel.idLogisticaClase= detalle[x]["id_logistica_clase"];
+              detalleSiModel.idEmpresa= detalle[x]['id_empresa'];
+              detalleSiModel.recursoTipo= detalle[x]['recurso_tipo'];
+              detalleSiModel.recursoNombre= detalle[x]['recurso_nombre'];
+              detalleSiModel.recursoCodigo= detalle[x]['recurso_codigo'];
+              detalleSiModel.recursoComentario= detalle[x]['recurso_comentario'];
+              detalleSiModel.recursoFoto= detalle[x]['recurso_foto'];
+              detalleSiModel.recursoEstado= detalle[x]['recurso_estado'];
+              detalleSiModel.idLogisticaTipo= detalle[x]['id_logistica_tipo'];
+              detalleSiModel.logisticaClaseNombre= detalle[x]["logistica_clase_nombre"];
+              detalleSiModel.logisticaTipoNombre= detalle[x]["logistica_tipo_nombre"];
+              await detalleSiDatabase.insertarDetalleSi(detalleSiModel);
+            }
+          }
 
           await siDatabase.insertarSi(si);
         }

@@ -9,11 +9,12 @@ class DatabaseHelper {
   Future<Database> get database async => _database ??= await getDatabase();
 
   Future<Database> getDatabase() async {
-    final String path = join(await getDatabasesPath(), 'soal.db');
+    final String path = join(await getDatabasesPath(), 'soalv1.db');
     return openDatabase(path, onCreate: (db, version) {
       db.execute(tableProveedorSql);
       db.execute(tableClaseSql);
       db.execute(tableSoliConmpraSql);
+      db.execute(tableDetalleSoliConmpraSql);
     }, version: 1, onDowngrade: onDatabaseDowngradeDelete);
   }
 
@@ -59,7 +60,7 @@ class DatabaseHelper {
       'idSede TEXT, '
       'idProyecto TEXT, '
       'siObservaciones TEXT, '
-      'siDatetime TEXT, ' 
+      'siDatetime TEXT, '
       'siDatetimeAprobacion TEXT, '
       'siNumero TEXT, '
       'siEstado TEXT, '
@@ -69,4 +70,26 @@ class DatabaseHelper {
       'personSurname TEXT, '
       'personSurname2 TEXT, '
       'sedeNombre TEXT)';
+
+  static const String tableDetalleSoliConmpraSql = 'CREATE TABLE DetalleSoli('
+      'idDetalleSi TEXT PRIMARY KEY, '
+      'idSi TEXT, '
+      'idRecurso TEXT, '
+      'descripcion TEXT, '
+      'um TEXT, '
+      'cantidad TEXT, '
+      'estado TEXT,'
+      'atendido TEXT, '
+      'cajaAlmacen TEXT, '
+      'idLogisticaClase TEXT, '
+      'idEmpresa TEXT, '
+      'recursoTipo TEXT, '
+      'recursoNombre TEXT, '
+      'recursoCodigo TEXT, '
+      'recursoComentario TEXT, '
+      'recursoFoto TEXT, '
+      'recursoEstado TEXT, '
+      'idLogisticaTipo TEXT,'
+      'logisticaClaseNombre TEXT,'
+      'logisticaTipoNombre TEXT)';
 }

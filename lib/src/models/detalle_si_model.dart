@@ -60,7 +60,12 @@ class DetalleSiModel {
         "recursoTipo": recursoTipo,
         "recursoNombre": recursoNombre,
         "recursoCodigo": recursoCodigo,
-        "recursoComentario": recursoComentario
+        "recursoComentario": recursoComentario,
+        "recursoFoto": recursoFoto,
+        "recursoEstado": recursoEstado,
+        "idLogisticaTipo": idLogisticaTipo,
+        "logisticaClaseNombre": logisticaClaseNombre,
+        "logisticaTipoNombre": logisticaTipoNombre
 
 
       };
@@ -69,6 +74,22 @@ class DetalleSiModel {
         idSi: json["idSi"],
         idRecurso: json["idRecurso"],
         descripcion: json['descripcion'],
-        
+        um:json['um'],
+        cantidad: json['cantidad'],
+        estado: json['estado'],
+        atendido: json['atendido'],
+        cajaAlmacen: json['cajaAlmacen'],
+        idLogisticaClase: json['idLogisticaClase'],
+        idEmpresa: json['idEmpresa'],
+        recursoTipo: json['recursoTipo'],
+        recursoNombre: json['recursoNombre'],
+        recursoCodigo: json['recursoCodigo'],
+        recursoComentario: json['recursoComentario'],
+        recursoFoto: json['recursoFoto'],
+        recursoEstado: json['recursoEstado'],
+        idLogisticaTipo: json['idLogisticaTipo'],
+        logisticaClaseNombre: json['logisticaClaseNombre'],
+        logisticaTipoNombre: json['logisticaTipoNombre'],
+
       );
 }

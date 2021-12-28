@@ -8,6 +8,7 @@ import 'package:soal_app/core/util/utils.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/si_model.dart';
 import 'package:soal_app/src/pages/Proveedores/busqueda_proveedores.dart';
+import 'package:soal_app/src/pages/SolCompras/detalle_si_page.dart';
 
 class SolComprasPage extends StatefulWidget {
   const SolComprasPage({Key? key}) : super(key: key);
@@ -363,7 +364,7 @@ class _SolComprasPageState extends State<SolComprasPage> {
 
   FocusedMenuHolder focusGeneral(
     Widget childs,
-    List<SiModel> proveedores,
+    List<SiModel> si,
     int index,
   ) {
     return FocusedMenuHolder(
@@ -374,31 +375,11 @@ class _SolComprasPageState extends State<SolComprasPage> {
         openWithTap: true,
         menuWidth: ScreenUtil().setWidth(210),
         menuItems: [
+         
           FocusedMenuItem(
             title: Expanded(
               child: Text(
-                "Documentos",
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w400,
-                  fontSize: ScreenUtil().setSp(18),
-                  letterSpacing: ScreenUtil().setSp(0.016),
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            trailingIcon: Icon(
-              Icons.insert_drive_file_sharp,
-              color: Colors.grey,
-              size: ScreenUtil().setHeight(20),
-            ),
-            onPressed: () {
-              //DetailProveedor
-            },
-          ),
-          FocusedMenuItem(
-            title: Expanded(
-              child: Text(
-                "ver",
+                "ver Detalles",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w400,
                   fontSize: ScreenUtil().setSp(18),
@@ -413,12 +394,12 @@ class _SolComprasPageState extends State<SolComprasPage> {
               size: ScreenUtil().setHeight(20),
             ),
             onPressed: () async {
-              /*   Navigator.push(
+                Navigator.push(
                 context,
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) {
-                    return DetailProveedor(
-                      proveedor: proveedores[index],
+                    return DetalleSiPage(
+                      simodel: si[index],
                     );
                   },
                   transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -437,28 +418,10 @@ class _SolComprasPageState extends State<SolComprasPage> {
                   },
                 ),
               );
-            */
+            
             },
           ),
-          FocusedMenuItem(
-            title: Expanded(
-              child: Text(
-                "Eliminar",
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w400,
-                  fontSize: ScreenUtil().setSp(18),
-                  letterSpacing: ScreenUtil().setSp(0.016),
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            trailingIcon: Icon(
-              Icons.delete_outlined,
-              color: Colors.grey,
-              size: ScreenUtil().setHeight(20),
-            ),
-            onPressed: () async {},
-          ),
+          
         ],
         child: childs);
   }

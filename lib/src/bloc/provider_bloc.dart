@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:soal_app/src/bloc/busqueda_proveedor_bloc.dart';
 import 'package:soal_app/src/bloc/clases_bloc.dart';
+import 'package:soal_app/src/bloc/detalle_si_bloc.dart';
 import 'package:soal_app/src/bloc/proveedoresBloc.dart';
 import 'package:soal_app/src/bloc/si_bloc.dart';
 
@@ -13,6 +14,7 @@ class ProviderBloc extends InheritedWidget {
   final busquedaProveedorBloc = BusquedaProveedorBloc();
   final clasesBloc = ClasesBloc();
   final siBloc = SiBloc();
+  final detalleSiBloc = DetalleSiBloc();
 
  
   ProviderBloc({required Widget child}) : super(child: child);
@@ -34,5 +36,9 @@ class ProviderBloc extends InheritedWidget {
 
   static SiBloc si(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.siBloc;
+  }
+
+  static DetalleSiBloc detalleSi(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.detalleSiBloc;
   }
 }
