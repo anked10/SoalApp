@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:soal_app/src/models/proveedores_model.dart';
+import 'package:soal_app/src/pages/Proveedores/documentos_proveedor.dart';
 import 'package:soal_app/src/pages/Proveedores/editar_proveedor.dart';
 
 class DetailProveedor extends StatefulWidget {
@@ -69,26 +71,54 @@ class _DetailProveedorState extends State<DetailProveedor> {
               ),
             ),
           ),
-          Container(
-            padding: EdgeInsets.symmetric(
-              horizontal: ScreenUtil().setWidth(16),
-            ),
-            height: ScreenUtil().setHeight(50),
-            child: Row(
-              children: [
-                IconButton(
-                  onPressed: () {},
-                  icon: Icon(Icons.file_copy),
-                  color: Colors.blue,
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return DocumentosProveedor(proveedor: widget.proveedor);
+                  },
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    var begin = Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
+
+                    var tween = Tween(begin: begin, end: end).chain(
+                      CurveTween(curve: curve),
+                    );
+
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
                 ),
-                Text(
-                  'Ver documentos',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(17),
-                    fontWeight: FontWeight.bold,
+              );
+            },
+            child: Container(
+              padding: EdgeInsets.symmetric(
+                horizontal: ScreenUtil().setWidth(16),
+              ),
+              height: ScreenUtil().setHeight(50),
+              child: Row(
+                children: [
+                  Container(
+                    height: ScreenUtil().setSp(35),
+                    width: ScreenUtil().setSp(35),
+                    child: SvgPicture.asset(
+                      'assets/svg/folder_azul.svg',
+                    ),
                   ),
-                ),
-              ],
+                  Text(
+                    '  Ver documentos',
+                    style: TextStyle(
+                      fontSize: ScreenUtil().setSp(17),
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
           Divider(),

@@ -1,25 +1,23 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:soal_app/core/database/sedes_database.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import 'package:soal_app/core/util/utils.dart';
-import 'package:soal_app/src/bloc/almacen_bloc.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/almacenModel.dart';
-import 'package:soal_app/src/models/sedesModel.dart';
-import 'package:soal_app/src/pages/Almacen/busqueda_almacen.dart';
 import 'package:soal_app/src/widgets/responsive.dart';
 
-class AlmacenPage extends StatefulWidget {
-  const AlmacenPage({Key? key}) : super(key: key);
+enum EstadoBusqueda { inicio, datos, vacio }
+
+class BusquedaAlmacen extends StatefulWidget {
+  const BusquedaAlmacen({Key? key}) : super(key: key);
 
   @override
-  _AlmacenPageState createState() => _AlmacenPageState();
+  _BusquedaAlmacenState createState() => _BusquedaAlmacenState();
 }
 
-class _AlmacenPageState extends State<AlmacenPage> {
-  String sedeValue = '';
-  int valor = 0;
+class _BusquedaAlmacenState extends State<BusquedaAlmacen> {
   List<String> itemsCabeceraTabla = [
     'CÓDIGO',
     '     CLASE     ',
@@ -29,85 +27,78 @@ class _AlmacenPageState extends State<AlmacenPage> {
     'SEDE',
   ];
 
+  TextEditingController _controller = TextEditingController();
+
+  dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final responsive = Responsive.of(context);
     final almacenBloc = ProviderBloc.almacen(context);
-    if (valor == 0) {
-      almacenBloc.getSedes();
-    }
+    almacenBloc.obtenerAlmacenPorQueryDelivery('');
 
+    final provider = Provider.of<EstadoListenerAlmacen>(context, listen: false);
+    final responsive = Responsive.of(context);
     return Scaffold(
-      body: StreamBuilder(
-        stream: almacenBloc.sedesStream,
-        builder: (BuildContext context, AsyncSnapshot<List<SedesModel>> snapshote) {
-          if (snapshote.hasData) {
-            if (snapshote.data!.length > 0) {
-              var listOficial = snapshote.data;
-
-              if (valor == 0) {
-                sedeValue = listOficial![0].sedeNombre.toString();
-                almacenBloc.getAlmacenPorSede(listOficial[0].idSede.toString());
-                valor++;
-              }
-              return SafeArea(
-                bottom: false,
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: ScreenUtil().setWidth(10),
-                      ),
-                      child: Row(
-                        children: [
-                          Text(
-                            'Almacén',
-                            style: TextStyle(
-                              fontSize: ScreenUtil().setSp(27),
-                              fontWeight: FontWeight.bold,
+      body: ValueListenableBuilder(
+        valueListenable: provider._estado,
+        builder: (BuildContext context, EstadoBusqueda data, Widget? child) {
+          return Column(
+            children: [
+              Container(
+                color: Colors.white,
+                padding: EdgeInsets.only(
+                  bottom: ScreenUtil().setHeight(10),
+                ),
+                child: SafeArea(
+                  child: Row(
+                    children: [
+                      BackButton(),
+                      Expanded(
+                        child: TextField(
+                          controller: _controller,
+                          decoration: InputDecoration(
+                            contentPadding: EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
+                            prefixIcon: Icon(Icons.search),
+                            hintText: "Buscar producto en almacén",
+                            focusedBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
+                            ),
+                            enabledBorder: UnderlineInputBorder(
+                              borderSide: BorderSide(color: Colors.transparent),
                             ),
                           ),
-                          Spacer(),
-                          IconButton(
-                            onPressed: () {
-                             Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation, secondaryAnimation) {
-                                    return BusquedaAlmacen();
-                                  },
-                                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                    var begin = Offset(0.0, 1.0);
-                                    var end = Offset.zero;
-                                    var curve = Curves.ease;
-
-                                    var tween = Tween(begin: begin, end: end).chain(
-                                      CurveTween(curve: curve),
-                                    );
-
-                                    return SlideTransition(
-                                      position: animation.drive(tween),
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              ); 
-                            },
-                            iconSize: ScreenUtil().setSp(35),
-                            icon: Icon(
-                              Icons.search,
-                              color: Color(0xff454799),
-                            ),
-                          )
-                        ],
+                          onChanged: (value) {
+                            provider.changeDatos();
+                            almacenBloc.obtenerAlmacenPorQueryDelivery(value);
+                          },
+                        ),
                       ),
-                    ),
-                    dropButtonSedes(snapshote.data!),
-                    StreamBuilder(
-                      stream: almacenBloc.almacenStream,
-                      builder: (BuildContext context, AsyncSnapshot<List<AlmacenModel>> data) {
-                        if (data.hasData) {
-                          if (data.data!.length > 0) {
+                      IconButton(
+                          onPressed: () {
+                            provider.changeInicio();
+
+                            _controller.text = '';
+                          },
+                          icon: Icon(Icons.close)),
+                      SizedBox(
+                        width: ScreenUtil().setWidth(10),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: ScreenUtil().setHeight(10),
+              ),
+              (data == EstadoBusqueda.datos)
+                  ? StreamBuilder(
+                      stream: almacenBloc.busquedaAlmacenStream,
+                      builder: (BuildContext context, AsyncSnapshot<List<AlmacenModel>> snapshot) {
+                        if (snapshot.hasData) {
+                          if (snapshot.data!.length > 0) {
                             return Expanded(
                               child: ListView.builder(
                                 shrinkWrap: true,
@@ -120,18 +111,19 @@ class _AlmacenPageState extends State<AlmacenPage> {
                                       vertical: ScreenUtil().setHeight(10),
                                       horizontal: ScreenUtil().setWidth(5),
                                     ),
-                                    height: ScreenUtil().setHeight(40) * (data.data!.length + 1),
+                                    height: ScreenUtil().setHeight(60) * (snapshot.data!.length + 1),
                                     child: Row(
                                       children: [
                                         Container(
-                                          width: responsive.wp(25),
+                                          width: responsive.wp(20),
                                           child: ListView.builder(
+                                            padding: EdgeInsets.zero,
                                             physics: NeverScrollableScrollPhysics(),
-                                            itemCount: data.data!.length + 1,
+                                            itemCount: snapshot.data!.length + 1,
                                             itemBuilder: (context, indexPrimero) {
                                               var ayno = maxLines(
-                                                'INFORMACIÒN\nBANCARIA',
-                                                ScreenUtil().setWidth(150),
+                                                'FECHA DE\nSOLICITUD',
+                                                ScreenUtil().setWidth(180),
                                                 TextStyle(
                                                   fontWeight: FontWeight.w400,
                                                   fontSize: ScreenUtil().setSp(14),
@@ -145,7 +137,7 @@ class _AlmacenPageState extends State<AlmacenPage> {
                                                       height: ayno * ScreenUtil().setHeight(20),
                                                       child: Center(
                                                         child: Text(
-                                                          'Tipo',
+                                                          'TIPO',
                                                           style: TextStyle(
                                                             fontWeight: FontWeight.w600,
                                                             fontSize: ScreenUtil().setSp(18),
@@ -175,7 +167,7 @@ class _AlmacenPageState extends State<AlmacenPage> {
                                                         children: [
                                                           Expanded(
                                                             child: Text(
-                                                              '${data.data![indexPrimero].logisticaTipoNombre}',
+                                                              '${snapshot.data![indexPrimero].logisticaTipoNombre}',
                                                               textAlign: TextAlign.center,
                                                               style: TextStyle(
                                                                 fontWeight: FontWeight.w400,
@@ -214,13 +206,13 @@ class _AlmacenPageState extends State<AlmacenPage> {
                                                   ),
                                                 )),
                                                 child: ListView.builder(
-                                                  itemCount: data.data!.length + 1,
+                                                  itemCount: snapshot.data!.length + 1,
                                                   shrinkWrap: true,
                                                   padding: EdgeInsets.zero,
                                                   physics: NeverScrollableScrollPhysics(),
                                                   itemBuilder: (context, index2) {
                                                     var ayno = maxLines(
-                                                      'INFORMACIÒN\nBANCARIA',
+                                                      'FECHA DE\nSOLICITUD',
                                                       ScreenUtil().setWidth(180),
                                                       TextStyle(
                                                         fontWeight: FontWeight.w400,
@@ -262,40 +254,40 @@ class _AlmacenPageState extends State<AlmacenPage> {
                                                             child: Center(
                                                               child: (itemsCabeceraTabla[index] == 'CÓDIGO')
                                                                   ? Text(
-                                                                      '${data.data![index2].recursoCodigo}',
+                                                                      '${snapshot.data![index2].recursoCodigo}',
                                                                       style: TextStyle(fontSize: ScreenUtil().setSp(15)),
                                                                     )
                                                                   : (itemsCabeceraTabla[index] == '     CLASE     ')
                                                                       ? Text(
-                                                                          '${data.data![index2].logisticaClaseNombre}',
+                                                                          '${snapshot.data![index2].logisticaClaseNombre}',
                                                                           style: TextStyle(fontSize: ScreenUtil().setSp(15)),
                                                                         )
                                                                       : (itemsCabeceraTabla[index] == 'DENOMINACION')
                                                                           ? Text(
-                                                                              '${data.data![index2].recursoNombre}',
+                                                                              '${snapshot.data![index2].recursoNombre}',
                                                                               textAlign: TextAlign.start,
                                                                               style: TextStyle(fontSize: ScreenUtil().setSp(15)),
                                                                             )
                                                                           : (itemsCabeceraTabla[index] == 'U.M.')
                                                                               ? Text(
-                                                                                  '${data.data![index2].almacenUnidad}',
+                                                                                  '${snapshot.data![index2].almacenUnidad}',
                                                                                   style: TextStyle(fontSize: ScreenUtil().setSp(15)),
                                                                                 )
                                                                               : (itemsCabeceraTabla[index] == 'CANTIDAD')
                                                                                   ? Text(
-                                                                                      '${data.data![index2].almacenStock}',
+                                                                                      '${snapshot.data![index2].almacenStock}',
                                                                                       style: TextStyle(fontSize: ScreenUtil().setSp(15)),
                                                                                     )
                                                                                   : (itemsCabeceraTabla[index] == '     CLASE      ')
                                                                                       ? Text(
-                                                                                          '${data.data![index2].logisticaClaseNombre}',
+                                                                                          '${snapshot.data![index2].logisticaClaseNombre}',
                                                                                           style: TextStyle(
                                                                                               fontWeight: FontWeight.bold,
                                                                                               fontSize: ScreenUtil().setSp(15)),
                                                                                         )
                                                                                       : (itemsCabeceraTabla[index] == 'SEDE')
                                                                                           ? Text(
-                                                                                              '${data.data![index2].idEmpresa}',
+                                                                                              '${snapshot.data![index2].idEmpresa}',
                                                                                               style: TextStyle(fontSize: ScreenUtil().setSp(15)),
                                                                                             )
                                                                                           : Text(''),
@@ -319,11 +311,16 @@ class _AlmacenPageState extends State<AlmacenPage> {
                             );
                           } else {
                             return Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                SizedBox(
-                                  height: ScreenUtil().setHeight(20),
+                                Container(
+                                  height: ScreenUtil().setSp(200),
+                                  width: ScreenUtil().setSp(200),
+                                  child: SvgPicture.asset(
+                                    'assets/svg/backBusquedaAlmacen.svg',
+                                  ),
                                 ),
-                                Text('No hay datos en este Almacén'),
+                                Text('No existen productos'),
                               ],
                             );
                           }
@@ -333,105 +330,50 @@ class _AlmacenPageState extends State<AlmacenPage> {
                           );
                         }
                       },
-                    ),
-                  ],
-                ),
-              );
-            } else {
-              return Center(
-                child: Text('No existen Sedes'),
-              );
-            }
-          } else {
-            return Center(
-              child: CupertinoActivityIndicator(),
-            );
-          }
+                    )
+                  : (data == EstadoBusqueda.inicio)
+                      ? Expanded(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                height: ScreenUtil().setSp(200),
+                                width: ScreenUtil().setSp(200),
+                                child: SvgPicture.asset(
+                                  'assets/svg/backBusquedaAlmacen.svg',
+                                ),
+                              ),
+                              Text('Buscar productos en almacén'),
+                            ],
+                          ),
+                        )
+                      : (data == EstadoBusqueda.vacio)
+                          ? Container()
+                          : Container()
+            ],
+          );
         },
-      ),
-    );
-  }
-
-  List<String> sedesCustomList = [];
-  Widget dropButtonSedes(List<SedesModel> sedes) {
-    sedesCustomList.clear();
-
-    for (int i = 0; i < sedes.length; i++) {
-      String sedesitos = sedes[i].sedeNombre.toString();
-      sedesCustomList.add(sedesitos);
-    }
-    final algo = sedesCustomList.toSet().toList();
-    return Padding(
-      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
-      child: Row(
-        children: [
-          Text(
-            'Sede :   ',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          Expanded(
-            child: Container(
-              padding: EdgeInsets.symmetric(
-                horizontal: ScreenUtil().setWidth(5),
-              ),
-              width: double.infinity,
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  border: Border.all(
-                    color: Colors.grey.shade300,
-                  )),
-              child: DropdownButton<String>(
-                dropdownColor: Colors.white,
-                value: sedeValue,
-                icon: Icon(Icons.arrow_drop_down),
-                iconSize: ScreenUtil().setSp(20),
-                elevation: 16,
-                isExpanded: true,
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: ScreenUtil().setSp(16),
-                ),
-                underline: Container(),
-                onChanged: (String? data) {
-                  setState(() {
-                    sedeValue = data.toString();
-                    final almacenBloc = ProviderBloc.almacen(context);
-
-                    ellanoTeAma(almacenBloc, sedeValue);
-
-                    valor++;
-                  });
-                },
-                items: algo.map((value) {
-                  return DropdownMenuItem<String>(
-                    value: value,
-                    child: Text(
-                      value,
-                      maxLines: 3,
-                      style: TextStyle(color: Colors.black),
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
 }
 
-void ellanoTeAma(AlmacenBloc almacenBloc, String dato) async {
-  final sedesDatabase = SedesDatabase();
+class EstadoListenerAlmacen with ChangeNotifier {
+  ValueNotifier<EstadoBusqueda> _estado = ValueNotifier(EstadoBusqueda.inicio);
+  ValueNotifier<EstadoBusqueda> get estado => this._estado;
 
-  final sedis = await sedesDatabase.getSedesForName(dato);
+  void changeVacio() {
+    _estado.value = EstadoBusqueda.vacio;
+    notifyListeners();
+  }
 
-  almacenBloc.getAlmacenPorSede(sedis[0].idSede.toString());
+  void changeInicio() {
+    _estado.value = EstadoBusqueda.inicio;
+    notifyListeners();
+  }
+
+  void changeDatos() {
+    _estado.value = EstadoBusqueda.datos;
+    notifyListeners();
+  }
 }

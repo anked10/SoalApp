@@ -10,6 +10,7 @@ import 'package:soal_app/src/models/proveedores_model.dart';
 import 'package:soal_app/src/pages/Proveedores/agregar_proveedor.dart';
 import 'package:soal_app/src/pages/Proveedores/busqueda_proveedores.dart';
 import 'package:soal_app/src/pages/Proveedores/detail_proveedor.dart';
+import 'package:soal_app/src/pages/Proveedores/documentos_proveedor.dart';
 
 class ProveedoresPage extends StatefulWidget {
   const ProveedoresPage({Key? key}) : super(key: key);
@@ -61,7 +62,8 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                           ),
                           Spacer(),
                           IconButton(
-                            onPressed: () { Navigator.push(
+                            onPressed: () {
+                              Navigator.push(
                                 context,
                                 PageRouteBuilder(
                                   pageBuilder: (context, animation, secondaryAnimation) {
@@ -82,7 +84,8 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                     );
                                   },
                                 ),
-                              );},
+                              );
+                            },
                             iconSize: ScreenUtil().setSp(35),
                             icon: Icon(
                               Icons.add,
@@ -366,7 +369,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
                                     },
                                   ),
                                 )
-                               ],
+                              ],
                             ),
                           );
                         },
@@ -422,6 +425,32 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
             ),
             onPressed: () {
               //DetailProveedor
+
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return DocumentosProveedor(
+                      proveedor: proveedores[index],
+                    );
+                  },
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    var begin = Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
+
+                    var tween = Tween(begin: begin, end: end).chain(
+                      CurveTween(curve: curve),
+                    );
+
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+              //DocumentosProveedor
             },
           ),
           FocusedMenuItem(

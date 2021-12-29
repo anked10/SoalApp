@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/core/util/router.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
+import 'package:soal_app/src/pages/Almacen/busqueda_almacen.dart';
 import 'package:soal_app/src/pages/Proveedores/bloc_editar_proveedor.dart';
 import 'package:soal_app/src/pages/Proveedores/busqueda_proveedores.dart';
 import 'package:soal_app/src/pages/home_page.dart';
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider<EstadoListener>(
             create: (_) => EstadoListener(),
+          ),
+          ChangeNotifierProvider<EstadoListenerAlmacen>(
+            create: (_) => EstadoListenerAlmacen(),
           ),
           ChangeNotifierProvider<EditProveedorBloc>(
             create: (_) => EditProveedorBloc(),

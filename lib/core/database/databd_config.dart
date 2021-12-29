@@ -9,12 +9,15 @@ class DatabaseHelper {
   Future<Database> get database async => _database ??= await getDatabase();
 
   Future<Database> getDatabase() async {
-    final String path = join(await getDatabasesPath(), 'soalv1.db');
+    final String path = join(await getDatabasesPath(), 'soal.db');
     return openDatabase(path, onCreate: (db, version) {
       db.execute(tableProveedorSql);
       db.execute(tableClaseSql);
       db.execute(tableSoliConmpraSql);
       db.execute(tableDetalleSoliConmpraSql);
+      db.execute(tableSedes);
+      db.execute(tableAlmacen);
+      db.execute(tableDocument);
     }, version: 1, onDowngrade: onDatabaseDowngradeDelete);
   }
 
@@ -92,4 +95,39 @@ class DatabaseHelper {
       'idLogisticaTipo TEXT,'
       'logisticaClaseNombre TEXT,'
       'logisticaTipoNombre TEXT)';
+
+  static const String tableSedes = 'CREATE TABLE Sedes('
+      'idSede TEXT PRIMARY KEY, '
+      'sedeNombre TEXT)';
+
+  static const String tableAlmacen = 'CREATE TABLE Almacen('
+      'idAlmacen TEXT PRIMARY KEY, '
+      'idSede TEXT, '
+      'idRecurso TEXT, '
+      'almacenUnidad TEXT, '
+      'almacenStock TEXT, '
+      'almacenDescripcion TEXT, '
+      'idLogisticaClase TEXT, '
+      'idEmpresa TEXT, '
+      'recursoTipo TEXT, '
+      'recursoNombre TEXT, '
+      'recursoCodigo TEXT, '
+      'recursoComentario TEXT, '
+      'recursoFoto TEXT, '
+      'recursoEstado TEXT, '
+      'idLogisticaTipo TEXT,'
+      'logisticaClaseNombre TEXT,'
+      'logisticaTipoNombre TEXT)';
+
+
+  static const String tableDocument = 'CREATE TABLE Documentos('
+      'idDocumento TEXT PRIMARY KEY, '
+      'idPerson TEXT, '
+      'idTipo TEXT, '
+      'documentoClase TEXT, '
+      'documentoTipo TEXT, '
+      'documentoArchivo TEXT, '
+      'documentoReferencia TEXT, '
+      'documentoFecha TEXT, '
+      'documentoFechaSubida TEXT)';
 }

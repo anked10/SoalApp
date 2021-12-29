@@ -34,6 +34,7 @@ class _DetalleSiPageState extends State<DetalleSiPage> {
     final detalleSiBloc = ProviderBloc.detalleSi(context);
     detalleSiBloc.obtenerDetalleSi(widget.simodel.idSi.toString());
 
+    final responsive = Responsive.of(context);
     return Scaffold(
       body: StreamBuilder(
         stream: detalleSiBloc.detalleSiStream,
@@ -61,40 +62,6 @@ class _DetalleSiPageState extends State<DetalleSiPage> {
                               ),
                             ),
                           ),
-
-                          /* IconButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                PageRouteBuilder(
-                                  pageBuilder: (context, animation, secondaryAnimation) {
-                                    return BusquedaProveedor();
-                                  },
-                                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                    var begin = Offset(0.0, 1.0);
-                                    var end = Offset.zero;
-                                    var curve = Curves.ease;
-
-                                    var tween = Tween(begin: begin, end: end).chain(
-                                      CurveTween(curve: curve),
-                                    );
-
-                                    return SlideTransition(
-                                      position: animation.drive(tween),
-                                      child: child,
-                                    );
-                                  },
-                                ),
-                              );
-                             
-                            },
-                            iconSize: ScreenUtil().setSp(35),
-                            icon: Icon(
-                              Icons.search,
-                              color: Color(0xff454799),
-                            ),
-                          )
-                         */
                         ],
                       ),
                     ),
@@ -168,18 +135,47 @@ class _DetalleSiPageState extends State<DetalleSiPage> {
                       ],
                     ),
                     SizedBox(
-                      height: ScreenUtil().setHeight(20),
+                      height: ScreenUtil().setHeight(30),
                     ),
                     Expanded(
                       child: ListView.builder(
-                          itemCount: listOficial!.length,
-                          itemBuilder: (context, index) {
-                            return CardExpandable(
-                              detalleSiModel: listOficial[index],
-                              index: (index + 1).toString(),
+                        shrinkWrap: true,
+                        itemCount: listOficial!.length + 2,
+                        itemBuilder: (context, index) {
+                          if (index == 0) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: responsive.wp(5),
+                              ),
+                              child: Text(
+                                'Items',
+                                style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(22),
+                                  color: Colors.blue[900],
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
                             );
-                          }),
-                    )
+                          }
+
+                          if (index == listOficial.length + 1) {
+                            return Container(
+                              child: Column(
+                                children: [
+                                  Text('Documentos'),
+                                ],
+                              ),
+                            );
+                          }
+
+                          index = index - 1;
+                          return CardExpandable(
+                            detalleSiModel: listOficial[index],
+                            index: (index + 1).toString(),
+                          );
+                        },
+                      ),
+                    ),
                   ],
                 ),
               );
