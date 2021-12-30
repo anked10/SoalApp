@@ -41,7 +41,7 @@ class AlmacenDatabase {
     try {
       final Database db = await dbprovider.getDatabase();
       List<AlmacenModel> list = [];
-      List<Map> maps = await db.rawQuery("SELECT * FROM Almacen where recursoNombre like '%$value%'");
+      List<Map> maps = await db.rawQuery("SELECT * FROM Almacen where recursoNombre like '%$value%' or recursoCodigo like '%$value%'");
 
       if (maps.length > 0) list = AlmacenModel.fromJsonList(maps);
       return list;

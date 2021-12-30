@@ -57,7 +57,6 @@ dependencies:
 
   #toast
   fluttertoast: ^8.0.8
-
   file_picker: ^4.3.0
 
   syncfusion_flutter_pdfviewer: ^19.3.55-beta

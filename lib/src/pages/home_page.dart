@@ -186,7 +186,7 @@ class _HomePageState extends State<HomePage> {
 }
 
 class ChangeBottomExplorer extends ChangeNotifier {
-  ValueNotifier<int> page = ValueNotifier(2);
+  ValueNotifier<int> page = ValueNotifier(0);
   ValueNotifier<int> get _pagina => this.page;
 
   void changePage(int index) {

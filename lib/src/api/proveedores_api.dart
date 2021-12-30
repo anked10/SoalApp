@@ -111,7 +111,7 @@ class ProveedoresApi {
       final response = await http.post(Uri.parse(url), body: {
         'app': 'true',
         'tn': token,
-        'id_proveedor': '${proveedor.idProveedor}',
+        //'id_proveedor': '${proveedor.idProveedor}',
         'proveedor_nombre': '${proveedor.nombre}',
         'proveedor_ruc': '${proveedor.ruc}',
         'proveedor_estado': '${proveedor.estado}',

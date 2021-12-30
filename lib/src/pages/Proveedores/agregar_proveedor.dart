@@ -60,7 +60,7 @@ class _AddProviderState extends State<AddProvider> {
 
   @override
   void dispose() {
-    _rucController.dispose(); 
+    _rucController.dispose();
     _nombreController.dispose();
     _telefonoController.dispose();
     _direccionController.dispose();
@@ -273,7 +273,23 @@ class _AddProviderState extends State<AddProvider> {
                   (data == estadoEditProveedor.datos)
                       ? InkWell(
                           onTap: () {
-                            provider.changeToCuenta();
+                            if (_rucController.text.isNotEmpty) {
+                              if (_nombreController.text.isNotEmpty) {
+                                if (_telefonoController.text.isNotEmpty) {
+                                  if (_direccionController.text.isNotEmpty) {
+                                    provider.changeToCuenta();
+                                  } else {
+                                    showToast2('Por favor ingresa Una dirección', Colors.red);
+                                  }
+                                } else {
+                                  showToast2('Por Favor ingrese el teléfono del proveedor', Colors.red);
+                                }
+                              } else {
+                                showToast2('Por favor ingrese el nombre del proveedor', Colors.red);
+                              }
+                            } else {
+                              showToast2('Por favor ingrese el número de ruc del proveedor', Colors.red);
+                            }
                           },
                           child: Container(
                             width: double.infinity,
@@ -345,86 +361,104 @@ class _AddProviderState extends State<AddProvider> {
                           : InkWell(
                               onTap: () async {
                                 provider.cargando.value = true;
-                                String clase1Dato = '0';
-                                String clase2Dato = '0';
-                                String clase3Dato = '0';
-                                String clase4Dato = '0';
-                                String clase5Dato = '0';
-                                String clase6Dato = '0';
 
-                                final proveedorApi = ProveedoresApi();
+                                if (_rucController.text.isNotEmpty) {
+                                  if (_nombreController.text.isNotEmpty) {
+                                    if (_telefonoController.text.isNotEmpty) {
+                                      if (_direccionController.text.isNotEmpty) {
+                                        String clase1Dato = '0';
+                                        String clase2Dato = '0';
+                                        String clase3Dato = '0';
+                                        String clase4Dato = '0';
+                                        String clase5Dato = '0';
+                                        String clase6Dato = '0';
 
-                                final clasesDatabase = ClasesDatabase();
-                                if (dropBien1 != 'Seleccione') {
-                                  var clase1 = await clasesDatabase.getClasesForName(dropBien1);
-                                  if (clase1.length > 0) {
-                                    clase1Dato = clase1[0].idLogisticaClase.toString();
+                                        final proveedorApi = ProveedoresApi();
+
+                                        final clasesDatabase = ClasesDatabase();
+                                        if (dropBien1 != 'Seleccione') {
+                                          var clase1 = await clasesDatabase.getClasesForName(dropBien1);
+                                          if (clase1.length > 0) {
+                                            clase1Dato = clase1[0].idLogisticaClase.toString();
+                                          }
+                                        }
+
+                                        if (dropBien2 != 'Seleccione') {
+                                          var clase2 = await clasesDatabase.getClasesForName(dropBien2);
+                                          if (clase2.length > 0) {
+                                            clase2Dato = clase2[0].idLogisticaClase.toString();
+                                          }
+                                        }
+
+                                        if (dropBien3 != 'Seleccione') {
+                                          var clase3 = await clasesDatabase.getClasesForName(dropBien3);
+                                          if (clase3.length > 0) {
+                                            clase3Dato = clase3[0].idLogisticaClase.toString();
+                                          }
+                                        }
+
+                                        if (dropServicio1 != 'Seleccione') {
+                                          var claseServicio1 = await clasesDatabase.getClasesForName(dropServicio1);
+                                          if (claseServicio1.length > 0) {
+                                            clase4Dato = claseServicio1[0].idLogisticaClase.toString();
+                                          }
+                                        }
+
+                                        if (dropServicio2 != 'Seleccione') {
+                                          var claseServicio2 = await clasesDatabase.getClasesForName(dropServicio2);
+                                          if (claseServicio2.length > 0) {
+                                            clase5Dato = claseServicio2[0].idLogisticaClase.toString();
+                                          }
+                                        }
+
+                                        if (dropServicio3 != 'Seleccione') {
+                                          var claseServicio3 = await clasesDatabase.getClasesForName(dropServicio3);
+                                          if (claseServicio3.length > 0) {
+                                            clase6Dato = claseServicio3[0].idLogisticaClase.toString();
+                                          }
+                                        }
+
+                                        ProveedorModel proveedor = ProveedorModel();
+
+                                        proveedor.nombre = _nombreController.text;
+                                        proveedor.ruc = _rucController.text;
+                                        proveedor.estado = (estadoPro == 'HABILITADO') ? '1' : '0';
+                                        proveedor.telefono = _telefonoController.text;
+                                        proveedor.contacto = _contactoController.text;
+                                        proveedor.email = _emailController.text;
+                                        proveedor.direccion = _direccionController.text;
+                                        proveedor.banco1 = '$entidad1/../$moneda1/../${_nroCuenta1.text}/../${_cci1.text}';
+                                        proveedor.banco2 = '$entidad2/../$moneda2/../${_nroCuenta2.text}/../${_cci2.text}';
+                                        proveedor.banco3 = '$entidad3/../$moneda3/../${_nroCuenta3.text}/../${_cci3.text}';
+
+                                        proveedor.clase1 = '$clase1Dato';
+                                        proveedor.clase2 = '$clase2Dato';
+                                        proveedor.clase3 = '$clase3Dato';
+                                        proveedor.clase4 = '$clase4Dato';
+                                        proveedor.clase5 = '$clase5Dato';
+                                        proveedor.clase6 = '$clase6Dato';
+
+                                        final res = await proveedorApi.addProvider(proveedor);
+
+                                        if (res.code == 1) {
+                                          showToast2('Proveedor agregado correctamente', Colors.green);
+                                          final proveedoresBloc = ProviderBloc.provee(context);
+                                          proveedoresBloc.obtenerProveedores();
+                                          Navigator.pop(context);
+                                        } else {
+                                          showToast2('${res.message}', Colors.red);
+                                        }
+                                      } else {
+                                        showToast2('Por favor ingresa Una dirección', Colors.red);
+                                      }
+                                    } else {
+                                      showToast2('Por Favor ingrese el teléfono del proveedor', Colors.red);
+                                    }
+                                  } else {
+                                    showToast2('Por favor ingrese el nombre del proveedor', Colors.red);
                                   }
-                                }
-
-                                if (dropBien2 != 'Seleccione') {
-                                  var clase2 = await clasesDatabase.getClasesForName(dropBien2);
-                                  if (clase2.length > 0) {
-                                    clase2Dato = clase2[0].idLogisticaClase.toString();
-                                  }
-                                }
-
-                                if (dropBien3 != 'Seleccione') {
-                                  var clase3 = await clasesDatabase.getClasesForName(dropBien3);
-                                  if (clase3.length > 0) {
-                                    clase3Dato = clase3[0].idLogisticaClase.toString();
-                                  }
-                                }
-
-                                if (dropServicio1 != 'Seleccione') {
-                                  var claseServicio1 = await clasesDatabase.getClasesForName(dropServicio1);
-                                  if (claseServicio1.length > 0) {
-                                    clase4Dato = claseServicio1[0].idLogisticaClase.toString();
-                                  }
-                                }
-
-                                if (dropServicio2 != 'Seleccione') {
-                                  var claseServicio2 = await clasesDatabase.getClasesForName(dropServicio2);
-                                  if (claseServicio2.length > 0) {
-                                    clase5Dato = claseServicio2[0].idLogisticaClase.toString();
-                                  }
-                                }
-
-                                if (dropServicio3 != 'Seleccione') {
-                                  var claseServicio3 = await clasesDatabase.getClasesForName(dropServicio3);
-                                  if (claseServicio3.length > 0) {
-                                    clase6Dato = claseServicio3[0].idLogisticaClase.toString();
-                                  }
-                                }
-
-                                ProveedorModel proveedor = ProveedorModel();
-
-                                proveedor.nombre = _nombreController.text;
-                                proveedor.ruc = _rucController.text;
-                                proveedor.estado = (estadoPro == 'HABILITADO') ? '1' : '0';
-                                proveedor.telefono = _telefonoController.text;
-                                proveedor.contacto = _contactoController.text;
-                                proveedor.email = _emailController.text;
-                                proveedor.direccion = _direccionController.text;
-                                proveedor.banco1 = '$entidad1/../$moneda1/../${_nroCuenta1.text}/../${_cci1.text}';
-                                proveedor.banco2 = '$entidad2/../$moneda2/../${_nroCuenta2.text}/../${_cci2.text}';
-                                proveedor.banco3 = '$entidad3/../$moneda3/../${_nroCuenta3.text}/../${_cci3.text}';
-
-                                proveedor.clase1 = '$clase1Dato';
-                                proveedor.clase2 = '$clase2Dato';
-                                proveedor.clase3 = '$clase3Dato';
-                                proveedor.clase4 = '$clase4Dato';
-                                proveedor.clase5 = '$clase5Dato';
-                                proveedor.clase6 = '$clase6Dato';
-
-                                final res = await proveedorApi.addProvider(proveedor);
-
-                                if (res.code == 1) {
-                                  showToast2('${res.message}', Colors.green);
-                                  final proveedoresBloc = ProviderBloc.provee(context);
-                                  proveedoresBloc.obtenerProveedores();
                                 } else {
-                                  showToast2('${res.message}', Colors.red);
+                                  showToast2('Por favor ingrese el número de ruc del proveedor', Colors.red);
                                 }
 
                                 provider.cargando.value = false;
@@ -787,6 +821,7 @@ class _AddProviderState extends State<AddProvider> {
               ),
               TextField(
                 controller: _rucController,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
@@ -885,6 +920,7 @@ class _AddProviderState extends State<AddProvider> {
               ),
               TextField(
                 controller: _telefonoController,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   filled: true,
                   fillColor: Colors.white,
