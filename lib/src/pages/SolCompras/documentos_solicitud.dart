@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:flowder/flowder.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,25 +8,27 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:open_file/open_file.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/documento_model.dart';
-import 'package:soal_app/src/models/proveedores_model.dart';
+import 'package:soal_app/src/models/si_model.dart';
+import 'package:soal_app/src/pages/SolCompras/nuevo_documento.dart';
 import 'package:soal_app/src/pages/pdf_viewer.dart';
 import 'package:soal_app/src/widgets/responsive.dart';
 
-class DocumentosProveedor extends StatefulWidget {
-  final ProveedorModel proveedor;
-  const DocumentosProveedor({Key? key, required this.proveedor}) : super(key: key);
+class DocumentosSolicitud extends StatefulWidget {
+  final SiModel simodel;
+  const DocumentosSolicitud({Key? key, required this.simodel}) : super(key: key);
 
   @override
-  _DocumentosProveedorState createState() => _DocumentosProveedorState();
+  _DocumentosSolicitudState createState() => _DocumentosSolicitudState();
 }
 
-class _DocumentosProveedorState extends State<DocumentosProveedor> {
+class _DocumentosSolicitudState extends State<DocumentosSolicitud> {
   late DownloaderUtils options;
   late DownloaderCore core;
   int valor = 0;
@@ -35,10 +36,10 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
   @override
   Widget build(BuildContext context) {
     final documentsBloc = ProviderBloc.documents(context);
-    final provider = Provider.of<DocumentsBloc>(context, listen: false);
+    final provider = Provider.of<DocumentsSolicitudBloc>(context, listen: false);
     print('valor $valor');
     if (valor == 0) {
-      documentsBloc.obtenerDocumentos('1', widget.proveedor.idProveedor.toString());
+      documentsBloc.obtenerDocumentos('3', widget.simodel.idSi.toString());
       valor++;
     }
     final responsive = Responsive.of(context);
@@ -52,6 +53,37 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
         elevation: 0,
         backgroundColor: Colors.white,
         iconTheme: IconThemeData(color: Colors.black),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.add),
+            onPressed: () {
+              final provider = Provider.of<UploapBloc>(context, listen: false);
+              provider.changeInicio();
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return NuevoDocumento(siModel: widget.simodel);
+                  },
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    var begin = Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
+
+                    var tween = Tween(begin: begin, end: end).chain(
+                      CurveTween(curve: curve),
+                    );
+
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+            },
+          )
+        ],
       ),
       body: Stack(
         fit: StackFit.expand,
@@ -76,8 +108,8 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
                       ),
                       itemBuilder: (context, y) {
                         print('0tra vex');
-                        Random random = new Random();
-                        int randomNumber = random.nextInt(4);
+
+                        int randomNumber = 0;
 
                         final fechaFormat = snapshot.data![y].documentoArchivo!.split(".");
                         var algo = fechaFormat.length - 1;
@@ -86,8 +118,10 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
                           randomNumber = 3;
                         } else if (fechaFormat[algo] == 'pdf') {
                           randomNumber = 2;
+                        } else if (fechaFormat[algo] == 'docx') {
+                          randomNumber = 1;
                         }
-                        
+
                         return itemDatos(snapshot.data![y], randomNumber, provider);
                       },
                     ),
@@ -116,9 +150,9 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
                       ? Container()
                       : (data == 100.0)
                           ? Container(
-                            margin:EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-                            padding: EdgeInsets.symmetric(vertical: responsive.hp(.5)),
-                            decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(10)),
+                              margin: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+                              padding: EdgeInsets.symmetric(vertical: responsive.hp(.5)),
+                              decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(10)),
                               child: Center(
                                 child: Text(
                                   'Descarga  completa',
@@ -135,7 +169,7 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
                                     LinearPercentIndicator(
                                       width: responsive.wp(90),
                                       lineHeight: 14.0,
-                                      percent: data/100,
+                                      percent: data / 100,
                                       backgroundColor: Colors.white,
                                       progressColor: Colors.blue,
                                     ),
@@ -150,16 +184,16 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
     );
   }
 
-  Widget itemDatos(DocumentoModel documento, int tipo, DocumentsBloc provider) {
+  Widget itemDatos(DocumentoModel documento, int tipo, DocumentsSolicitudBloc provider) {
     var svg = 'assets/svg/folder_azul.svg';
     Color col = Color(0xffeef7fe);
     Color colMore = Color(0xff415eb6);
 
-    if (tipo == 0) {
+    if (tipo == 1) {
       svg = 'assets/svg/folder_azul.svg';
       col = Color(0xffeef7fe);
       colMore = Color(0xff415eb6);
-    } else if (tipo == 1) {
+    } else if (tipo == 0) {
       svg = 'assets/svg/folder_amarillo.svg';
       col = Color(0xfffffbec);
       colMore = Color(0xffffb110);
@@ -226,12 +260,14 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
     );
   }
 
-  FocusedMenuHolder focusGeneral(Widget childs, DocumentoModel document, DocumentsBloc provider) {
+  FocusedMenuHolder focusGeneral(Widget childs, DocumentoModel document, DocumentsSolicitudBloc provider) {
     return FocusedMenuHolder(
         blurBackgroundColor: Colors.black.withOpacity(0.2),
         blurSize: 0,
         animateMenuItems: true,
-        onPressed: () {},
+        onPressed: () {
+          provider.changeInicio();
+        },
         openWithTap: true,
         menuWidth: ScreenUtil().setWidth(210),
         menuItems: [
@@ -253,7 +289,47 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
               size: ScreenUtil().setHeight(20),
             ),
             onPressed: () async {
-              Navigator.push(
+              await new Future.delayed(new Duration(seconds: 1));
+              await [
+                Permission.location,
+                Permission.storage,
+              ].request();
+              var checkResult = await Permission.manageExternalStorage.status;
+
+              if (!checkResult.isGranted) {
+                /* var dir = await getExternalStorageDirectory();
+                var testdir = await Directory('${dir!.path}/SOAL').create(recursive: true);  */
+
+                options = DownloaderUtils(
+                  progressCallback: (current, total) {
+                    provider.cargando.value = double.parse((current / total * 100).toStringAsFixed(2));
+                  },
+                  file: File('/storage/emulated/0/Soal/${document.documentoArchivo}'),
+                  progress: ProgressImplementation(),
+                  onDone: () {
+                    print('COMPLETE /storage/emulated/0/Soal/${document.documentoArchivo}');
+                    provider.changeFinish();
+                  },
+                  deleteOnCancel: true,
+                );
+                //core = await Flowder.download('http://ipv4.download.thinkbroadband.com/5MB.zip', options);
+                core = await Flowder.download('$API_BASE_URL/${document.documentoArchivo}', options);
+
+                print(core);
+              } else if (await Permission.storage.request().isPermanentlyDenied) {
+                await openAppSettings();
+              } else if (await Permission.storage.request().isDenied) {
+                Map<Permission, PermissionStatus> statuses = await [
+                  Permission.location,
+                  Permission.storage,
+                ].request();
+                print(statuses[Permission.location]);
+              }
+
+              final _result = OpenFile.open("/storage/emulated/0/Soal/${document.documentoArchivo}");
+              print(_result);
+
+              /*  Navigator.push(
                 context,
                 PageRouteBuilder(
                   transitionDuration: const Duration(milliseconds: 400),
@@ -269,7 +345,7 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
                     );
                   },
                 ),
-              );
+              ); */
 
               //PdfViewer
             },
@@ -293,7 +369,7 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
             ),
             onPressed: () async {
               await new Future.delayed(new Duration(seconds: 1));
-              Map<Permission, PermissionStatus> statuses = await [
+              await [
                 Permission.location,
                 Permission.storage,
               ].request();
@@ -335,13 +411,13 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
   }
 }
 
-class DocumentsBloc with ChangeNotifier {
+class DocumentsSolicitudBloc with ChangeNotifier {
   ValueNotifier<double> _cargando = ValueNotifier(0.0);
   ValueNotifier<double> get cargando => this._cargando;
 
   BuildContext? context;
 
-  DocumentsBloc({this.context}) {
+  DocumentsSolicitudBloc({this.context}) {
     _init();
   }
   void _init() {}

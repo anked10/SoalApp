@@ -497,25 +497,7 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
               );
             },
           ),
-          FocusedMenuItem(
-            title: Expanded(
-              child: Text(
-                "Eliminar",
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w400,
-                  fontSize: ScreenUtil().setSp(18),
-                  letterSpacing: ScreenUtil().setSp(0.016),
-                  color: Colors.black,
-                ),
-              ),
-            ),
-            trailingIcon: Icon(
-              Icons.delete_outlined,
-              color: Colors.grey,
-              size: ScreenUtil().setHeight(20),
-            ),
-            onPressed: () async {},
-          ),
+           
         ],
         child: childs);
   }

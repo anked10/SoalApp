@@ -62,11 +62,7 @@ class _DetailProveedorState extends State<DetailProveedor> {
                     icon: Icon(Icons.edit),
                     color: Colors.black,
                   ),
-                  IconButton(
-                    onPressed: () {},
-                    icon: Icon(Icons.delete),
-                    color: Colors.black,
-                  )
+                   
                 ],
               ),
             ),

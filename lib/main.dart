@@ -7,6 +7,9 @@ import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/pages/Almacen/busqueda_almacen.dart';
 import 'package:soal_app/src/pages/Proveedores/bloc_editar_proveedor.dart';
 import 'package:soal_app/src/pages/Proveedores/busqueda_proveedores.dart';
+import 'package:soal_app/src/pages/Proveedores/documentos_proveedor.dart';
+import 'package:soal_app/src/pages/SolCompras/documentos_solicitud.dart';
+import 'package:soal_app/src/pages/SolCompras/nuevo_documento.dart';
 import 'package:soal_app/src/pages/home_page.dart';
 import 'injection_container.dart' as di;
 
@@ -30,6 +33,15 @@ class MyApp extends StatelessWidget {
           ),
           ChangeNotifierProvider<EstadoListenerAlmacen>(
             create: (_) => EstadoListenerAlmacen(),
+          ),
+          ChangeNotifierProvider<DocumentsBloc>(
+            create: (_) => DocumentsBloc(),
+          ),
+          ChangeNotifierProvider<UploapBloc>(
+            create: (_) => UploapBloc(),
+          ),
+          ChangeNotifierProvider<DocumentsSolicitudBloc>(
+            create: (_) => DocumentsSolicitudBloc(),
           ),
           ChangeNotifierProvider<EditProveedorBloc>(
             create: (_) => EditProveedorBloc(),

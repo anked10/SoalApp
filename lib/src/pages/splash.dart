@@ -20,8 +20,7 @@ class _SplashState extends State<Splash> {
       final clasesApi = ClasesApi();
       await clasesApi.getClases();
 
-      final documentosApi =DocumentosApi();
-      await documentosApi.getDocumentos();
+      
       String? token = await StorageManager.readData('token');
       if (token == null || token.isEmpty) {
         Navigator.pushNamedAndRemoveUntil(context, LOGIN_ROUTE, (route) => false);

@@ -120,7 +120,7 @@ class _AlmacenPageState extends State<AlmacenPage> {
                                       vertical: ScreenUtil().setHeight(10),
                                       horizontal: ScreenUtil().setWidth(5),
                                     ),
-                                    height: ScreenUtil().setHeight(40) * (data.data!.length + 1),
+                                    height: ScreenUtil().setHeight(70) * (data.data!.length + 1),
                                     child: Row(
                                       children: [
                                         Container(

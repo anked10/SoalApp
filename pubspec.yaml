@@ -65,7 +65,15 @@ dependencies:
     git:
       url: https://github.com/Harsh223/flowder.git
   path_provider: ^2.0.4
+  permission_handler: ^8.1.6
+  percent_indicator: ^3.4.0
+  flutter_datetime_picker: ^1.5.1
+  dio: ^4.0.4
+  open_file: ^3.2.1
 
+
+
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter

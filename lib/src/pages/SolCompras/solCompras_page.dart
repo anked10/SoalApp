@@ -9,6 +9,7 @@ import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/si_model.dart';
 import 'package:soal_app/src/pages/Proveedores/busqueda_proveedores.dart';
 import 'package:soal_app/src/pages/SolCompras/detalle_si_page.dart';
+import 'package:soal_app/src/pages/SolCompras/documentos_solicitud.dart';
 
 class SolComprasPage extends StatefulWidget {
   const SolComprasPage({Key? key}) : super(key: key);
@@ -399,6 +400,52 @@ class _SolComprasPageState extends State<SolComprasPage> {
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) {
                     return DetalleSiPage(
+                      simodel: si[index],
+                    );
+                  },
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    var begin = Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
+
+                    var tween = Tween(begin: begin, end: end).chain(
+                      CurveTween(curve: curve),
+                    );
+
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+            
+            },
+          ),
+
+           FocusedMenuItem(
+            title: Expanded(
+              child: Text(
+                "Documentos",
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.w400,
+                  fontSize: ScreenUtil().setSp(18),
+                  letterSpacing: ScreenUtil().setSp(0.016),
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            trailingIcon: Icon(
+              Icons.edit_outlined,
+              color: Colors.grey,
+              size: ScreenUtil().setHeight(20),
+            ),
+            onPressed: () async {
+                Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return DocumentosSolicitud(
                       simodel: si[index],
                     );
                   },

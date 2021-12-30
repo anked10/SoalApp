@@ -33,7 +33,7 @@ class AlmacenBloc {
   void getSedes() async {
     final listsedes = await sedesDatabase.getSedes();
 
-    if (listsedes.length < 0) {
+    if (listsedes.length== 0) {
       await almacenAPi.getAlmacenes();
     }
     _sedesController.sink.add(await sedesDatabase.getSedes());
