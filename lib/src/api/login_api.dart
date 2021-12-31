@@ -28,7 +28,7 @@ class LoginApi {
         StorageManager.saveData('userEmail', decodedData['data']['u_e']);
         StorageManager.saveData('userImage', decodedData['data']['u_i']);
         StorageManager.saveData('personName', decodedData['data']['p_n']);
-        StorageManager.saveData('personSurname', decodedData['data']['p_p']);
+        StorageManager.saveData('personSurname', decodedData['data']['p_s']);
         StorageManager.saveData('idRoleUser', decodedData['data']['ru']);
         StorageManager.saveData('roleName', decodedData['data']['rn']);
         StorageManager.saveData('token', decodedData['data']['tn']);

@@ -17,7 +17,6 @@ import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/documento_model.dart';
 import 'package:soal_app/src/models/si_model.dart';
 import 'package:soal_app/src/pages/SolCompras/nuevo_documento.dart';
-import 'package:soal_app/src/pages/pdf_viewer.dart';
 import 'package:soal_app/src/widgets/responsive.dart';
 
 class DocumentosSolicitud extends StatefulWidget {
@@ -165,7 +164,7 @@ class _DocumentosSolicitudState extends State<DocumentosSolicitud> {
                                 height: ScreenUtil().setHeight(40),
                                 child: Column(
                                   children: [
-                                    Text('$data%'),
+                                    Text('Descargando  $data%'),
                                     LinearPercentIndicator(
                                       width: responsive.wp(90),
                                       lineHeight: 14.0,
@@ -309,6 +308,8 @@ class _DocumentosSolicitudState extends State<DocumentosSolicitud> {
                   onDone: () {
                     print('COMPLETE /storage/emulated/0/Soal/${document.documentoArchivo}');
                     provider.changeFinish();
+                    final _result = OpenFile.open("/storage/emulated/0/Soal/${document.documentoArchivo}");
+                    print(_result);
                   },
                   deleteOnCancel: true,
                 );
@@ -325,9 +326,6 @@ class _DocumentosSolicitudState extends State<DocumentosSolicitud> {
                 ].request();
                 print(statuses[Permission.location]);
               }
-
-              final _result = OpenFile.open("/storage/emulated/0/Soal/${document.documentoArchivo}");
-              print(_result);
 
               /*  Navigator.push(
                 context,

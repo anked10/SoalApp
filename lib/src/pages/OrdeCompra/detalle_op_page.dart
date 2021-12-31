@@ -5,21 +5,23 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:soal_app/core/util/utils.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
+import 'package:soal_app/src/models/detalle_op_model.dart';
 import 'package:soal_app/src/models/detalle_si_model.dart';
+import 'package:soal_app/src/models/orden_compra_mode.dart';
 import 'package:soal_app/src/models/si_model.dart';
+import 'package:soal_app/src/pages/OrdeCompra/documentos_oc.dart';
 import 'package:soal_app/src/widgets/responsive.dart';
 
-class DetalleSiPage extends StatefulWidget {
-  final SiModel simodel;
-  const DetalleSiPage({Key? key, required this.simodel}) : super(key: key);
+class DetalleOpPage extends StatefulWidget {
+  final OrdenCompraModel opModel;
+  const DetalleOpPage({Key? key, required this.opModel}) : super(key: key);
 
   @override
-  _DetalleSiPageState createState() => _DetalleSiPageState();
+  _DetalleOpPageState createState() => _DetalleOpPageState();
 }
 
-class _DetalleSiPageState extends State<DetalleSiPage> {
+class _DetalleOpPageState extends State<DetalleOpPage> {
   List<String> itemsCabeceraTabla = [
     'TIPO',
     'CLASE',
@@ -32,20 +34,21 @@ class _DetalleSiPageState extends State<DetalleSiPage> {
 
   @override
   Widget build(BuildContext context) {
-    final detalleSiBloc = ProviderBloc.detalleSi(context);
-    detalleSiBloc.obtenerDetalleSi(widget.simodel.idSi.toString());
+    final detalleOpBloc = ProviderBloc.detalleOp(context);
+    detalleOpBloc.obtenerDetalleSi(widget.opModel.idOp.toString());
 
     final responsive = Responsive.of(context);
     return Scaffold(
       body: StreamBuilder(
-        stream: detalleSiBloc.detalleSiStream,
-        builder: (BuildContext context, AsyncSnapshot<List<DetalleSiModel>> snapshote) {
+        stream: detalleOpBloc.detalleOpStream,
+        builder: (BuildContext context, AsyncSnapshot<List<DetalleOpModel>> snapshote) {
           if (snapshote.hasData) {
             if (snapshote.data!.length > 0) {
               var listOficial = snapshote.data;
               return SafeArea(
                 bottom: false,
                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
                       padding: EdgeInsets.symmetric(
@@ -74,10 +77,10 @@ class _DetalleSiPageState extends State<DetalleSiPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Solicitud N°',
+                                'Proveedor',
                                 style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                               ),
-                              Text('${widget.simodel.siNumero}'),
+                              Text('${widget.opModel.proveedorNombre}'),
                             ],
                           ),
                         ),
@@ -89,15 +92,33 @@ class _DetalleSiPageState extends State<DetalleSiPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Fecha de aprobación',
+                                'Ruc',
                                 style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                               ),
-                              Text('${widget.simodel.siDatetime}'),
+                              Text('${snapshote.data![0].proveedorRuc}'),
                             ],
                           ),
                         ),
                         SizedBox(width: ScreenUtil().setWidth(16)),
                       ],
+                    ),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(20),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Dirección',
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                          Text('${snapshote.data![0].proveedorDireccion}'),
+                        ],
+                      ),
                     ),
                     SizedBox(
                       height: ScreenUtil().setHeight(20),
@@ -110,10 +131,10 @@ class _DetalleSiPageState extends State<DetalleSiPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Solicitante',
+                                'Contacto',
                                 style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                               ),
-                              Text('${widget.simodel.personName} ${widget.simodel.personSurname}'),
+                              Text('${snapshote.data![0].proveedorContacto}'),
                             ],
                           ),
                         ),
@@ -125,15 +146,36 @@ class _DetalleSiPageState extends State<DetalleSiPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Sede',
+                                'Teléfono',
                                 style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
                               ),
-                              Text('${widget.simodel.sedeNombre}'),
+                              Text('${snapshote.data![0].proveedorTelefono}'),
                             ],
                           ),
                         ),
                         SizedBox(width: ScreenUtil().setWidth(16)),
                       ],
+                    ),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(30),
+                    ),
+                    Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: ScreenUtil().setWidth(16),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Email',
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+                          ),
+                          Text('${snapshote.data![0].proveedorEmail}'),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: ScreenUtil().setHeight(20),
                     ),
                     SizedBox(
                       height: ScreenUtil().setHeight(30),
@@ -147,7 +189,34 @@ class _DetalleSiPageState extends State<DetalleSiPage> {
                             return Column(
                               children: [
                                 InkWell(
-                                  onTap: () {},
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      PageRouteBuilder(
+                                        pageBuilder: (context, animation, secondaryAnimation) {
+                                          return DocumentosOC(
+                                            idOp: listOficial[index].idOp.toString(),
+                                          );
+                                        },
+                                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                          var begin = Offset(0.0, 1.0);
+                                          var end = Offset.zero;
+                                          var curve = Curves.ease;
+
+                                          var tween = Tween(begin: begin, end: end).chain(
+                                            CurveTween(curve: curve),
+                                          );
+
+                                          return SlideTransition(
+                                            position: animation.drive(tween),
+                                            child: child,
+                                          );
+                                        },
+                                      ),
+                                    );
+
+                                    //DocumentosOC
+                                  },
                                   child: Container(
                                     padding: EdgeInsets.only(
                                       left: ScreenUtil().setWidth(16),
@@ -193,7 +262,7 @@ class _DetalleSiPageState extends State<DetalleSiPage> {
 
                           index = index - 1;
                           return CardExpandable(
-                            detalleSiModel: listOficial[index],
+                            detalleOpModel: listOficial[index],
                             index: (index + 1).toString(),
                           );
                         },
@@ -219,9 +288,9 @@ class _DetalleSiPageState extends State<DetalleSiPage> {
 }
 
 class CardExpandable extends StatefulWidget {
-  const CardExpandable({Key? key, required this.detalleSiModel, required this.index}) : super(key: key);
+  const CardExpandable({Key? key, required this.detalleOpModel, required this.index}) : super(key: key);
 
-  final DetalleSiModel detalleSiModel;
+  final DetalleOpModel detalleOpModel;
   final String index;
 
   @override
@@ -272,7 +341,7 @@ class _CardExpandableState extends State<CardExpandable> {
                           ),
                           Expanded(
                             child: Text(
-                              '${widget.detalleSiModel.recursoNombre}',
+                              '${widget.detalleOpModel.recursoNombre}',
                               style: TextStyle(
                                 fontWeight: FontWeight.w500,
                                 fontSize: ScreenUtil().setSp(19),
@@ -308,25 +377,29 @@ class _CardExpandableState extends State<CardExpandable> {
                         shrinkWrap: true,
                         physics: ClampingScrollPhysics(),
                         children: [
-                          SizedBox(
+                          /*  SizedBox(
                             height: responsive.hp(2),
                           ),
                           _datosRow3(
                             responsive,
                             'Tipo:',
-                            '${widget.detalleSiModel.logisticaTipoNombre}',
+                            '${widget.detalleOpModel.logisticaTipoNombre}',
                             'Clase:',
-                            '${widget.detalleSiModel.logisticaClaseNombre}',
-                          ),
+                            '${widget.detalleOpModel.logisticaClaseNombre}',
+                          ), */
                           SizedBox(
                             height: responsive.hp(2),
                           ),
                           _datosRow3(
                             responsive,
                             'U.M.:',
-                            '${widget.detalleSiModel.um}',
+                            '${widget.detalleOpModel.um}',
                             'Cantidad:',
-                            '${widget.detalleSiModel.cantidad}',
+                            '${widget.detalleOpModel.cantidad}',
+                            'Precio Unit:',
+                            'S/.${widget.detalleOpModel.detalleOpPrecioUnit}',
+                            'Precio Total:',
+                            'S/.${widget.detalleOpModel.detalleOpPrecioTotal}',
                           ),
                           SizedBox(
                             height: responsive.hp(2),
@@ -343,7 +416,7 @@ class _CardExpandableState extends State<CardExpandable> {
                                 ),
                               ),
                               Text(
-                                '${widget.detalleSiModel.descripcion}',
+                                '${widget.detalleOpModel.descripcion}',
                                 style: TextStyle(
                                   fontSize: responsive.ip(1.5),
                                   fontWeight: FontWeight.w700,
@@ -368,14 +441,24 @@ class _CardExpandableState extends State<CardExpandable> {
     );
   }
 
-  Widget _datosRow3(Responsive responsive, String title, String subtitle, String title2, String subtitle2) {
+  Widget _datosRow3(
+    Responsive responsive,
+    String title,
+    String subtitle,
+    String title2,
+    String subtitle2,
+    String title3,
+    String subtitle3,
+    String title4,
+    String subtitle4,
+  ) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          width: responsive.wp(42.5),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 title,
@@ -398,9 +481,8 @@ class _CardExpandableState extends State<CardExpandable> {
         ),
         SizedBox(width: responsive.wp(5)),
         Container(
-          width: responsive.wp(42.5),
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Text(
                 title2,
@@ -412,6 +494,54 @@ class _CardExpandableState extends State<CardExpandable> {
               ),
               Text(
                 subtitle2,
+                style: TextStyle(
+                  fontSize: responsive.ip(1.5),
+                  fontWeight: FontWeight.w700,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(width: responsive.wp(5)),
+        Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                title3,
+                style: TextStyle(
+                  fontSize: responsive.ip(1.8),
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFFFAA11B),
+                ),
+              ),
+              Text(
+                subtitle3,
+                style: TextStyle(
+                  fontSize: responsive.ip(1.5),
+                  fontWeight: FontWeight.w700,
+                  color: Colors.grey[600],
+                ),
+              ),
+            ],
+          ),
+        ),
+        SizedBox(width: responsive.wp(5)),
+        Container(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                title4,
+                style: TextStyle(
+                  fontSize: responsive.ip(1.8),
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFFFAA11B),
+                ),
+              ),
+              Text(
+                subtitle4,
                 style: TextStyle(
                   fontWeight: FontWeight.w700,
                   fontSize: responsive.ip(1.5),
@@ -445,7 +575,7 @@ class ExpandableContainer extends StatelessWidget {
       duration: Duration(milliseconds: 300),
       curve: Curves.easeInOut,
       width: screenWidth,
-      height: expanded ? responsive.hp(22) : collapsedHeight,
+      height: expanded ? responsive.hp(15) : collapsedHeight,
       child: Container(
         child: child,
       ),

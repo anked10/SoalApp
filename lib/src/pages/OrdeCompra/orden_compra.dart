@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -7,39 +6,39 @@ import 'package:focused_menu/modals.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:soal_app/core/util/utils.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
-import 'package:soal_app/src/models/si_model.dart';
-import 'package:soal_app/src/pages/Proveedores/busqueda_proveedores.dart';
-import 'package:soal_app/src/pages/SolCompras/detalle_si_page.dart';
-import 'package:soal_app/src/pages/SolCompras/documentos_solicitud.dart';
+import 'package:soal_app/src/models/orden_compra_mode.dart';
+import 'package:soal_app/src/pages/OrdeCompra/detalle_op_page.dart';
+import 'package:soal_app/src/pages/OrdeCompra/documentos_oc.dart';
 
-class SolComprasPage extends StatefulWidget {
-  const SolComprasPage({Key? key}) : super(key: key);
+class OrdenCompraPage extends StatefulWidget {
+  const OrdenCompraPage({Key? key}) : super(key: key);
 
   @override
-  _SolComprasPageState createState() => _SolComprasPageState();
+  _OrdenCompraPageState createState() => _OrdenCompraPageState();
 }
 
-class _SolComprasPageState extends State<SolComprasPage> {
-  List<String> itemsCabeceraTabla = [
-    'NÚMERO',
+class _OrdenCompraPageState extends State<OrdenCompraPage> {
+  List<String> itemsHead = [
+    'OC',
     '   SEDE   ',
-    'CONCEPTO DE LA\nSOLICITUD',
-    'PROYECTO',
+    'PROVEEDOR',
+    'MONEDA',
+    'MONTO',
     'SOLICITADO POR',
     'ESTADO',
   ];
 
   @override
   Widget build(BuildContext context) {
-    final siBloc = ProviderBloc.si(context);
-    siBloc.obtenerSi();
+    final opBloc = ProviderBloc.op(context);
+    opBloc.obtenerOp();
 
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
       body: StreamBuilder(
-        stream: siBloc.siStream,
-        builder: (BuildContext context, AsyncSnapshot<List<SiModel>> snapshote) {
+        stream: opBloc.opStream,
+        builder: (BuildContext context, AsyncSnapshot<List<OrdenCompraModel>> snapshote) {
           if (snapshote.hasData) {
             if (snapshote.data!.length > 0) {
               var listOficial = snapshote.data;
@@ -54,17 +53,17 @@ class _SolComprasPageState extends State<SolComprasPage> {
                       child: Row(
                         children: [
                           Text(
-                            'Solicitud de compras',
+                            'Orden de compras',
                             style: TextStyle(
                               fontSize: ScreenUtil().setSp(27),
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          Spacer(),
+                          /* Spacer(),
                          
                           IconButton(
                             onPressed: () {
-                              Navigator.push(
+                              /* Navigator.push(
                                 context,
                                 PageRouteBuilder(
                                   pageBuilder: (context, animation, secondaryAnimation) {
@@ -85,7 +84,7 @@ class _SolComprasPageState extends State<SolComprasPage> {
                                     );
                                   },
                                 ),
-                              );
+                              ); */
                              
                             },
                             iconSize: ScreenUtil().setSp(35),
@@ -93,7 +92,7 @@ class _SolComprasPageState extends State<SolComprasPage> {
                               Icons.search,
                               color: Color(0xff454799),
                             ),
-                          )
+                          ) */
                         ],
                       ),
                     ),
@@ -109,7 +108,7 @@ class _SolComprasPageState extends State<SolComprasPage> {
                               vertical: ScreenUtil().setHeight(10),
                               horizontal: ScreenUtil().setWidth(5),
                             ),
-                            height: ScreenUtil().setHeight(80) * (listOficial!.length + 1) ,
+                            height: ScreenUtil().setHeight(80) * (listOficial!.length + 1),
                             child: Row(
                               children: [
                                 Container(
@@ -155,7 +154,7 @@ class _SolComprasPageState extends State<SolComprasPage> {
 
                                       int lineas = 2;
                                       var lineasCaptadas = maxLines(
-                                        '${listOficial[index].siDatetime}',
+                                        '${listOficial[index].opDateTiemAprobacion}',
                                         ScreenUtil().setWidth(150),
                                         TextStyle(
                                           fontWeight: FontWeight.w400,
@@ -175,7 +174,7 @@ class _SolComprasPageState extends State<SolComprasPage> {
                                                     children: [
                                                       Expanded(
                                                         child: Text(
-                                                          '${listOficial[index].siDatetime}',
+                                                          '${listOficial[index].opDateTiemAprobacion}',
                                                           textAlign: TextAlign.center,
                                                           style: TextStyle(
                                                             fontWeight: FontWeight.w400,
@@ -202,12 +201,11 @@ class _SolComprasPageState extends State<SolComprasPage> {
                                     scrollDirection: Axis.horizontal,
                                     padding: EdgeInsets.zero,
                                     physics: BouncingScrollPhysics(),
-                                    itemCount: itemsCabeceraTabla.length,
+                                    itemCount: itemsHead.length,
                                     itemBuilder: (context, index) {
-                                      //return Container(child: Text('0'));
                                       return Container(
                                         width: (maxAncho(
-                                          itemsCabeceraTabla[index],
+                                          itemsHead[index],
                                           ScreenUtil().setWidth(180),
                                           TextStyle(
                                             fontWeight: FontWeight.w600,
@@ -236,7 +234,7 @@ class _SolComprasPageState extends State<SolComprasPage> {
                                                     height: ayno * ScreenUtil().setHeight(20),
                                                     child: Center(
                                                       child: Text(
-                                                        '${itemsCabeceraTabla[index]}',
+                                                        '${itemsHead[index]}',
                                                         style: TextStyle(
                                                           fontWeight: FontWeight.w600,
                                                           fontSize: ScreenUtil().setSp(18),
@@ -252,20 +250,9 @@ class _SolComprasPageState extends State<SolComprasPage> {
                                                 ],
                                               );
                                             }
-                                            index2 = index2 -1;
+                                            index2 = index2 - 1;
                                             int lineas = 2;
-                                            var lineasCaptadas = maxLines(
-                                              '${listOficial[index].sedeNombre}',
-                                              ScreenUtil().setWidth(180),
-                                              TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: ScreenUtil().setSp(14),
-                                              ),
-                                            );
 
-                                            if (lineasCaptadas > 2) {
-                                              lineas = lineasCaptadas;
-                                            }
                                             return Column(
                                               children: [
                                                 focusGeneral(
@@ -276,15 +263,15 @@ class _SolComprasPageState extends State<SolComprasPage> {
                                                       height: lineas * ScreenUtil().setHeight(25),
                                                       child: Container(
                                                         child: Center(
-                                                          child: (itemsCabeceraTabla[index] == 'NÚMERO')
+                                                          child: (itemsHead[index] == 'OC')
                                                               ? Text(
-                                                                  '${listOficial[index2].siNumero}',
+                                                                  '${listOficial[index2].opNumero}',
                                                                   textAlign: TextAlign.center,
                                                                   style: TextStyle(
                                                                     fontSize: ScreenUtil().setSp(15),
                                                                   ),
                                                                 )
-                                                              : (itemsCabeceraTabla[index] == '   SEDE   ')
+                                                              : (itemsHead[index] == '   SEDE   ')
                                                                   ? Text(
                                                                       '${listOficial[index2].sedeNombre}',
                                                                       textAlign: TextAlign.center,
@@ -292,40 +279,48 @@ class _SolComprasPageState extends State<SolComprasPage> {
                                                                         fontSize: ScreenUtil().setSp(15),
                                                                       ),
                                                                     )
-                                                                  : (itemsCabeceraTabla[index] == 'CONCEPTO DE LA\nSOLICITUD')
+                                                                  : (itemsHead[index] == 'PROVEEDOR')
                                                                       ? Text(
-                                                                          '${listOficial[index2].siObservaciones}',
+                                                                          '${listOficial[index2].proveedorNombre}',
                                                                           textAlign: TextAlign.center,
                                                                           style: TextStyle(
                                                                             fontSize: ScreenUtil().setSp(15),
                                                                           ),
                                                                         )
-                                                                      : (itemsCabeceraTabla[index] == 'PROYECTO')
+                                                                      : (itemsHead[index] == 'MONEDA')
                                                                           ? Text(
-                                                                              '${listOficial[index2].proyectoNombre}',
+                                                                              '${listOficial[index2].opMoneda}',
                                                                               textAlign: TextAlign.center,
                                                                               style: TextStyle(
                                                                                 fontSize: ScreenUtil().setSp(15),
                                                                               ),
                                                                             )
-                                                                          : (itemsCabeceraTabla[index] == 'SOLICITADO POR')
+                                                                          : (itemsHead[index] == 'MONTO')
                                                                               ? Text(
-                                                                                  '${listOficial[index2].personName} ${listOficial[index2].personSurname}',
+                                                                                  '${listOficial[index2].opTotal}',
                                                                                   textAlign: TextAlign.center,
                                                                                   style: TextStyle(
                                                                                     fontSize: ScreenUtil().setSp(15),
                                                                                   ),
                                                                                 )
-                                                                              : (itemsCabeceraTabla[index] == 'ESTADO')
+                                                                              : (itemsHead[index] == 'SOLICITADO POR')
                                                                                   ? Text(
-                                                                                      '${listOficial[index2].siEstado}',
+                                                                                      '${listOficial[index2].personName} ${listOficial[index2].personSurname} ${listOficial[index2].personSurname2}',
                                                                                       textAlign: TextAlign.center,
                                                                                       style: TextStyle(
-                                                                                        fontWeight: FontWeight.bold,
                                                                                         fontSize: ScreenUtil().setSp(15),
                                                                                       ),
                                                                                     )
-                                                                                  : Text(''),
+                                                                                  : (itemsHead[index] == 'ESTADO')
+                                                                                      ? Text(
+                                                                                          '${listOficial[index2].opEstado}',
+                                                                                          textAlign: TextAlign.center,
+                                                                                          style: TextStyle(
+                                                                                            fontWeight: FontWeight.bold,
+                                                                                            fontSize: ScreenUtil().setSp(15),
+                                                                                          ),
+                                                                                        )
+                                                                                      : Text(''),
                                                         ),
                                                       ),
                                                     ),
@@ -351,7 +346,7 @@ class _SolComprasPageState extends State<SolComprasPage> {
               );
             } else {
               return Center(
-                child: Text('No hay Solicitudes de compra'),
+                child: Text('No hay Ordenes de compra'),
               );
             }
           } else {
@@ -366,7 +361,7 @@ class _SolComprasPageState extends State<SolComprasPage> {
 
   FocusedMenuHolder focusGeneral(
     Widget childs,
-    List<SiModel> si,
+    List<OrdenCompraModel> op,
     int index,
   ) {
     return FocusedMenuHolder(
@@ -377,11 +372,10 @@ class _SolComprasPageState extends State<SolComprasPage> {
         openWithTap: true,
         menuWidth: ScreenUtil().setWidth(210),
         menuItems: [
-         
           FocusedMenuItem(
             title: Expanded(
               child: Text(
-                "ver Detalles",
+                "Ver Detalles",
                 style: GoogleFonts.poppins(
                   fontWeight: FontWeight.w400,
                   fontSize: ScreenUtil().setSp(18),
@@ -396,12 +390,12 @@ class _SolComprasPageState extends State<SolComprasPage> {
               size: ScreenUtil().setHeight(20),
             ),
             onPressed: () async {
-                Navigator.push(
+              Navigator.push(
                 context,
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) {
-                    return DetalleSiPage(
-                      simodel: si[index],
+                    return DetalleOpPage(
+                      opModel: op[index],
                     );
                   },
                   transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -420,11 +414,9 @@ class _SolComprasPageState extends State<SolComprasPage> {
                   },
                 ),
               );
-            
             },
           ),
-
-           FocusedMenuItem(
+          FocusedMenuItem(
             title: Expanded(
               child: Text(
                 "Documentos",
@@ -442,7 +434,31 @@ class _SolComprasPageState extends State<SolComprasPage> {
               size: ScreenUtil().setHeight(20),
             ),
             onPressed: () async {
-                Navigator.push(
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return DocumentosOC(
+                      idOp: op[index].idOp.toString(),
+                    );
+                  },
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    var begin = Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
+
+                    var tween = Tween(begin: begin, end: end).chain(
+                      CurveTween(curve: curve),
+                    );
+
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+              /* Navigator.push(
                 context,
                 PageRouteBuilder(
                   pageBuilder: (context, animation, secondaryAnimation) {
@@ -465,11 +481,9 @@ class _SolComprasPageState extends State<SolComprasPage> {
                     );
                   },
                 ),
-              );
-            
+              ); */
             },
           ),
-          
         ],
         child: childs);
   }

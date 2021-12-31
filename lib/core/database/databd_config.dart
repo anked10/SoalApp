@@ -18,6 +18,9 @@ class DatabaseHelper {
       db.execute(tableSedes);
       db.execute(tableAlmacen);
       db.execute(tableDocument);
+      db.execute(tableOrdenCompra);
+      db.execute(tableDetalleOrdenConmpraSql);
+      db.execute(tableDocumentosOrdenDeCompraSql);
     }, version: 1, onDowngrade: onDatabaseDowngradeDelete);
   }
 
@@ -119,7 +122,6 @@ class DatabaseHelper {
       'logisticaClaseNombre TEXT,'
       'logisticaTipoNombre TEXT)';
 
-
   static const String tableDocument = 'CREATE TABLE Documentos('
       'idDocumento TEXT PRIMARY KEY, '
       'idPerson TEXT, '
@@ -130,4 +132,67 @@ class DatabaseHelper {
       'documentoReferencia TEXT, '
       'documentoFecha TEXT, '
       'documentoFechaSubida TEXT)';
+
+  static const String tableOrdenCompra = 'CREATE TABLE OrdenCompra('
+      'idOp TEXT PRIMARY KEY, '
+      'opNumero TEXT, '
+      'opVencimiento TEXT, '
+      'opMoneda TEXT, '
+      'opTotal TEXT, '
+      'opCondiciones TEXT, '
+      'opDateTime TEXT, '
+      'opDateTiemAprobacion TEXT, '
+      'opEstado TEXT, '
+      'opActivo TEXT, '
+      'proveedorNombre TEXT, '
+      'personName TEXT, '
+      'personSurname TEXT, '
+      'personSurname2 TEXT, '
+      'sedeNombre TEXT)';
+
+  static const String tableDetalleOrdenConmpraSql = 'CREATE TABLE DetalleOr('
+      'idDetalleOp TEXT PRIMARY KEY, '
+      'idOp TEXT, '
+      'detalleOpPrecioUnit TEXT, '
+      'detalleOpPrecioTotal TEXT, '
+      'opNumero TEXT, '
+      'cantidad TEXT, '
+      'opVencimiento TEXT,'
+      'atendido TEXT, '
+      'um TEXT, '
+      'descripcion TEXT, '
+      'recursoTipo TEXT, '
+      'recursoNombre TEXT, '
+      'recursoCodigo TEXT, '
+      'recursoComentario TEXT, '
+      'recursoFoto TEXT, '
+      'recursoEstado TEXT, '
+      'proveedorNombre TEXT, '
+      'proveedorRuc TEXT, '
+      'proveedorDireccion TEXT, '
+      'proveedorContacto TEXT, '
+      'proveedorTelefono TEXT, '
+      'proveedorEmail TEXT)';
+
+  static const String tableDocumentosOrdenDeCompraSql = 'CREATE TABLE DocumentosOrdenDeCompra('
+      'idPago TEXT PRIMARY KEY, '
+      'idObligacion TEXT, '
+      'idUser TEXT, '
+      'pagoBanco TEXT, '
+      'pagoMoneda TEXT, '
+      'pagoMonto TEXT, '
+      'pagoFecha TEXT,'
+      'pagoVoucher TEXT, '
+      'pagoTipo TEXT, '
+      'pagoReferencia TEXT, '
+      'tipoComprobante TEXT, '
+      'pagoRuc TEXT, '
+      'pagoNroComprobante TEXT, '
+      'idPersonPago TEXT, '
+      'idPersonPagador TEXT, '
+      'pagoRendicion TEXT, '
+      'pagoRendicionAprobacion  TEXT, '
+      'idOp TEXT, '
+      'pagoRegCod TEXT, '
+      'pagoFechaAdjuntada TEXT)';
 }

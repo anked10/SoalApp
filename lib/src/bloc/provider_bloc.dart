@@ -4,8 +4,11 @@ import 'package:soal_app/src/bloc/almacen_bloc.dart';
 import 'package:soal_app/src/bloc/busqueda_proveedor_bloc.dart';
 import 'package:soal_app/src/bloc/clases_bloc.dart';
 import 'package:soal_app/src/bloc/data_user.dart';
+import 'package:soal_app/src/bloc/detalle_op_bloc.dart';
 import 'package:soal_app/src/bloc/detalle_si_bloc.dart';
+import 'package:soal_app/src/bloc/documento_oc_bloc.dart';
 import 'package:soal_app/src/bloc/documentos_bloc.dart';
+import 'package:soal_app/src/bloc/orden_compra_bloc.dart';
 import 'package:soal_app/src/bloc/proveedoresBloc.dart';
 import 'package:soal_app/src/bloc/si_bloc.dart';
 
@@ -21,6 +24,9 @@ class ProviderBloc extends InheritedWidget {
   final almacenBloc = AlmacenBloc();
   final documentosBloc = DocumentosBloc();
   final dataUserBloc = DataUserBloc();
+  final ordenCompraBloc = OrdenCompraBloc();
+  final detalleOpBloc = DetalleOpBloc();
+  final documentoOCBloc = DocumentoOCBloc();
 
  
   ProviderBloc({required Widget child}) : super(child: child);
@@ -58,5 +64,17 @@ class ProviderBloc extends InheritedWidget {
 
   static DataUserBloc data(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.dataUserBloc;
+  }
+
+  static OrdenCompraBloc op(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.ordenCompraBloc;
+  }
+
+  static DetalleOpBloc detalleOp(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.detalleOpBloc;
+  }
+
+  static DocumentoOCBloc docOC(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.documentoOCBloc;
   }
 }
