@@ -53,9 +53,9 @@ class MyApp extends StatelessWidget {
         ],
         child: ScreenUtilInit(
           designSize: const Size(375, 812),
-          builder: () => MaterialApp(
+          builder: (_, w) => MaterialApp(
             debugShowCheckedModeBanner: false,
-            title: 'Bufi',
+            title: 'Soal',
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),

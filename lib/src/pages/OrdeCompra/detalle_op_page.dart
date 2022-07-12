@@ -2,14 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:focused_menu/focused_menu.dart';
-import 'package:focused_menu/modals.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/detalle_op_model.dart';
-import 'package:soal_app/src/models/detalle_si_model.dart';
 import 'package:soal_app/src/models/orden_compra_mode.dart';
-import 'package:soal_app/src/models/si_model.dart';
 import 'package:soal_app/src/pages/OrdeCompra/documentos_oc.dart';
 import 'package:soal_app/src/widgets/responsive.dart';
 

@@ -162,7 +162,7 @@ class _EditProviderState extends State<EditProvider> {
       ),
       body: ValueListenableBuilder(
         valueListenable: provider.page,
-        builder: (BuildContext context, estadoEditProveedor data, Widget? child) {
+        builder: (BuildContext context, EstadoEditProveedor data, Widget? child) {
           return Stack(
             children: [
               Column(
@@ -184,7 +184,7 @@ class _EditProviderState extends State<EditProvider> {
                               children: [
                                 CircleAvatar(
                                   backgroundColor:
-                                      (data == estadoEditProveedor.datos) ? Colors.yellow.shade800 : Colors.yellow.shade800.withOpacity(0.5),
+                                      (data == EstadoEditProveedor.datos) ? Colors.yellow.shade800 : Colors.yellow.shade800.withOpacity(0.5),
                                   child: Text(
                                     '1',
                                     style: TextStyle(
@@ -198,7 +198,7 @@ class _EditProviderState extends State<EditProvider> {
                                   'Datos',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
-                                    color: (data == estadoEditProveedor.datos) ? Colors.black : Colors.grey,
+                                    color: (data == EstadoEditProveedor.datos) ? Colors.black : Colors.grey,
                                     fontSize: ScreenUtil().setSp(16),
                                   ),
                                 )
@@ -216,7 +216,7 @@ class _EditProviderState extends State<EditProvider> {
                               children: [
                                 CircleAvatar(
                                   backgroundColor:
-                                      (data == estadoEditProveedor.cuenta) ? Colors.yellow.shade800 : Colors.yellow.shade800.withOpacity(0.5),
+                                      (data == EstadoEditProveedor.cuenta) ? Colors.yellow.shade800 : Colors.yellow.shade800.withOpacity(0.5),
                                   child: Text(
                                     '2',
                                     style: TextStyle(
@@ -230,7 +230,7 @@ class _EditProviderState extends State<EditProvider> {
                                   'Cuentas',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
-                                    color: (data == estadoEditProveedor.cuenta) ? Colors.black : Colors.grey,
+                                    color: (data == EstadoEditProveedor.cuenta) ? Colors.black : Colors.grey,
                                     fontSize: ScreenUtil().setSp(16),
                                   ),
                                 )
@@ -248,7 +248,7 @@ class _EditProviderState extends State<EditProvider> {
                               children: [
                                 CircleAvatar(
                                   backgroundColor:
-                                      (data == estadoEditProveedor.tipos) ? Colors.yellow.shade800 : Colors.yellow.shade800.withOpacity(0.5),
+                                      (data == EstadoEditProveedor.tipos) ? Colors.yellow.shade800 : Colors.yellow.shade800.withOpacity(0.5),
                                   child: Text(
                                     '3',
                                     style: TextStyle(
@@ -262,7 +262,7 @@ class _EditProviderState extends State<EditProvider> {
                                   'Tipos',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
-                                    color: (data == estadoEditProveedor.tipos) ? Colors.black : Colors.grey,
+                                    color: (data == EstadoEditProveedor.tipos) ? Colors.black : Colors.grey,
                                     fontSize: ScreenUtil().setSp(16),
                                   ),
                                 )
@@ -275,14 +275,14 @@ class _EditProviderState extends State<EditProvider> {
                   ),
 
                   //contenedor del medio
-                  (data == estadoEditProveedor.datos)
+                  (data == EstadoEditProveedor.datos)
                       ? pageDatos()
-                      : (data == estadoEditProveedor.cuenta)
+                      : (data == EstadoEditProveedor.cuenta)
                           ? pageCuentas()
                           : pageTipo(clasesBloc),
 
                   //boton en la parte baja
-                  (data == estadoEditProveedor.datos)
+                  (data == EstadoEditProveedor.datos)
                       ? InkWell(
                           onTap: () {
                             provider.changeToCuenta();
@@ -318,7 +318,7 @@ class _EditProviderState extends State<EditProvider> {
                             ),
                           ),
                         )
-                      : (data == estadoEditProveedor.cuenta)
+                      : (data == EstadoEditProveedor.cuenta)
                           ? InkWell(
                               onTap: () {
                                 provider.changeToTipos();

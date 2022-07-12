@@ -17,7 +17,6 @@ import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/documento_model.dart';
 import 'package:soal_app/src/models/proveedores_model.dart';
-import 'package:soal_app/src/pages/pdf_viewer.dart';
 import 'package:soal_app/src/widgets/responsive.dart';
 
 class DocumentosProveedor extends StatefulWidget {
@@ -88,7 +87,7 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
                         } else if (fechaFormat[algo] == 'pdf') {
                           randomNumber = 2;
                         }
-                        
+
                         return itemDatos(snapshot.data![y], randomNumber, provider);
                       },
                     ),
@@ -117,9 +116,9 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
                       ? Container()
                       : (data == 100.0)
                           ? Container(
-                            margin:EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-                            padding: EdgeInsets.symmetric(vertical: responsive.hp(.5)),
-                            decoration: BoxDecoration(color:Colors.green,borderRadius: BorderRadius.circular(10)),
+                              margin: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+                              padding: EdgeInsets.symmetric(vertical: responsive.hp(.5)),
+                              decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(10)),
                               child: Center(
                                 child: Text(
                                   'Descarga  completa',
@@ -136,7 +135,7 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
                                     LinearPercentIndicator(
                                       width: responsive.wp(90),
                                       lineHeight: 14.0,
-                                      percent: data/100,
+                                      percent: data / 100,
                                       backgroundColor: Colors.white,
                                       progressColor: Colors.blue,
                                     ),
@@ -254,7 +253,7 @@ class _DocumentosProveedorState extends State<DocumentosProveedor> {
               size: ScreenUtil().setHeight(20),
             ),
             onPressed: () async {
-             await new Future.delayed(new Duration(seconds: 1));
+              await new Future.delayed(new Duration(seconds: 1));
               await [
                 Permission.location,
                 Permission.storage,

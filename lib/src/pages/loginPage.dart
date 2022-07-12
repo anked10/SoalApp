@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       final clasesApi = ClasesApi();
 
       await clasesApi.getClases();

@@ -43,7 +43,6 @@ List<DropdownMenuItem<String>> get dropdownMoneda1 {
 String moneda2 = "Seleccione";
 String moneda3 = "Seleccione";
 
-
 String estadoPro = "Seleccione";
 List<DropdownMenuItem<String>> get dropDownestado {
   List<DropdownMenuItem<String>> menuItems = [
@@ -54,14 +53,13 @@ List<DropdownMenuItem<String>> get dropDownestado {
   return menuItems;
 }
 
-enum estadoEditProveedor { datos, cuenta, tipos }
+enum EstadoEditProveedor { datos, cuenta, tipos }
 
 class EditProveedorBloc with ChangeNotifier {
-  ValueNotifier<estadoEditProveedor> _page = ValueNotifier(estadoEditProveedor.datos);
-  ValueNotifier<estadoEditProveedor> get page => this._page;
+  ValueNotifier<EstadoEditProveedor> _page = ValueNotifier(EstadoEditProveedor.datos);
+  ValueNotifier<EstadoEditProveedor> get page => this._page;
 
-
-   ValueNotifier<bool> _cargando = ValueNotifier(false);
+  ValueNotifier<bool> _cargando = ValueNotifier(false);
   ValueNotifier<bool> get cargando => this._cargando;
 
   BuildContext? context;
@@ -72,17 +70,17 @@ class EditProveedorBloc with ChangeNotifier {
   void _init() {}
 
   void changeToDatos() {
-    _page.value = estadoEditProveedor.datos;
+    _page.value = EstadoEditProveedor.datos;
     notifyListeners();
   }
 
   void changeToCuenta() {
-    _page.value = estadoEditProveedor.cuenta;
+    _page.value = EstadoEditProveedor.cuenta;
     notifyListeners();
   }
 
   void changeToTipos() {
-    _page.value = estadoEditProveedor.tipos;
+    _page.value = EstadoEditProveedor.tipos;
     notifyListeners();
   }
 }
