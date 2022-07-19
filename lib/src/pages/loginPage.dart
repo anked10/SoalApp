@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:soal_app/core/sharedpreferences/storage_manager.dart';
 import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/core/util/utils.dart';
 import 'package:soal_app/src/api/clases_api.dart';
@@ -185,7 +186,12 @@ class _LoginPageState extends State<LoginPage> {
                               final res = await _login.login(_usuarioController.text, _passwdController.text);
 
                               if (res.code == 1) {
-                                Navigator.of(context).pushNamedAndRemoveUntil(HOME_ROUTE, (Route<dynamic> route) => false);
+                                String? idRol = await StorageManager.readData('idRoleUser');
+                                if (idRol != '3') {
+                                  Navigator.of(context).pushNamedAndRemoveUntil(HOME_GERENCIA, (Route<dynamic> route) => false);
+                                } else {
+                                  Navigator.of(context).pushNamedAndRemoveUntil(HOME_ROUTE, (Route<dynamic> route) => false);
+                                }
                               } else {
                                 showToast2(res.message, Colors.black);
                               }
@@ -237,6 +243,7 @@ class _LoginPageState extends State<LoginPage> {
               builder: (context, snapshot) {
                 return ShowLoadding(
                   active: _controller.loadding,
+                  color: Colors.black.withOpacity(0.3),
                 );
               },
             ),

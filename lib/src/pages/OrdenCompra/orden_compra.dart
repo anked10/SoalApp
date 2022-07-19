@@ -7,8 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:soal_app/core/util/utils.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/orden_compra_mode.dart';
-import 'package:soal_app/src/pages/OrdeCompra/detalle_op_page.dart';
-import 'package:soal_app/src/pages/OrdeCompra/documentos_oc.dart';
+import 'package:soal_app/src/pages/OrdenCompra/detalle_op_page.dart';
+import 'package:soal_app/src/pages/OrdenCompra/documentos_oc.dart';
 
 class OrdenCompraPage extends StatefulWidget {
   const OrdenCompraPage({Key? key}) : super(key: key);

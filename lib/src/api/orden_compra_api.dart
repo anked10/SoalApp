@@ -2,16 +2,22 @@ import 'dart:convert';
 
 import 'package:soal_app/core/database/detalle_op_database.dart';
 import 'package:soal_app/core/database/orden_compra_database.dart';
+import 'package:soal_app/core/database/orden_compra_db.dart';
+import 'package:soal_app/core/database/recurso_detalle_database.dart';
 import 'package:soal_app/core/sharedpreferences/storage_manager.dart';
 import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/src/models/api_result_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:soal_app/src/models/detalle_op_model.dart';
 import 'package:soal_app/src/models/orden_compra_mode.dart';
+import 'package:soal_app/src/models/orden_compra_model.dart';
+import 'package:soal_app/src/models/recurso_detalle_oc_model.dart';
 
 class OrdenCompraApi {
   final ordenCompraDatabase = OrdenCompraDatabase();
   final detalleOpDatabase = DetalleOpDatabase();
+  final ocDB = OrdenCompraDB();
+  final detalleOCDB = RecursoDetalleOCDB();
   Future<ApiResultModel> getOrdenCompra() async {
     ApiResultModel result = ApiResultModel();
     try {
@@ -86,6 +92,83 @@ class OrdenCompraApi {
       result.code = 2;
       result.message = 'Ocurrió un error';
       return result;
+    }
+  }
+
+  Future<int> getOrdenCompraPendientes() async {
+    try {
+      final url = '$API_BASE_URL/api/Ordencompra/ws_listar_pendientes_op';
+      String? token = await StorageManager.readData('token');
+      final response = await http.post(Uri.parse(url), body: {
+        'app': 'true',
+        'tn': token,
+      });
+      if (response.statusCode == 200) {
+        await ocDB.deleteAllByEstado('0');
+        final decodedData = json.decode(response.body);
+        for (var i = 0; i < decodedData.length; i++) {
+          var item = decodedData[i];
+          final orden = OrdenCompraNewModel();
+          orden.idOC = item["id_op"];
+          orden.ccOC = item["generar_orden_compra_cc"];
+          orden.proformaOC = item["generar_orden_compra_proforma"];
+          orden.condicionPagoOC = item["generar_orden_compra_condicion_pago"];
+          orden.subTotalOC = '';
+          orden.percentDescuentoOC = '';
+          orden.descuentoOC = item["generar_orden_compra_descuento"];
+          orden.igvOC = item["generar_orden_compra_igv"];
+          orden.creditoOC = item["generar_orden_compra_credito"];
+          orden.totalOC = item["op_total"];
+          orden.dateTimeCreateOC = item["op_datetime"];
+          orden.dateTimeAprobacionOC = item["op_datetime_aprobacion"];
+          orden.estadoOC = item["op_estado"];
+          orden.activoOC = item["op_activo"];
+          orden.nombreProyectoOC = item["proyecto_nombre"];
+          orden.codigoProyectoOC = item["proyecto_codigo"];
+          orden.idMoneda = item["id_moneda"];
+          orden.nameCreateOC = item["person_name"];
+          orden.surnameCreateOC = item["person_surname"];
+          orden.surnameCreate2OC = item["person_surname2"];
+          orden.nombreEmpresa = item["empresa_nombre"];
+          orden.rucEmpresa = item["empresa_ruc"];
+          orden.direccionEmpresa = item["empresa_direccion"];
+          orden.nombreSede = item["sede_nombre"];
+          orden.nombreProveedor = item["proveedor_nombre"];
+          orden.rucProveedor = item["proveedor_ruc"];
+          orden.direccionProveedor = item["proveedor_direccion"];
+          orden.telefonoProveedor = item["proveedor_telefono"];
+          orden.contactoProveedor = item["proveedor_contacto"];
+          orden.emailProveedor = item["proveedor_email"];
+          await ocDB.insertarOrdenCompra(orden);
+
+          for (var x = 0; x < item["detalle"].length; x++) {
+            var de = item["detalle"][x];
+
+            final detalle = RecursoDetalleOCModel();
+            detalle.idDetalleOC = de["id_detalleop"];
+            detalle.idOC = de["id_op"];
+            detalle.idrecurso = de["id_recurso"];
+            detalle.cantidadDetalleOC = de["detalleop_cantidad"];
+            detalle.precioUnitDetalleOC = de["detalleop_prec_unit"];
+            detalle.precioUnitTDetalleOC = de["detalleop_prec_unit_t"];
+            detalle.precioTotalDetalleOC = de["detalleop_prec_tot"];
+            detalle.umRecurso = de["logistica_materiales_um"];
+            detalle.tipoRecurso = de["recurso_tipo"];
+            detalle.nombreRecurso = de["recurso_nombre"];
+            detalle.codigoRecurso = de["recurso_codigo"];
+            detalle.comentarioRecurso = de["recurso_comentario"];
+            detalle.fotoRecurso = de["recurso_foto"];
+            detalle.estadoRecurso = de["recurso_estado"];
+
+            await detalleOCDB.insertarDetalleOC(detalle);
+          }
+        }
+        return 1;
+      } else {
+        return 2;
+      }
+    } catch (e) {
+      return 2;
     }
   }
 }

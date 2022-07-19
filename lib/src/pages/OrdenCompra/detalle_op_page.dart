@@ -5,7 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/detalle_op_model.dart';
 import 'package:soal_app/src/models/orden_compra_mode.dart';
-import 'package:soal_app/src/pages/OrdeCompra/documentos_oc.dart';
+import 'package:soal_app/src/pages/OrdenCompra/documentos_oc.dart';
 import 'package:soal_app/src/widgets/responsive.dart';
 
 class DetalleOpPage extends StatefulWidget {

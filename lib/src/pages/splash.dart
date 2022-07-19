@@ -19,10 +19,17 @@ class _SplashState extends State<Splash> {
       await clasesApi.getClases();
 
       String? token = await StorageManager.readData('token');
+
+      String? idRol = await StorageManager.readData('idRoleUser');
       if (token == null || token.isEmpty) {
         Navigator.pushNamedAndRemoveUntil(context, LOGIN_ROUTE, (route) => false);
       } else {
-        Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
+        //ROL GERENCIAS id=3
+        if (idRol != '3') {
+          Navigator.pushNamedAndRemoveUntil(context, HOME_GERENCIA, (route) => false);
+        } else {
+          Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
+        }
       }
     });
     super.initState();

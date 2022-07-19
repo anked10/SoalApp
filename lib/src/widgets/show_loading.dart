@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ShowLoadding extends StatelessWidget {
-  const ShowLoadding({Key? key, required this.active}) : super(key: key);
+  const ShowLoadding({Key? key, required this.active, required this.color}) : super(key: key);
   final bool active;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +12,7 @@ class ShowLoadding extends StatelessWidget {
         ? Container(
             height: double.infinity,
             width: double.infinity,
-            color: Colors.black.withOpacity(0.3),
+            color: color,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

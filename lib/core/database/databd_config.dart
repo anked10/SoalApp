@@ -21,6 +21,8 @@ class DatabaseHelper {
       db.execute(tableOrdenCompra);
       db.execute(tableDetalleOrdenConmpraSql);
       db.execute(tableDocumentosOrdenDeCompraSql);
+      db.execute(tableOrdenCompraSql);
+      db.execute(tableRecursoDetalleOC);
     }, version: 1, onDowngrade: onDatabaseDowngradeDelete);
   }
 
@@ -195,4 +197,52 @@ class DatabaseHelper {
       'idOp TEXT, '
       'pagoRegCod TEXT, '
       'pagoFechaAdjuntada TEXT)';
+
+  static const String tableOrdenCompraSql = 'CREATE TABLE OrdenCompraNew('
+      'idOC TEXT PRIMARY KEY, '
+      'ccOC TEXT, '
+      'proformaOC TEXT, '
+      'condicionPagoOC TEXT, '
+      'subTotalOC TEXT, '
+      'percentDescuentoOC TEXT, '
+      'descuentoOC TEXT, '
+      'igvOC TEXT, '
+      'creditoOC TEXT, '
+      'totalOC TEXT, '
+      'dateTimeCreateOC TEXT,'
+      'dateTimeAprobacionOC TEXT, '
+      'estadoOC TEXT, '
+      'activoOC TEXT, '
+      'nombreProyectoOC TEXT, '
+      'codigoProyectoOC TEXT, '
+      'idMoneda TEXT, '
+      'nameCreateOC TEXT, '
+      'surnameCreateOC TEXT, '
+      'surnameCreate2OC TEXT, '
+      'nombreEmpresa TEXT, '
+      'rucEmpresa TEXT, '
+      'direccionEmpresa  TEXT, '
+      'nombreSede TEXT, '
+      'nombreProveedor TEXT, '
+      'rucProveedor TEXT, '
+      'direccionProveedor TEXT, '
+      'telefonoProveedor TEXT, '
+      'contactoProveedor TEXT, '
+      'emailProveedor TEXT)';
+
+  static const String tableRecursoDetalleOC = 'CREATE TABLE RecursoDetalleOC('
+      'idDetalleOC TEXT PRIMARY KEY, '
+      'idOC TEXT, '
+      'idrecurso TEXT, '
+      'cantidadDetalleOC TEXT, '
+      'precioUnitDetalleOC TEXT, '
+      'precioUnitTDetalleOC TEXT, '
+      'precioTotalDetalleOC TEXT, '
+      'tipoRecurso TEXT, '
+      'nombreRecurso TEXT, '
+      'codigoRecurso TEXT, '
+      'comentarioRecurso TEXT, '
+      'umRecurso TEXT, '
+      'fotoRecurso TEXT, '
+      'estadoRecurso TEXT)';
 }

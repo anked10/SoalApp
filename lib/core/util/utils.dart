@@ -3,7 +3,7 @@ import 'dart:math';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-
+import 'package:intl/intl.dart';
 
 class Utils {
   double screenSafeAreaHeight(BuildContext context) {
@@ -41,8 +41,6 @@ void showToast2(String? texto, Color color) {
   Fluttertoast.showToast(msg: "$texto", toastLength: Toast.LENGTH_LONG, timeInSecForIosWeb: 3, backgroundColor: color, textColor: Colors.white);
 }
 
-
-
 maxLines(String text, double ancho, TextStyle style) {
   final span = TextSpan(
     text: text,
@@ -54,13 +52,24 @@ maxLines(String text, double ancho, TextStyle style) {
   return tp.computeLineMetrics().length;
 }
 
-
 maxAncho(String text, double ancho, TextStyle style) {
   final span = TextSpan(
     text: text,
     style: style,
   );
   final tp = TextPainter(text: span, textDirection: ui.TextDirection.ltr);
-  tp.layout(maxWidth: ancho); 
+  tp.layout(maxWidth: ancho);
   return tp.width * 1.7;
+}
+
+obtenerFecha(String date) {
+  if (date == 'null' || date == '') {
+    return '';
+  }
+
+  var fecha = DateTime.parse(date);
+
+  final DateFormat fech = DateFormat('dd MMM yyyy', 'es');
+
+  return fech.format(fecha);
 }

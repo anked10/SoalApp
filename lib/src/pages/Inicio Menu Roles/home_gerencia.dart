@@ -3,37 +3,32 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:soal_app/core/config/colors.dart';
-import 'package:soal_app/src/pages/Almacen/almacen_page.dart';
+import 'package:soal_app/src/pages/Contabilidad/contabilidad.dart';
 import 'package:soal_app/src/pages/Cuenta/cuenta_page.dart';
-import 'package:soal_app/src/pages/OrdenCompra/consulta_informacion.dart';
-import 'package:soal_app/src/pages/Proveedores/proveedores_page.dart';
-import 'package:soal_app/src/pages/SolCompras/solCompras_page.dart';
+import 'package:soal_app/src/pages/OrdenCompra/oc_pendientes.dart';
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class HomeGerencia extends StatefulWidget {
+  const HomeGerencia({Key? key}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomeGerenciaState createState() => _HomeGerenciaState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomeGerenciaState extends State<HomeGerencia> {
   List<Widget> pageList = [];
 
   @override
   void initState() {
-    pageList.add(ProveedoresPage());
-    pageList.add(AlmacenPage());
-    pageList.add(SolComprasPage());
-    pageList.add(ConsultaInformacion());
+    pageList.add(OCPendientes());
+    pageList.add(Contabilidad());
     pageList.add(CuentaPage());
-    //pageList.add(UserPage());
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<ChangeBottomExplorer>(context, listen: false);
+    final provider = Provider.of<ChangeBottom>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
       body: ValueListenableBuilder<int>(
@@ -87,21 +82,17 @@ class _HomePageState extends State<HomePage> {
                               height: ScreenUtil().setSp(30),
                               width: ScreenUtil().setSp(30),
                               child: SvgPicture.asset(
-                                'assets/svg/proveedores.svg',
+                                'assets/svg/solCompras.svg',
                                 color: (value == 0) ? tabSelected : tabNoSelected,
                               ),
                             ),
-                            Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  'Proveedores',
-                                  style: TextStyle(
-                                    fontSize: ScreenUtil().setSp(14),
-                                    color: (value == 0) ? tabSelected : tabNoSelected,
-                                  ),
-                                ),
-                              ],
+                            Text(
+                              'Orden\ncompras',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: ScreenUtil().setSp(14),
+                                color: (value == 0) ? tabSelected : tabNoSelected,
+                              ),
                             )
                           ],
                         ),
@@ -125,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Almacén',
+                                  'Contabilidad\ny Finanzas',
                                   style: TextStyle(
                                     fontSize: ScreenUtil().setSp(14),
                                     color: (value == 1) ? tabSelected : tabNoSelected,
@@ -136,61 +127,9 @@ class _HomePageState extends State<HomePage> {
                           ],
                         ),
                       ),
-                      // InkWell(
-                      //   onTap: () {
-                      //     provider.changePage(2);
-                      //   },
-                      //   child: Column(
-                      //     mainAxisAlignment: MainAxisAlignment.center,
-                      //     children: [
-                      //       Container(
-                      //         height: ScreenUtil().setSp(30),
-                      //         width: ScreenUtil().setSp(30),
-                      //         child: SvgPicture.asset(
-                      //           'assets/svg/solCompras.svg',
-                      //           color: (value == 2) ? tabSelected : tabNoSelected,
-                      //         ),
-                      //       ),
-                      //       Text(
-                      //         'Solicitud\ncompras',
-                      //         textAlign: TextAlign.center,
-                      //         style: TextStyle(
-                      //           fontSize: ScreenUtil().setSp(14),
-                      //           color: (value == 2) ? tabSelected : tabNoSelected,
-                      //         ),
-                      //       )
-                      //     ],
-                      //   ),
-                      // ),
                       InkWell(
                         onTap: () {
-                          provider.changePage(3);
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Container(
-                              height: ScreenUtil().setSp(30),
-                              width: ScreenUtil().setSp(30),
-                              child: SvgPicture.asset(
-                                'assets/svg/solCompras.svg',
-                                color: (value == 3) ? tabSelected : tabNoSelected,
-                              ),
-                            ),
-                            Text(
-                              'Orden\ncompras',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: ScreenUtil().setSp(14),
-                                color: (value == 3) ? tabSelected : tabNoSelected,
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {
-                          provider.changePage(4);
+                          provider.changePage(2);
                         },
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -200,7 +139,7 @@ class _HomePageState extends State<HomePage> {
                               width: ScreenUtil().setSp(30),
                               child: SvgPicture.asset(
                                 'assets/svg/cuenta.svg',
-                                color: (value == 4) ? tabSelected : tabNoSelected,
+                                color: (value == 2) ? tabSelected : tabNoSelected,
                               ),
                             ),
                             Column(
@@ -210,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                                   'Cuenta',
                                   style: TextStyle(
                                     fontSize: ScreenUtil().setSp(14),
-                                    color: (value == 4) ? tabSelected : tabNoSelected,
+                                    color: (value == 2) ? tabSelected : tabNoSelected,
                                   ),
                                 ),
                               ],
@@ -230,7 +169,7 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class ChangeBottomExplorer extends ChangeNotifier {
+class ChangeBottom extends ChangeNotifier {
   ValueNotifier<int> page = ValueNotifier(0);
   ValueNotifier<int> get _pagina => this.page;
 

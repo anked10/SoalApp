@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/core/util/router.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/pages/Almacen/busqueda_almacen.dart';
-import 'package:soal_app/src/pages/OrdeCompra/documentos_oc.dart';
+import 'package:soal_app/src/pages/Inicio%20Menu%20Roles/home_gerencia.dart';
+import 'package:soal_app/src/pages/OrdenCompra/documentos_oc.dart';
 import 'package:soal_app/src/pages/Proveedores/bloc_editar_proveedor.dart';
 import 'package:soal_app/src/pages/Proveedores/busqueda_proveedores.dart';
 import 'package:soal_app/src/pages/Proveedores/documentos_proveedor.dart';
@@ -28,6 +30,9 @@ class MyApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider<ChangeBottomExplorer>(
             create: (_) => ChangeBottomExplorer(),
+          ),
+          ChangeNotifierProvider<ChangeBottom>(
+            create: (_) => ChangeBottom(),
           ),
           ChangeNotifierProvider<EstadoListener>(
             create: (_) => EstadoListener(),
@@ -59,6 +64,16 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               primarySwatch: Colors.blue,
             ),
+            localizationsDelegates: const [
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            supportedLocales: const [
+              Locale('es'),
+              Locale('es', 'ES'), // Spanish, no country code
+              //const Locale('en', 'EN'), // English, no country code
+            ],
             onGenerateRoute: Routers.generateRoute,
             initialRoute: SPLASH_ROUTE,
           ),
