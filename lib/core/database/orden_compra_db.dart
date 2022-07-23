@@ -33,6 +33,21 @@ class OrdenCompraDB {
     }
   }
 
+  Future<List<OrdenCompraNewModel>> buscarOCPendientes(String query) async {
+    try {
+      final Database db = await dbprovider.getDatabase();
+      List<OrdenCompraNewModel> list = [];
+      List<Map> maps = await db.rawQuery(
+          "SELECT * FROM OrdenCompraNew WHERE estadoOC='0' AND (nombreProyectoOC LIKE '%$query%' OR nombreProveedor LIKE '%$query%' OR rucProveedor LIKE '%$query%' OR nombreEmpresa LIKE '%$query%' OR nombreSede LIKE '%$query%' OR nameCreateOC LIKE '%$query%' OR dateTimeCreateOC LIKE '%$query%' OR totalOC LIKE '%$query%') ");
+
+      if (maps.length > 0) list = OrdenCompraNewModel.fromJsonList(maps);
+      return list;
+    } catch (e) {
+      print(" $e Error en la base de datos OrdenCompraNew");
+      return [];
+    }
+  }
+
   Future<List<OrdenCompraNewModel>> getOCByID(String idOC) async {
     try {
       final Database db = await dbprovider.getDatabase();

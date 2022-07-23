@@ -4,6 +4,7 @@ import 'package:soal_app/core/util/utils.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/orden_compra_model.dart';
 import 'package:soal_app/src/models/recurso_detalle_oc_model.dart';
+import 'package:soal_app/src/pages/Actions/aprobar_oc.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
 import 'package:soal_app/src/widgets/widgets.dart';
 
@@ -202,6 +203,67 @@ class DetalleOC extends StatelessWidget {
                           color: Colors.blue,
                           height: 40,
                           mtop: 15,
+                        ),
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      Align(
+                        alignment: Alignment.bottomRight,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            //Aprobar OC
+                            Navigator.push(
+                              context,
+                              PageRouteBuilder(
+                                opaque: false,
+                                pageBuilder: (context, animation, secondaryAnimation) {
+                                  return AprobarOC(
+                                    id: idOC,
+                                    onChanged: (v) {
+                                      Navigator.pop(context);
+                                      final ocBloc = ProviderBloc.op(context);
+
+                                      ocBloc.ocPendientes();
+                                    },
+                                  );
+                                },
+                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                  var begin = const Offset(0.0, 1.0);
+                                  var end = Offset.zero;
+                                  var curve = Curves.ease;
+
+                                  var tween = Tween(begin: begin, end: end).chain(
+                                    CurveTween(curve: curve),
+                                  );
+
+                                  return SlideTransition(
+                                    position: animation.drive(tween),
+                                    child: child,
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              ),
+                            ),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.symmetric(
+                                horizontal: ScreenUtil().setWidth(15),
+                                vertical: ScreenUtil().setHeight(4),
+                              ),
+                            ),
+                          ),
+                          icon: Icon(
+                            Icons.check_circle_outline,
+                            size: ScreenUtil().setHeight(30),
+                          ),
+                          label: Text(
+                            'Aprobar',
+                            style: TextStyle(fontSize: ScreenUtil().setSp(20), fontWeight: FontWeight.w500),
+                          ),
                         ),
                       ),
                       SizedBox(height: ScreenUtil().setHeight(50)),

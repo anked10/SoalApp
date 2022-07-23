@@ -4,18 +4,17 @@ import 'package:soal_app/core/util/utils.dart';
 import 'package:soal_app/src/api/orden_compra_api.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
 
-class Eliminar extends StatefulWidget {
-  const Eliminar({Key? key, required this.title, required this.id, required this.valueEliminar, required this.onChanged}) : super(key: key);
-  final String title;
+class AprobarOC extends StatefulWidget {
+  const AprobarOC({Key? key, required this.id, required this.onChanged}) : super(key: key);
+
   final String id;
-  final String valueEliminar;
   final ValueChanged<int>? onChanged;
 
   @override
-  _EliminarState createState() => _EliminarState();
+  _AprobarOCState createState() => _AprobarOCState();
 }
 
-class _EliminarState extends State<Eliminar> {
+class _AprobarOCState extends State<AprobarOC> {
   final _controller = ControllerAction();
 
   @override
@@ -54,15 +53,15 @@ class _EliminarState extends State<Eliminar> {
               child: Column(
                 children: [
                   Icon(
-                    Icons.cancel,
-                    color: Colors.redAccent,
+                    Icons.check_circle_outline,
+                    color: Colors.green,
                     size: ScreenUtil().setHeight(40),
                   ),
                   SizedBox(
                     height: ScreenUtil().setHeight(10),
                   ),
                   Text(
-                    '¿Está seguro que desea eliminar ${widget.title}?',
+                    '¿Está seguro que desea Aprobar esta Orden de Compra?',
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.black,
@@ -84,7 +83,7 @@ class _EliminarState extends State<Eliminar> {
                         child: Text(
                           'Cancelar',
                           style: TextStyle(
-                            color: Colors.green,
+                            color: const Color(0XFFFF0F00),
                             fontWeight: FontWeight.w600,
                             fontSize: ScreenUtil().setSp(14),
                             fontStyle: FontStyle.normal,
@@ -98,21 +97,20 @@ class _EliminarState extends State<Eliminar> {
                         onTap: () async {
                           _controller.changeCargando(true);
                           final _api = OrdenCompraApi();
-                          final res = await _api.eliminarOrdenCompra(widget.id, widget.valueEliminar);
+                          final res = await _api.aprobarOrdenCompra(widget.id);
                           if (res == 1) {
                             widget.onChanged!(1);
                             Navigator.pop(context);
-                            showToast2('Orden de Compra Eliminada', Colors.black);
+                            showToast2('Orden de Compra Aprobada', Colors.green);
                           } else {
                             showToast2('Ocurrió un error, inténtelo nuevamente', Colors.redAccent);
                           }
-
                           _controller.changeCargando(false);
                         },
                         child: Text(
-                          'Eliminar',
+                          'AprobarOC',
                           style: TextStyle(
-                            color: const Color(0XFFFF0F00),
+                            color: Colors.green,
                             fontWeight: FontWeight.w600,
                             fontSize: ScreenUtil().setSp(14),
                             fontStyle: FontStyle.normal,

@@ -14,6 +14,9 @@ class OrdenCompraBloc {
   final _ocPendientesController = BehaviorSubject<List<OrdenCompraNewModel>>();
   Stream<List<OrdenCompraNewModel>> get ocPendientesStream => _ocPendientesController.stream;
 
+  final _searchOCPendientesController = BehaviorSubject<List<OrdenCompraNewModel>>();
+  Stream<List<OrdenCompraNewModel>> get searchOCPendientesStream => _searchOCPendientesController.stream;
+
   final _detalleOCController = BehaviorSubject<List<OrdenCompraNewModel>>();
   Stream<List<OrdenCompraNewModel>> get detalleOCStream => _detalleOCController.stream;
 
@@ -26,6 +29,7 @@ class OrdenCompraBloc {
     _ocPendientesController.close();
     _cargandoController.close();
     _detalleOCController.close();
+    _searchOCPendientesController.close();
   }
 
   void obtenerOp() async {
@@ -40,6 +44,14 @@ class OrdenCompraBloc {
     await ordenCompraApi.getOrdenCompraPendientes();
     _cargandoController.sink.add(false);
     _ocPendientesController.sink.add(await ordenCompraApi.ocDB.getOCPendientes());
+  }
+
+  void searchOCPendientes(String query) async {
+    if (query.isEmpty) {
+      _searchOCPendientesController.sink.add(await ordenCompraApi.ocDB.getOCPendientes());
+    } else {
+      _searchOCPendientesController.sink.add(await ordenCompraApi.ocDB.buscarOCPendientes(query));
+    }
   }
 
   void detalleOC(String idOC) async {

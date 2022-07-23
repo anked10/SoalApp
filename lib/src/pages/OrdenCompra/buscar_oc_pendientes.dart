@@ -4,115 +4,92 @@ import 'package:soal_app/core/util/utils.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/orden_compra_model.dart';
 import 'package:soal_app/src/pages/Actions/eliminar.dart';
-import 'package:soal_app/src/pages/OrdenCompra/buscar_oc_pendientes.dart';
 import 'package:soal_app/src/pages/OrdenCompra/detalle_oc.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
+import 'package:soal_app/src/widgets/text_field_search.dart';
 
-class OCPendientes extends StatelessWidget {
-  const OCPendientes({Key? key}) : super(key: key);
+class BuscarOCPendientes extends StatefulWidget {
+  const BuscarOCPendientes({Key? key}) : super(key: key);
 
+  @override
+  State<BuscarOCPendientes> createState() => _BuscarOCPendientesState();
+}
+
+class _BuscarOCPendientesState extends State<BuscarOCPendientes> {
+  final _searchController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final ocBloc = ProviderBloc.op(context);
-    ocBloc.ocPendientes();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
+        iconTheme: IconThemeData(color: Colors.black),
         title: Text(
           'Orden de Compras Pendientes',
           style: TextStyle(
-            fontSize: ScreenUtil().setSp(18),
+            fontSize: ScreenUtil().setSp(20),
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
         elevation: 0,
-        actions: [
-          IconButton(
-            onPressed: () {
-              ocBloc.ocPendientes();
+      ),
+      body: Column(
+        children: [
+          TextFieldSearch(
+            label: 'Buscar...',
+            controller: _searchController,
+            onChanged: (value) {
+              ocBloc.searchOCPendientes(value);
             },
-            icon: Icon(
-              Icons.refresh,
-              color: Colors.deepPurple,
-            ),
           ),
-          IconButton(
-            onPressed: () {
-              ocBloc.searchOCPendientes('');
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  pageBuilder: (context, animation, secondaryAnimation) {
-                    return const BuscarOCPendientes();
-                  },
-                ),
-              );
-            },
-            icon: Icon(
-              Icons.search,
-              color: Colors.deepPurple,
-            ),
+          SizedBox(height: ScreenUtil().setHeight(20)),
+          Expanded(
+            child: StreamBuilder<List<OrdenCompraNewModel>>(
+                stream: ocBloc.searchOCPendientesStream,
+                builder: (_, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.isNotEmpty) {
+                      return Expanded(
+                        child: ListView.builder(
+                          itemCount: snapshot.data!.length + 1,
+                          itemBuilder: (_, index) {
+                            if (index == 0) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: ScreenUtil().setWidth(16),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      'Se encontraron ${snapshot.data!.length} resultado(s)',
+                                      style: TextStyle(
+                                        color: Colors.grey,
+                                        fontSize: ScreenUtil().setSp(10),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            }
+
+                            index = index - 1;
+                            return _item(context, snapshot.data![index], index + 1);
+                          },
+                        ),
+                      );
+                    } else {
+                      return const Center(
+                        child: Text('Sin resultados'),
+                      );
+                    }
+                  } else {
+                    return Container();
+                  }
+                }),
           ),
         ],
-      ),
-      body: RefreshIndicator(
-        onRefresh: () async {
-          ocBloc.ocPendientes();
-          return null;
-        },
-        child: StreamBuilder<bool>(
-            stream: ocBloc.cargandoStream,
-            builder: (_, c) {
-              if (c.hasData && !c.data!) {
-                return StreamBuilder<List<OrdenCompraNewModel>>(
-                    stream: ocBloc.ocPendientesStream,
-                    builder: (_, snapshot) {
-                      if (snapshot.hasData) {
-                        if (snapshot.data!.isNotEmpty) {
-                          return ListView.builder(
-                            itemCount: snapshot.data!.length + 1,
-                            itemBuilder: (_, index) {
-                              if (index == 0) {
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: ScreenUtil().setWidth(16),
-                                  ),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        'Se encontraron ${snapshot.data!.length} resultado(s)',
-                                        style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: ScreenUtil().setSp(10),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              }
-
-                              index = index - 1;
-                              return _item(context, snapshot.data![index], index + 1);
-                            },
-                          );
-                        } else {
-                          return const Center(
-                            child: Text('No existen órdenes compra pendientes'),
-                          );
-                        }
-                      } else {
-                        return Container();
-                      }
-                    });
-              } else {
-                return ShowLoadding(
-                  active: true,
-                  color: Colors.transparent,
-                );
-              }
-            }),
       ),
     );
   }

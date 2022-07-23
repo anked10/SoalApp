@@ -171,4 +171,47 @@ class OrdenCompraApi {
       return 2;
     }
   }
+
+  Future<int> aprobarOrdenCompra(String idOC) async {
+    try {
+      final url = '$API_BASE_URL/api/Ordencompra/aprobacion_op';
+      String? token = await StorageManager.readData('token');
+      final response = await http.post(Uri.parse(url), body: {
+        'app': 'true',
+        'tn': token,
+        'id_op': idOC,
+      });
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
+        print(decodedData);
+        return decodedData["result"];
+      } else {
+        return 2;
+      }
+    } catch (e) {
+      return 2;
+    }
+  }
+
+  Future<int> eliminarOrdenCompra(String idOC, String eliminar) async {
+    try {
+      final url = '$API_BASE_URL/api/Ordencompra/aprobacion_op';
+      String? token = await StorageManager.readData('token');
+      final response = await http.post(Uri.parse(url), body: {
+        'app': 'true',
+        'tn': token,
+        'id_op': idOC,
+        'eliminar': eliminar,
+      });
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
+        print(decodedData);
+        return decodedData["result"];
+      } else {
+        return 2;
+      }
+    } catch (e) {
+      return 2;
+    }
+  }
 }
