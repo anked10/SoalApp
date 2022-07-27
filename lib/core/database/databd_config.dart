@@ -23,6 +23,8 @@ class DatabaseHelper {
       db.execute(tableDocumentosOrdenDeCompraSql);
       db.execute(tableOrdenCompraSql);
       db.execute(tableRecursoDetalleOC);
+      db.execute(tableObligacionTributariaSql);
+      db.execute(tableDetalleOT);
     }, version: 1, onDowngrade: onDatabaseDowngradeDelete);
   }
 
@@ -245,4 +247,47 @@ class DatabaseHelper {
       'umRecurso TEXT, '
       'fotoRecurso TEXT, '
       'estadoRecurso TEXT)';
+
+  static const String tableObligacionTributariaSql = 'CREATE TABLE ObligacionTributaria('
+      'idObligacion TEXT PRIMARY KEY, '
+      'claseObligacion TEXT, '
+      'codigoObligacion TEXT, '
+      'yearObligacion TEXT, '
+      'mesObligacion TEXT, '
+      'dateCreacionObligacion TEXT, '
+      'horaCreacionObligacion TEXT, '
+      'dateInicioObligacion TEXT, '
+      'dateFinObligacion TEXT, '
+      'estadoObligacion TEXT, '
+      'tipoObligacion TEXT, '
+      'conceptoObligacion TEXT,'
+      'activoObligacion TEXT, '
+      'monedaObligacion TEXT, '
+      'importeObligacion TEXT, '
+      'documentacionObligacion TEXT, '
+      'dateAprobacionObligacion TEXT, '
+      'horaAprobacionObligacion TEXT, '
+      'nombreEmpresa TEXT, '
+      'rucEmpresa TEXT, '
+      'direccionEmpresa TEXT, '
+      'responsableEmpresa TEXT, '
+      'nameCreate  TEXT, '
+      'surnameCreate  TEXT, '
+      'surnameCreate2  TEXT, '
+      'montoTotal  TEXT, '
+      'cargoEmpresa TEXT)';
+
+  static const String tableDetalleOT = 'CREATE TABLE DetalleOT('
+      'idDetalleOT TEXT PRIMARY KEY, '
+      'idOT TEXT, '
+      'idPeriodo TEXT, '
+      'diasEfectivos TEXT, '
+      'diasLaborales TEXT, '
+      'montoMensual TEXT, '
+      'totalMensual TEXT, '
+      'subTotal TEXT, '
+      'total TEXT, '
+      'bancoOT TEXT, '
+      'cuentaOT TEXT, '
+      'estadoOT TEXT)';
 }
