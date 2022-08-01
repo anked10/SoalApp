@@ -258,7 +258,7 @@ class DetalleOC extends StatelessWidget {
                           ),
                           icon: Icon(
                             Icons.check_circle_outline,
-                            size: ScreenUtil().setHeight(30),
+                            size: ScreenUtil().setHeight(25),
                           ),
                           label: Text(
                             'Aprobar',

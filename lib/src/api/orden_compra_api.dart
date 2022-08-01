@@ -106,16 +106,16 @@ class OrdenCompraApi {
       if (response.statusCode == 200) {
         await ocDB.deleteAllByEstado('0');
         final decodedData = json.decode(response.body);
-        for (var i = 0; i < decodedData.length; i++) {
-          var item = decodedData[i];
+        for (var i = 0; i < decodedData["result"]["datos"].length; i++) {
+          var item = decodedData["result"]["datos"][i];
           final orden = OrdenCompraNewModel();
           orden.idOC = item["id_op"];
           orden.ccOC = item["generar_orden_compra_cc"];
           orden.proformaOC = item["generar_orden_compra_proforma"];
           orden.condicionPagoOC = item["generar_orden_compra_condicion_pago"];
-          orden.subTotalOC = '';
-          orden.percentDescuentoOC = '';
-          orden.descuentoOC = item["generar_orden_compra_descuento"];
+          orden.subTotalOC = item["total_parcial"];
+          orden.percentDescuentoOC = item["generar_orden_compra_descuento"];
+          orden.descuentoOC = item["descuento"].toString();
           orden.igvOC = item["generar_orden_compra_igv"];
           orden.creditoOC = item["generar_orden_compra_credito"];
           orden.totalOC = item["op_total"];
