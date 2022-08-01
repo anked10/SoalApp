@@ -74,7 +74,7 @@ class ObligacionTributariaApi {
             total = total + double.parse(d["obligacionper_total"]);
           }
 
-          ot.surnameCreate2 = total.toStringAsFixed(2);
+          ot.montoTotal = total.toStringAsFixed(2);
 
           await otDB.insertarOT(ot);
         }

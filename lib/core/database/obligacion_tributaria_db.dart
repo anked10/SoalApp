@@ -38,7 +38,7 @@ class ObligacionTributariaDB {
       final Database db = await dbprovider.getDatabase();
       List<ObligacionTributariaModel> list = [];
       List<Map> maps = await db.rawQuery(
-          "SELECT * FROM ObligacionTributaria WHERE estadoObligacion='0' AND (nombreProyectoOC LIKE '%$query%' OR nombreProveedor LIKE '%$query%' OR rucProveedor LIKE '%$query%' OR nombreEmpresa LIKE '%$query%' OR nombreSede LIKE '%$query%' OR nameCreateOC LIKE '%$query%' OR dateTimeCreateOC LIKE '%$query%' OR totalOC LIKE '%$query%') ");
+          "SELECT * FROM ObligacionTributaria WHERE estadoObligacion='0' AND (nombreEmpresa LIKE '%$query%' OR dateInicioObligacion LIKE '%$query%' OR dateFinObligacion LIKE '%$query%' OR nameCreate LIKE '%$query%' OR surnameCreate LIKE '%$query%' OR monedaObligacion LIKE '%$query%' OR montoTotal LIKE '%$query%') ");
 
       if (maps.length > 0) list = ObligacionTributariaModel.fromJsonList(maps);
       return list;

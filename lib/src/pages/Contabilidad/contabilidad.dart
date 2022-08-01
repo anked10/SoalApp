@@ -1,83 +1,116 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:soal_app/src/bloc/provider_bloc.dart';
+import 'package:soal_app/src/models/obligacion_tributaria_model.dart';
+import 'package:soal_app/src/pages/Contabilidad/buscar_ot_pendientes.dart';
+import 'package:soal_app/src/pages/Contabilidad/item_ot_widget.dart';
+import 'package:soal_app/src/widgets/show_loading.dart';
 
 class Contabilidad extends StatelessWidget {
   const Contabilidad({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final otBloc = ProviderBloc.ot(context);
+    otBloc.getOTPendientes();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
-          'Obligaciones Tributarias',
+          'Obligaciones Tributarias Pendientes',
           style: TextStyle(
-            fontSize: ScreenUtil().setSp(20),
+            fontSize: ScreenUtil().setSp(15),
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
         ),
         elevation: 0,
-      ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          _button(titulo: 'Pendientes de\nAprobación', color: Colors.orangeAccent, icon: Icons.check_box_outlined),
+        actions: [
+          IconButton(
+            onPressed: () {
+              otBloc.getOTPendientes();
+            },
+            icon: Icon(
+              Icons.refresh,
+              color: Colors.deepPurple,
+            ),
+          ),
+          IconButton(
+            onPressed: () {
+              otBloc.searchOTPendientes('');
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return const BuscarOTPendientes();
+                  },
+                ),
+              );
+            },
+            icon: Icon(
+              Icons.search,
+              color: Colors.deepPurple,
+            ),
+          ),
         ],
       ),
-    );
-  }
+      body: RefreshIndicator(
+        onRefresh: () async {
+          otBloc.getOTPendientes();
+          return null;
+        },
+        child: StreamBuilder<bool>(
+            stream: otBloc.cargandoStream,
+            builder: (_, c) {
+              if (c.hasData && !c.data!) {
+                return StreamBuilder<List<ObligacionTributariaModel>>(
+                    stream: otBloc.otPendientesStream,
+                    builder: (_, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data!.isNotEmpty) {
+                          return ListView.builder(
+                            itemCount: snapshot.data!.length + 1,
+                            itemBuilder: (_, index) {
+                              if (index == 0) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: ScreenUtil().setWidth(16),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Se encontraron ${snapshot.data!.length} resultado(s)',
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: ScreenUtil().setSp(10),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
 
-  Widget _button({required String titulo, Function()? ontap, required Color color, required IconData icon}) {
-    return Center(
-      child: InkWell(
-        onTap: ontap,
-        child: Container(
-          height: ScreenUtil().setHeight(180),
-          width: ScreenUtil().setWidth(180),
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(30),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey[500]!,
-                offset: Offset(4, 4),
-                blurRadius: 15,
-                spreadRadius: 1,
-              ),
-              BoxShadow(
-                color: Colors.white,
-                offset: Offset(-4, -4),
-                blurRadius: 15,
-                spreadRadius: 1,
-              ),
-            ],
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                color: Colors.white,
-                size: ScreenUtil().setHeight(30),
-              ),
-              SizedBox(
-                height: ScreenUtil().setHeight(10),
-              ),
-              Text(
-                titulo,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.w600,
-                  fontSize: ScreenUtil().setSp(16),
-                ),
-              ),
-            ],
-          ),
-        ),
+                              index = index - 1;
+                              return ItemOTWidget(otP: snapshot.data![index], i: index + 1);
+                            },
+                          );
+                        } else {
+                          return const Center(
+                            child: Text('No existen órdenes compra pendientes'),
+                          );
+                        }
+                      } else {
+                        return Container();
+                      }
+                    });
+              } else {
+                return ShowLoadding(
+                  active: true,
+                  color: Colors.transparent,
+                );
+              }
+            }),
       ),
     );
   }

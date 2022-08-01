@@ -19,11 +19,11 @@ class DetalleOTDB {
     }
   }
 
-  Future<List<DetalleOTModel>> getdetalleOCByIdOC(String idDetalleOT) async {
+  Future<List<DetalleOTModel>> getdetalleOCByIdOT(String idOT) async {
     try {
       final Database db = await dbprovider.getDatabase();
       List<DetalleOTModel> list = [];
-      List<Map> maps = await db.rawQuery("SELECT * FROM DetalleOT WHERE idDetalleOT='$idDetalleOT'");
+      List<Map> maps = await db.rawQuery("SELECT * FROM DetalleOT WHERE idOT='$idOT'");
 
       if (maps.length > 0) list = DetalleOTModel.fromJsonList(maps);
       return list;

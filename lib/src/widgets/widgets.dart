@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-Widget cards({required Widget child, required Color color, required num height, required num mtop}) {
+Widget cards({required Widget child, required Color color, required num height, required num mtop, required Color fondo}) {
   return Container(
     width: double.infinity,
     decoration: BoxDecoration(
-      color: Colors.white,
+      color: fondo,
       borderRadius: BorderRadius.circular(10),
       boxShadow: [
         BoxShadow(
@@ -42,7 +42,7 @@ Widget cards({required Widget child, required Color color, required num height, 
   );
 }
 
-Widget rows({required String titulo, required String data, required num st, required num sd}) {
+Widget rows({required String titulo, required String data, required num st, required num sd, String? active}) {
   return Row(
     crossAxisAlignment: CrossAxisAlignment.start,
     children: [
@@ -51,7 +51,7 @@ Widget rows({required String titulo, required String data, required num st, requ
         style: TextStyle(
           fontSize: ScreenUtil().setSp(st),
           fontWeight: FontWeight.w400,
-          color: Colors.grey,
+          color: (active == null) ? Colors.grey : Colors.black,
         ),
       ),
       SizedBox(
