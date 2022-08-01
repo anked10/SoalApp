@@ -116,7 +116,7 @@ class _HomeGerenciaState extends State<HomeGerencia> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Contabilidad\ny Finanzas',
+                                  'Contabilidad\n y Finanzas',
                                   style: TextStyle(
                                     fontSize: ScreenUtil().setSp(14),
                                     color: (value == 1) ? tabSelected : tabNoSelected,

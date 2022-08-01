@@ -313,7 +313,7 @@ class _BuscarOCPendientesState extends State<BuscarOCPendientes> {
                                     width: ScreenUtil().setWidth(4),
                                   ),
                                   Text(
-                                    orden.nameCreateOC ?? '',
+                                    "${orden.nameCreateOC?.split(' ').first} ${orden.surnameCreateOC ?? ''}",
                                     style: TextStyle(
                                       fontSize: ScreenUtil().setSp(10),
                                       fontWeight: FontWeight.w400,
