@@ -53,26 +53,39 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: ScreenUtil().setHeight(50),
                     ),
-                    Text(
-                      'Bienvenido ',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: ScreenUtil().setSp(24),
-                        fontStyle: FontStyle.normal,
-                      ),
-                    ),
+                    // Text(
+                    //   'Bienvenido ',
+                    //   style: TextStyle(
+                    //     fontWeight: FontWeight.w600,
+                    //     fontSize: ScreenUtil().setSp(24),
+                    //     fontStyle: FontStyle.normal,
+                    //   ),
+                    // ),
                     SizedBox(
                       height: ScreenUtil().setHeight(10),
                     ),
                     Container(
-                      height: ScreenUtil().setHeight(200),
-                      width: double.infinity,
-                      child: Image(
-                        image: AssetImage('assets/images/logo.png'),
+                      height: ScreenUtil().setHeight(250),
+                      width: ScreenUtil().setWidth(250),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.transparent.withOpacity(0.2),
+                            spreadRadius: 2,
+                            blurRadius: 5,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                        image: DecorationImage(
+                          image: new ExactAssetImage('assets/images/logo.png'),
+                          fit: BoxFit.scaleDown,
+                        ),
                       ),
                     ),
                     SizedBox(
-                      height: ScreenUtil().setHeight(40),
+                      height: ScreenUtil().setHeight(15),
                     ),
                     Text(
                       'Iniciar sesión',
@@ -83,7 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                     SizedBox(
-                      height: ScreenUtil().setHeight(40),
+                      height: ScreenUtil().setHeight(20),
                     ),
                     Container(
                       margin: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
@@ -175,7 +188,7 @@ class _LoginPageState extends State<LoginPage> {
                       width: double.infinity,
                       child: MaterialButton(
                         height: ScreenUtil().setHeight(48),
-                        color: Color(0XFF2684FE),
+                        color: Color(0XFF050268),
                         textColor: Colors.white,
                         elevation: 0,
                         onPressed: () async {
@@ -219,18 +232,18 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                     ),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(16),
-                    ),
-                    Text(
-                      '¿Olvidó la contraseña?',
-                      style: TextStyle(
-                        color: Color(0XFF2684FE),
-                        fontWeight: FontWeight.w500,
-                        fontSize: ScreenUtil().setSp(12),
-                        fontStyle: FontStyle.normal,
-                      ),
-                    ),
+                    // SizedBox(
+                    //   height: ScreenUtil().setHeight(16),
+                    // ),
+                    // Text(
+                    //   '¿Olvidó la contraseña?',
+                    //   style: TextStyle(
+                    //     color: Color(0XFF2684FE),
+                    //     fontWeight: FontWeight.w500,
+                    //     fontSize: ScreenUtil().setSp(12),
+                    //     fontStyle: FontStyle.normal,
+                    //   ),
+                    // ),
                     SizedBox(
                       height: ScreenUtil().setHeight(150),
                     ),
