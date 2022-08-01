@@ -34,6 +34,34 @@ class _CuentaPageState extends State<CuentaPage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     SizedBox(height: ScreenUtil().setHeight(50)),
+                    Center(
+                      child: Container(
+                        alignment: Alignment.center,
+                        height: ScreenUtil().setHeight(200),
+                        width: ScreenUtil().setWidth(200),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Color(0XFF050268),
+                            width: ScreenUtil().setWidth(1),
+                          ),
+                          color: Colors.white,
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.transparent.withOpacity(0.2),
+                              spreadRadius: 2,
+                              blurRadius: 5,
+                              offset: const Offset(0, 3),
+                            ),
+                          ],
+                          image: DecorationImage(
+                            image: new ExactAssetImage('assets/images/logo.png'),
+                            fit: BoxFit.scaleDown,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(30)),
                     cards(
                       image: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
