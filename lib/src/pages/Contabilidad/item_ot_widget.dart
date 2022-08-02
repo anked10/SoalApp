@@ -27,10 +27,10 @@ class ItemOTWidget extends StatelessWidget {
                     return AprobarOT(
                       id: otP.idObligacion.toString(),
                       onChanged: (v) {
-                        Navigator.pop(context);
-                        final otBloc = ProviderBloc.ot(context);
-
-                        otBloc.getOTPendientes();
+                        if (v == 1) {
+                          final otBloc = ProviderBloc.ot(context);
+                          otBloc.getOTPendientes();
+                        }
                       },
                     );
                   },
@@ -75,10 +75,10 @@ class ItemOTWidget extends StatelessWidget {
                       id: otP.idObligacion.toString(),
                       valueEliminarOT: '1',
                       onChanged: (v) {
-                        Navigator.pop(context);
-                        final otBloc = ProviderBloc.ot(context);
-
-                        otBloc.getOTPendientes();
+                        if (v == 1) {
+                          final otBloc = ProviderBloc.ot(context);
+                          otBloc.getOTPendientes();
+                        }
                       },
                     );
                   },

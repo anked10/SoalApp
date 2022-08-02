@@ -25,7 +25,7 @@ class _SplashState extends State<Splash> {
         Navigator.pushNamedAndRemoveUntil(context, LOGIN_ROUTE, (route) => false);
       } else {
         //ROL GERENCIAS id=3
-        if (idRol != '3') {
+        if (idRol == '3' || idRol == '2') {
           Navigator.pushNamedAndRemoveUntil(context, HOME_GERENCIA, (route) => false);
         } else {
           Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);

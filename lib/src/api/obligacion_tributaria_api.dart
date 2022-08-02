@@ -21,6 +21,8 @@ class ObligacionTributariaApi {
         'tn': token,
       });
       if (response.statusCode == 200) {
+        await otDB.deleteAllByEstado('0');
+        await detalleOTDB.deleteAll();
         final decodedData = json.decode(response.body);
         for (var i = 0; i < decodedData["result"]["datos"].length; i++) {
           var total = 0.00;
@@ -83,6 +85,51 @@ class ObligacionTributariaApi {
         return 2;
       }
     } catch (e) {
+      return 2;
+    }
+  }
+
+  Future<int> eliminarObligacionTributaria(String idOT, String eliminar) async {
+    try {
+      final url = '$API_BASE_URL/api/Obligaciontributaria/ws_eliminar_pendientes_op';
+      String? token = await StorageManager.readData('token');
+      final response = await http.post(Uri.parse(url), body: {
+        'app': 'true',
+        'tn': token,
+        'id_obligacion': idOT,
+        'eliminar': eliminar,
+      });
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
+        print(decodedData);
+        return decodedData["result"]["code"];
+      } else {
+        return 2;
+      }
+    } catch (e) {
+      print('error $e');
+      return 2;
+    }
+  }
+
+  Future<int> aprobarObligacionTributaria(String idOT) async {
+    try {
+      final url = '$API_BASE_URL/api/Obligaciontributaria/ws_aprobar_obligacion';
+      String? token = await StorageManager.readData('token');
+      final response = await http.post(Uri.parse(url), body: {
+        'app': 'true',
+        'tn': token,
+        'id_obligacion': idOT,
+      });
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
+        print(decodedData);
+        return decodedData["result"]["code"];
+      } else {
+        return 2;
+      }
+    } catch (e) {
+      print('error $e');
       return 2;
     }
   }

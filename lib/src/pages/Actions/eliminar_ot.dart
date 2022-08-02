@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soal_app/core/util/utils.dart';
+import 'package:soal_app/src/api/obligacion_tributaria_api.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
 
 class EliminarOT extends StatefulWidget {
@@ -95,15 +96,15 @@ class _EliminarOTState extends State<EliminarOT> {
                       InkWell(
                         onTap: () async {
                           _controller.changeCargando(true);
-                          // final _api = OrdenCompraApi();
-                          // final res = await _api.eliminarOTOrdenCompra(widget.id, widget.valueEliminarOT);
-                          // if (res == 1) {
-                          //   widget.onChanged!(1);
-                          //   Navigator.pop(context);
-                          //   showToast2('Orden de Compra Eliminada', Colors.black);
-                          // } else {
-                          //   showToast2('Ocurrió un error, inténtelo nuevamente', Colors.redAccent);
-                          // }
+                          final _api = ObligacionTributariaApi();
+                          final res = await _api.eliminarObligacionTributaria(widget.id, widget.valueEliminarOT);
+                          if (res == 1) {
+                            widget.onChanged!(1);
+                            Navigator.pop(context);
+                            showToast2('Obligación Tributaria Eliminada', Colors.black);
+                          } else {
+                            showToast2('Ocurrió un error, inténtelo nuevamente', Colors.redAccent);
+                          }
 
                           _controller.changeCargando(false);
                         },

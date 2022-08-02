@@ -69,15 +69,15 @@ class _LoginPageState extends State<LoginPage> {
                       width: ScreenUtil().setWidth(250),
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.transparent.withOpacity(0.2),
-                            spreadRadius: 2,
-                            blurRadius: 5,
-                            offset: const Offset(0, 3),
-                          ),
-                        ],
+                        //shape: BoxShape.circle,
+                        // boxShadow: [
+                        //   BoxShadow(
+                        //     color: Colors.transparent.withOpacity(0.2),
+                        //     spreadRadius: 2,
+                        //     blurRadius: 5,
+                        //     offset: const Offset(0, 3),
+                        //   ),
+                        // ],
                         image: DecorationImage(
                           image: new ExactAssetImage('assets/images/logo.png'),
                           fit: BoxFit.scaleDown,
@@ -192,15 +192,16 @@ class _LoginPageState extends State<LoginPage> {
                         textColor: Colors.white,
                         elevation: 0,
                         onPressed: () async {
+                          FocusScope.of(context).requestFocus(FocusNode());
                           if (_usuarioController.text.length > 0) {
                             if (_passwdController.text.length > 0) {
                               _controller.changeLoadding(true);
                               final _login = LoginApi();
-                              final res = await _login.login(_usuarioController.text, _passwdController.text);
+                              final res = await _login.login(_usuarioController.text.trim(), _passwdController.text.trim());
 
                               if (res.code == 1) {
                                 String? idRol = await StorageManager.readData('idRoleUser');
-                                if (idRol != '3') {
+                                if (idRol == '3' || idRol == '2') {
                                   Navigator.of(context).pushNamedAndRemoveUntil(HOME_GERENCIA, (Route<dynamic> route) => false);
                                 } else {
                                   Navigator.of(context).pushNamedAndRemoveUntil(HOME_ROUTE, (Route<dynamic> route) => false);

@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 import 'package:soal_app/core/config/colors.dart';
 import 'package:soal_app/src/pages/Almacen/almacen_page.dart';
 import 'package:soal_app/src/pages/Cuenta/cuenta_page.dart';
-import 'package:soal_app/src/pages/OrdenCompra/consulta_informacion.dart';
+import 'package:soal_app/src/pages/OrdenCompra/orden_compra.dart';
 import 'package:soal_app/src/pages/Proveedores/proveedores_page.dart';
 import 'package:soal_app/src/pages/SolCompras/solCompras_page.dart';
 
@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
     pageList.add(ProveedoresPage());
     pageList.add(AlmacenPage());
     pageList.add(SolComprasPage());
-    pageList.add(ConsultaInformacion());
+    pageList.add(OrdenCompraPage());
     pageList.add(CuentaPage());
     //pageList.add(UserPage());
 

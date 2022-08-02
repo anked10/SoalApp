@@ -40,12 +40,12 @@ class _CuentaPageState extends State<CuentaPage> {
                         height: ScreenUtil().setHeight(200),
                         width: ScreenUtil().setWidth(200),
                         decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Color(0XFF050268),
-                            width: ScreenUtil().setWidth(1),
-                          ),
+                          // border: Border.all(
+                          //   color: Color(0XFF050268),
+                          //   width: ScreenUtil().setWidth(1),
+                          // ),
                           color: Colors.white,
-                          shape: BoxShape.circle,
+                          //shape: BoxShape.circle,
                           boxShadow: [
                             BoxShadow(
                               color: Colors.transparent.withOpacity(0.2),
