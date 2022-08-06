@@ -14,24 +14,28 @@ class Splash extends StatefulWidget {
 class _SplashState extends State<Splash> {
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
-      final clasesApi = ClasesApi();
-      await clasesApi.getClases();
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) async {
+        final clasesApi = ClasesApi();
+        await clasesApi.getClases();
 
-      String? token = await StorageManager.readData('token');
+        String? token = await StorageManager.readData('token');
 
-      String? idRol = await StorageManager.readData('idRoleUser');
-      if (token == null || token.isEmpty) {
-        Navigator.pushNamedAndRemoveUntil(context, LOGIN_ROUTE, (route) => false);
-      } else {
-        //ROL GERENCIAS id=3
-        if (idRol == '3' || idRol == '2') {
-          Navigator.pushNamedAndRemoveUntil(context, HOME_GERENCIA, (route) => false);
+        String? idRol = await StorageManager.readData('idRoleUser');
+        if (token == null || token.isEmpty) {
+          Navigator.pushNamedAndRemoveUntil(context, LOGIN_ROUTE, (route) => false);
         } else {
-          Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
+          //Navigator.pushNamedAndRemoveUntil(context, PAGE_MENU, (route) => false);
+
+          //ROL GERENCIAS id=3
+          if (idRol == '3' || idRol == '2') {
+            Navigator.pushNamedAndRemoveUntil(context, HOME_GERENCIA, (route) => false);
+          } else {
+            Navigator.pushNamedAndRemoveUntil(context, HOME_ROUTE, (route) => false);
+          }
         }
-      }
-    });
+      },
+    );
     super.initState();
   }
 

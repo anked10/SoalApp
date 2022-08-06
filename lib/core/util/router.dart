@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:soal_app/src/pages/Inicio%20Menu%20Roles/home_gerencia.dart';
+import 'package:soal_app/src/pages/Menu%20Slide/page.dart';
 import 'package:soal_app/src/pages/home_page.dart';
 import 'package:soal_app/src/pages/loginPage.dart';
 import 'package:soal_app/src/pages/splash.dart';
@@ -16,6 +17,8 @@ class Routers {
         return MaterialPageRoute(builder: (_) => Splash());
       case HOME_GERENCIA:
         return MaterialPageRoute(builder: (_) => HomeGerencia());
+      case PAGE_MENU:
+        return MaterialPageRoute(builder: (_) => PageInicio());
 
       default:
         return MaterialPageRoute(builder: (_) => LoginPage());
