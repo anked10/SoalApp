@@ -43,7 +43,8 @@ class _HomePageState extends State<HomePage> {
             children: [
               Container(
                 padding: EdgeInsets.only(
-                  bottom: kBottomNavigationBarHeight + ScreenUtil().setHeight(20),
+                  bottom:
+                      kBottomNavigationBarHeight + ScreenUtil().setHeight(25),
                 ),
                 child: IndexedStack(
                   index: value,
@@ -51,16 +52,17 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               Positioned(
-                bottom: 0,
+                bottom: 00,
                 left: 0,
                 right: 0,
                 child: Container(
                   padding: EdgeInsets.only(
                     left: ScreenUtil().setWidth(10),
                     right: ScreenUtil().setWidth(10),
-                    bottom: ScreenUtil().setHeight(10),
+                    bottom: ScreenUtil().setHeight(20),
                   ),
-                  height: kBottomNavigationBarHeight + ScreenUtil().setHeight(20),
+                  height:
+                      kBottomNavigationBarHeight + ScreenUtil().setHeight(25),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     boxShadow: [
@@ -84,11 +86,12 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              height: ScreenUtil().setSp(30),
-                              width: ScreenUtil().setSp(30),
+                              height: ScreenUtil().setHeight(25),
+                              width: ScreenUtil().setHeight(25),
                               child: SvgPicture.asset(
                                 'assets/svg/proveedores.svg',
-                                color: (value == 0) ? tabSelected : tabNoSelected,
+                                color:
+                                    (value == 0) ? tabSelected : tabNoSelected,
                               ),
                             ),
                             Column(
@@ -97,8 +100,10 @@ class _HomePageState extends State<HomePage> {
                                 Text(
                                   'Proveedores',
                                   style: TextStyle(
-                                    fontSize: ScreenUtil().setSp(14),
-                                    color: (value == 0) ? tabSelected : tabNoSelected,
+                                    fontSize: 13,
+                                    color: (value == 0)
+                                        ? tabSelected
+                                        : tabNoSelected,
                                   ),
                                 ),
                               ],
@@ -114,11 +119,12 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              height: ScreenUtil().setSp(30),
-                              width: ScreenUtil().setSp(30),
+                              height: ScreenUtil().setHeight(25),
+                              width: ScreenUtil().setHeight(25),
                               child: SvgPicture.asset(
                                 'assets/svg/almacen.svg',
-                                color: (value == 1) ? tabSelected : tabNoSelected,
+                                color:
+                                    (value == 1) ? tabSelected : tabNoSelected,
                               ),
                             ),
                             Column(
@@ -127,8 +133,10 @@ class _HomePageState extends State<HomePage> {
                                 Text(
                                   'Almacén',
                                   style: TextStyle(
-                                    fontSize: ScreenUtil().setSp(14),
-                                    color: (value == 1) ? tabSelected : tabNoSelected,
+                                    fontSize: 13,
+                                    color: (value == 1)
+                                        ? tabSelected
+                                        : tabNoSelected,
                                   ),
                                 ),
                               ],
@@ -170,19 +178,21 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              height: ScreenUtil().setSp(30),
-                              width: ScreenUtil().setSp(30),
+                              height: ScreenUtil().setHeight(25),
+                              width: ScreenUtil().setHeight(25),
                               child: SvgPicture.asset(
                                 'assets/svg/solCompras.svg',
-                                color: (value == 3) ? tabSelected : tabNoSelected,
+                                color:
+                                    (value == 3) ? tabSelected : tabNoSelected,
                               ),
                             ),
                             Text(
                               'Orden\ncompras',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                fontSize: ScreenUtil().setSp(14),
-                                color: (value == 3) ? tabSelected : tabNoSelected,
+                                fontSize: 13,
+                                color:
+                                    (value == 3) ? tabSelected : tabNoSelected,
                               ),
                             )
                           ],
@@ -196,11 +206,12 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              height: ScreenUtil().setSp(30),
-                              width: ScreenUtil().setSp(30),
+                              height: ScreenUtil().setHeight(25),
+                              width: ScreenUtil().setHeight(25),
                               child: SvgPicture.asset(
                                 'assets/svg/cuenta.svg',
-                                color: (value == 4) ? tabSelected : tabNoSelected,
+                                color:
+                                    (value == 4) ? tabSelected : tabNoSelected,
                               ),
                             ),
                             Column(
@@ -209,8 +220,10 @@ class _HomePageState extends State<HomePage> {
                                 Text(
                                   'Cuenta',
                                   style: TextStyle(
-                                    fontSize: ScreenUtil().setSp(14),
-                                    color: (value == 4) ? tabSelected : tabNoSelected,
+                                    fontSize: 13,
+                                    color: (value == 4)
+                                        ? tabSelected
+                                        : tabNoSelected,
                                   ),
                                 ),
                               ],

@@ -45,7 +45,9 @@ class _NuevoDocumentoState extends State<NuevoDocumento> {
   String tipo = "Seleccionar tipo de documento";
   List<DropdownMenuItem<String>> get dropdownTipo {
     List<DropdownMenuItem<String>> menuItems = [
-      DropdownMenuItem(child: Text("Seleccionar tipo de documento"), value: "Seleccionar tipo de documento"),
+      DropdownMenuItem(
+          child: Text("Seleccionar tipo de documento"),
+          value: "Seleccionar tipo de documento"),
       DropdownMenuItem(child: Text("COTIZACIÓN"), value: "COTIZACIÓN"),
       DropdownMenuItem(child: Text("AVISO"), value: "AVISO"),
       DropdownMenuItem(child: Text("OTROS"), value: "OTROS"),
@@ -132,7 +134,8 @@ class _NuevoDocumentoState extends State<NuevoDocumento> {
                 ),
                 child: TextButton(
                     onPressed: () {
-                      DatePicker.showDatePicker(context, showTitleActions: true, onChanged: (date) {
+                      DatePicker.showDatePicker(context, showTitleActions: true,
+                          onChanged: (date) {
                         print('change $date');
                         setState(() {
                           _fechaController.text =
@@ -200,13 +203,15 @@ class _NuevoDocumentoState extends State<NuevoDocumento> {
                 ),
                 child: TextButton(
                   onPressed: () async {
-                    String? selectedDirectory = await FilePicker.platform.getDirectoryPath();
+                    String? selectedDirectory =
+                        await FilePicker.platform.getDirectoryPath();
 
                     if (selectedDirectory == null) {
                       // User canceled the picker
                     }
 
-                    FilePickerResult? result = await FilePicker.platform.pickFiles();
+                    FilePickerResult? result =
+                        await FilePicker.platform.pickFiles();
 
                     if (result != null) {
                       selectedfile = File(result.files.single.path.toString());
@@ -247,7 +252,8 @@ class _NuevoDocumentoState extends State<NuevoDocumento> {
               InkWell(
                 onTap: () {
                   if (tipo != 'Seleccionar tipo de documento') {
-                    if (_fechaController.text.isNotEmpty && _fechaController.text != 'Fecha') {
+                    if (_fechaController.text.isNotEmpty &&
+                        _fechaController.text != 'Fecha') {
                       if (_referenciaController.text.isNotEmpty) {
                         if (_documentController.text.isNotEmpty) {
                           uploadFile(
@@ -273,7 +279,8 @@ class _NuevoDocumentoState extends State<NuevoDocumento> {
                   }
                 },
                 child: Container(
-                  padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(8)),
+                  padding:
+                      EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(8)),
                   decoration: BoxDecoration(
                     color: Colors.red,
                     border: Border.all(color: Colors.transparent),
@@ -302,9 +309,13 @@ class _NuevoDocumentoState extends State<NuevoDocumento> {
                         ? Container()
                         : (data == 100.0)
                             ? Container(
-                                margin: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-                                padding: EdgeInsets.symmetric(vertical: responsive.hp(.5)),
-                                decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(10)),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: responsive.wp(5)),
+                                padding: EdgeInsets.symmetric(
+                                    vertical: responsive.hp(.5)),
+                                decoration: BoxDecoration(
+                                    color: Colors.green,
+                                    borderRadius: BorderRadius.circular(10)),
                                 child: Center(
                                   child: Text(
                                     'Descarga  completa',
@@ -312,11 +323,13 @@ class _NuevoDocumentoState extends State<NuevoDocumento> {
                                   ),
                                 ))
                             : Padding(
-                                padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: ScreenUtil().setWidth(10)),
                                 child: Container(
                                   height: ScreenUtil().setHeight(40),
                                   child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Text('$data %'),
                                       LinearPercentIndicator(
@@ -341,7 +354,8 @@ class _NuevoDocumentoState extends State<NuevoDocumento> {
     );
   }
 
-  uploadFile(File _image, String id, String tipo, String ref, String fecha, UploapBloc provider, BuildContext context) async {
+  uploadFile(File _image, String id, String tipo, String ref, String fecha,
+      UploapBloc provider, BuildContext context) async {
     String? token = await StorageManager.readData('token');
     String uploadurl = "$API_BASE_URL/api/Solicitudcompra/guardar_documento";
     //dont use http://localhost , because emulator don't get that address
@@ -349,7 +363,8 @@ class _NuevoDocumentoState extends State<NuevoDocumento> {
     //hit "ipconfig" in windows or "ip a" in linux to get you local IP
 
     FormData formdata = FormData.fromMap({
-      "documento_archivo": await MultipartFile.fromFile(_image.path, filename: basename(_image.path)
+      "documento_archivo": await MultipartFile.fromFile(_image.path,
+          filename: basename(_image.path)
           //show only filename from path
           ),
       "app": "true",
@@ -366,7 +381,10 @@ class _NuevoDocumentoState extends State<NuevoDocumento> {
       onSendProgress: (int sent, int total) {
         String percentage = (sent / total * 100).toStringAsFixed(2);
 
-        progress = "$sent" + " Bytes of " "$total Bytes - " + percentage + " % uploaded";
+        progress = "$sent" +
+            " Bytes of " "$total Bytes - " +
+            percentage +
+            " % uploaded";
         print('progress $progress');
         provider._cargando.value = double.parse(percentage);
         //update the progress
