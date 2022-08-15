@@ -7,6 +7,7 @@ import 'package:soal_app/src/bloc/detalle_op_bloc.dart';
 import 'package:soal_app/src/bloc/detalle_si_bloc.dart';
 import 'package:soal_app/src/bloc/documento_oc_bloc.dart';
 import 'package:soal_app/src/bloc/documentos_bloc.dart';
+import 'package:soal_app/src/bloc/modulos_bloc.dart';
 import 'package:soal_app/src/bloc/orden_compra_bloc.dart';
 import 'package:soal_app/src/bloc/ot_bloc.dart';
 import 'package:soal_app/src/bloc/proveedoresBloc.dart';
@@ -14,6 +15,7 @@ import 'package:soal_app/src/bloc/si_bloc.dart';
 
 //singleton para obtner una unica instancia del Bloc
 class ProviderBloc extends InheritedWidget {
+  final modulosBloc = ModulosBloc();
   final proveedoresBloc = ProveedoresBloc();
   final busquedaProveedorBloc = BusquedaProveedorBloc();
   final clasesBloc = ClasesBloc();
@@ -34,6 +36,10 @@ class ProviderBloc extends InheritedWidget {
 
   static ProveedoresBloc provee(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.proveedoresBloc;
+  }
+
+  static ModulosBloc modulo(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.modulosBloc;
   }
 
   static BusquedaProveedorBloc busPro(BuildContext context) {

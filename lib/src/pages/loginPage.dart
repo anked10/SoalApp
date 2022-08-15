@@ -201,10 +201,10 @@ class _LoginPageState extends State<LoginPage> {
 
                               if (res.code == 1) {
                                 String? idRol = await StorageManager.readData('idRoleUser');
-                                if (idRol == '3' || idRol == '2') {
-                                  Navigator.of(context).pushNamedAndRemoveUntil(HOME_GERENCIA, (Route<dynamic> route) => false);
+                                if (idRol == '3') {
+                                  Navigator.pushNamedAndRemoveUntil(context, HOME_GERENCIA, (route) => false);
                                 } else {
-                                  Navigator.of(context).pushNamedAndRemoveUntil(HOME_ROUTE, (Route<dynamic> route) => false);
+                                  Navigator.pushNamedAndRemoveUntil(context, PAGE_MENU, (route) => false);
                                 }
                               } else {
                                 showToast2(res.message, Colors.black);
