@@ -1,4 +1,5 @@
 import 'package:path/path.dart';
+import 'package:soal_app/core/database/modulos_db.dart';
 import 'package:sqflite/sqflite.dart';
 
 class DatabaseHelper {
@@ -25,6 +26,9 @@ class DatabaseHelper {
       db.execute(tableRecursoDetalleOC);
       db.execute(tableObligacionTributariaSql);
       db.execute(tableDetalleOT);
+      //Modulos DB
+      db.execute(ModulosDB.modulosTableSql);
+      db.execute(ModulosDB.submodulosTableSql);
     }, version: 1, onDowngrade: onDatabaseDowngradeDelete);
   }
 
