@@ -1,10 +1,8 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:soal_app/core/config/colors.dart';
 import 'package:soal_app/core/sharedpreferences/storage_manager.dart';
 import 'package:soal_app/core/util/constants.dart';
-
 
 class LogoutPage extends StatefulWidget {
   const LogoutPage({Key? key}) : super(key: key);
@@ -46,29 +44,55 @@ class _LogoutPageState extends State<LogoutPage> {
               horizontal: ScreenUtil().setWidth(40),
             ),
             decoration: BoxDecoration(
-              color: Color(0XFF17314C),
+              color: Colors.white,
               borderRadius: BorderRadius.circular(20),
             ),
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(24)),
               child: Column(
                 children: [
-                  SizedBox(
-                    height: ScreenUtil().setHeight(32),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(8)),
+                    height: ScreenUtil().setHeight(50),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Image.asset(
+                          'assets/images/soal.png',
+                          fit: BoxFit.cover,
+                          width: ScreenUtil().setWidth(60),
+                        ),
+                        SizedBox(width: ScreenUtil().setWidth(8)),
+                        Container(
+                          height: ScreenUtil().setHeight(25),
+                          width: 1,
+                          decoration: BoxDecoration(
+                            color: colorSecond,
+                          ),
+                        ),
+                        SizedBox(width: ScreenUtil().setWidth(8)),
+                        Image.asset(
+                          'assets/images/proonix.png',
+                          fit: BoxFit.cover,
+                          width: ScreenUtil().setWidth(60),
+                        ),
+                      ],
+                    ),
                   ),
                   Text(
                     '¿$nombre, estás seguro de cerrar sesión?',
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w500,
-                      fontSize: ScreenUtil().setSp(18),
+                      color: Colors.indigo,
+                      fontWeight: FontWeight.w400,
+                      fontSize: ScreenUtil().setSp(16),
                       fontStyle: FontStyle.normal,
                     ),
                   ),
-                  SizedBox(
-                    height: ScreenUtil().setHeight(40),
-                  ),
+                  // SizedBox(
+                  //   height: ScreenUtil().setHeight(10),
+                  // ),
+                  Spacer(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
@@ -79,7 +103,7 @@ class _LogoutPageState extends State<LogoutPage> {
                         child: Text(
                           'Cancelar',
                           style: TextStyle(
-                            color: Color(0XFF2684FE),
+                            color: Colors.indigo,
                             fontWeight: FontWeight.w600,
                             fontSize: ScreenUtil().setSp(14),
                             fontStyle: FontStyle.normal,
@@ -105,7 +129,8 @@ class _LogoutPageState extends State<LogoutPage> {
                         ),
                       ),
                     ],
-                  )
+                  ),
+                  SizedBox(height: ScreenUtil().setHeight(10)),
                 ],
               ),
             ),

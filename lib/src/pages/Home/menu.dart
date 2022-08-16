@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:soal_app/core/config/colors.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/Menu/modulos_model.dart';
 import 'package:soal_app/src/models/Menu/submodulo_model.dart';
@@ -25,9 +26,28 @@ class Menu extends StatelessWidget {
         title: Container(
           margin: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(20)),
           height: ScreenUtil().setHeight(50),
-          child: Image.asset(
-            'assets/images/logo.png',
-            fit: BoxFit.cover,
+          child: Row(
+            children: [
+              Image.asset(
+                'assets/images/soal.png',
+                fit: BoxFit.cover,
+                width: ScreenUtil().setWidth(60),
+              ),
+              SizedBox(width: ScreenUtil().setWidth(8)),
+              Container(
+                height: ScreenUtil().setHeight(25),
+                width: 1,
+                decoration: BoxDecoration(
+                  color: colorSecond,
+                ),
+              ),
+              SizedBox(width: ScreenUtil().setWidth(8)),
+              Image.asset(
+                'assets/images/proonix.png',
+                fit: BoxFit.cover,
+                width: ScreenUtil().setWidth(60),
+              ),
+            ],
           ),
         ),
       ),
@@ -38,9 +58,6 @@ class Menu extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(
-                  height: ScreenUtil().setHeight(8),
-                ),
                 const InfoUser(),
                 SizedBox(
                   height: ScreenUtil().setHeight(20),
@@ -48,7 +65,7 @@ class Menu extends StatelessWidget {
                 Container(
                   height: ScreenUtil().setHeight(1),
                   width: ScreenUtil().setWidth(200),
-                  color: Colors.green,
+                  color: Colors.indigo,
                 ),
                 SizedBox(
                   height: ScreenUtil().setHeight(20),

@@ -14,6 +14,7 @@ import 'package:soal_app/src/pages/Proveedores/documentos_proveedor.dart';
 import 'package:soal_app/src/pages/SolCompras/documentos_solicitud.dart';
 import 'package:soal_app/src/pages/SolCompras/nuevo_documento.dart';
 import 'package:soal_app/src/pages/home_page.dart';
+import 'core/config/colors.dart';
 import 'injection_container.dart' as di;
 
 void main() async {
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
             debugShowCheckedModeBanner: false,
             title: 'Soal',
             theme: ThemeData(
-              primarySwatch: Colors.blue,
+              primarySwatch: Colors.indigo,
             ),
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,

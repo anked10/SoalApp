@@ -17,7 +17,7 @@ class InfoUser extends StatelessWidget {
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return Container(
-            margin: EdgeInsets.only(left: ScreenUtil().setWidth(15)),
+            margin: EdgeInsets.only(left: ScreenUtil().setWidth(8)),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -27,7 +27,7 @@ class InfoUser extends StatelessWidget {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: Image.asset(
-                      'assets/images/logo.png',
+                      'assets/images/icon.png',
                       fit: BoxFit.cover,
                     ),
                   ),
@@ -37,17 +37,16 @@ class InfoUser extends StatelessWidget {
           );
         }
         return Container(
-          margin: EdgeInsets.only(left: ScreenUtil().setWidth(15)),
+          margin: EdgeInsets.only(left: ScreenUtil().setWidth(8)),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(height: ScreenUtil().setHeight(30)),
               CircleAvatar(
                 backgroundColor: Colors.transparent,
                 radius: ScreenUtil().setSp(30),
                 child: Container(
-                  width: ScreenUtil().setWidth(50),
-                  height: ScreenUtil().setHeight(50),
+                  width: ScreenUtil().setWidth(60),
+                  height: ScreenUtil().setHeight(60),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(100),
                     child: CachedNetworkImage(
@@ -60,7 +59,7 @@ class InfoUser extends StatelessWidget {
                           child: SvgPicture.asset(
                             'assets/svg/userPicture.svg',
                             fit: BoxFit.cover,
-                            color: Colors.purple,
+                            color: Colors.indigo,
                             width: ScreenUtil().setWidth(150),
                             height: ScreenUtil().setHeight(150),
                           ),
@@ -86,15 +85,15 @@ class InfoUser extends StatelessWidget {
                 style: TextStyle(
                   color: Colors.black,
                   fontWeight: FontWeight.w600,
-                  fontSize: ScreenUtil().setSp(16),
+                  fontSize: ScreenUtil().setSp(14),
                 ),
               ),
               Text(
                 '${snapshot.data!.roleName}',
                 style: TextStyle(
                   color: Colors.blueGrey,
-                  fontWeight: FontWeight.bold,
-                  fontSize: ScreenUtil().setSp(14),
+                  fontWeight: FontWeight.w500,
+                  fontSize: ScreenUtil().setSp(12),
                 ),
               ),
             ],
