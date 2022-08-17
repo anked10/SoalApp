@@ -22,7 +22,6 @@ class ModuloDatabase {
       final Database db = await dbprovider.getDatabase();
       List<ModulosModel> list = [];
       List<Map> maps = await db.rawQuery("SELECT * FROM Modulos ORDER BY CAST(ordenModulo AS INTEGER) DESC");
-      print(maps);
       if (maps.isNotEmpty) list = ModulosModel.fromJsonList(maps);
       return list;
     } catch (e) {

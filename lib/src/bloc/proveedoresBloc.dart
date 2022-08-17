@@ -12,13 +12,18 @@ class ProveedoresBloc {
 
   Stream<List<ProveedorModel>> get proveedoresStream => _proveedoresController.stream;
 
+  final _cargandoController = BehaviorSubject<bool>();
+  Stream<bool> get cargandoStream => _cargandoController.stream;
   dispose() {
     _proveedoresController.close();
+    _cargandoController.close();
   }
 
   void obtenerProveedores() async {
     _proveedoresController.sink.add(await getProviders());
+    _cargandoController.sink.add(true);
     await proveedoresApi.obtenerProveedores();
+    _cargandoController.sink.add(false);
     _proveedoresController.sink.add(await getProviders());
   }
 

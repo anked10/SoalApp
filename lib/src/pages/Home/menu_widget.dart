@@ -17,7 +17,10 @@ class MenuWidget extends StatelessWidget {
         ),
         height: ScreenUtil().setHeight(45),
         width: ScreenUtil().setWidth(45),
-        child: const Icon(Icons.menu),
+        child: const Icon(
+          Icons.menu,
+          color: Colors.indigo,
+        ),
       ),
     );
   }

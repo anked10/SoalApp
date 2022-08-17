@@ -22,7 +22,6 @@ class SubModuloDatabase {
       final Database db = await dbprovider.getDatabase();
       List<SubModuloModel> list = [];
       List<Map> maps = await db.rawQuery("SELECT * FROM SubModulos WHERE idModulo='$idModulo'");
-      print(maps);
       if (maps.isNotEmpty) list = SubModuloModel.fromJsonList(maps);
       return list;
     } catch (e) {

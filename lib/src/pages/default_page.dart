@@ -10,10 +10,9 @@ class DefaultPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        automaticallyImplyLeading: false,
-        elevation: 0,
-        centerTitle: true,
+        backgroundColor: Colors.white,
         leading: const MenuWidget(),
+        elevation: 0,
       ),
       body: Center(
         child: SizedBox(

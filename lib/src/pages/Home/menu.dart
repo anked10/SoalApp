@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:soal_app/core/config/colors.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/Menu/modulos_model.dart';
@@ -64,7 +63,7 @@ class Menu extends StatelessWidget {
                 ),
                 Container(
                   height: ScreenUtil().setHeight(1),
-                  width: ScreenUtil().setWidth(200),
+                  width: double.infinity,
                   color: Colors.indigo,
                 ),
                 SizedBox(
@@ -169,15 +168,17 @@ class Menu extends StatelessWidget {
           bottom: ScreenUtil().setHeight(5),
         ),
         padding: EdgeInsets.only(top: ScreenUtil().setHeight(10), bottom: ScreenUtil().setHeight(10), left: ScreenUtil().setWidth(20)),
-        // decoration: BoxDecoration(
-        //     borderRadius: BorderRadius.circular(20), color: (itemSeleccionado == item.idSubModulo.toString()) ? Colors.green : Colors.transparent),
         child: Row(
           children: [
-            SizedBox(
-              child: SvgPicture.asset(
-                'assets/svg/arrow.svg',
-                color: (itemSeleccionado == item.idSubModulo.toString()) ? Colors.green : Colors.black,
-              ),
+            // SizedBox(
+            //   child: SvgPicture.asset(
+            //     'assets/svg/arrow.svg',
+            //     color: (itemSeleccionado == item.idSubModulo.toString()) ? Colors.indigo : Colors.black,
+            //   ),
+            // ),
+            Icon(
+              Icons.keyboard_arrow_right,
+              color: (itemSeleccionado == item.idSubModulo.toString()) ? Colors.indigo : Colors.black,
             ),
             SizedBox(
               width: ScreenUtil().setWidth(19),
@@ -185,7 +186,7 @@ class Menu extends StatelessWidget {
             Text(
               item.nameSubModulo.toString(),
               style: TextStyle(
-                color: (itemSeleccionado == item.idSubModulo.toString()) ? Colors.green : Colors.black,
+                color: (itemSeleccionado == item.idSubModulo.toString()) ? Colors.indigo : Colors.black,
                 fontSize: ScreenUtil().setSp(13),
                 fontWeight: FontWeight.w400,
               ),
@@ -195,53 +196,4 @@ class Menu extends StatelessWidget {
       ),
     );
   }
-
-  // Widget construirItem(ModulosModel item, BuildContext context) {
-  //   return InkWell(
-  //     onTap: () {
-  //       // if (item.orden == 9) {
-  //       //   Navigator.push(
-  //       //     context,
-  //       //     PageRouteBuilder(
-  //       //       opaque: false,
-  //       //       pageBuilder: (context, animation, secondaryAnimation) {
-  //       //         //return LogoutPage();
-  //       //         return Container();
-  //       //       },
-  //       //     ),
-  //       //   );
-  //       // } else {
-  //       //   onSelectItem!(item);
-  //       // }
-  //     },
-  //     child: Container(
-  //       margin: EdgeInsets.only(
-  //         bottom: ScreenUtil().setHeight(5),
-  //       ),
-  //       padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(15), horizontal: ScreenUtil().setWidth(5)),
-  //       decoration: BoxDecoration(
-  //         borderRadius: BorderRadius.circular(20),
-  //       ),
-  //       child: Row(
-  //         children: [
-  //           // Icon(
-  //           //   item.icon,
-  //           //   color: (itemSeleccionado == item) ? Colors.white : Colors.black,
-  //           // ),
-  //           // SizedBox(
-  //           //   width: ScreenUtil().setWidth(19),
-  //           // ),
-  //           Text(
-  //             item.nombreModulo.toString(),
-  //             style: TextStyle(
-  //               color: Colors.black,
-  //               fontSize: ScreenUtil().setSp(13),
-  //               fontWeight: FontWeight.w400,
-  //             ),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
 }

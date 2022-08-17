@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:soal_app/src/pages/Home/menu.dart';
+import 'package:soal_app/src/pages/New/Proveedores/proveedores.dart';
 import 'package:soal_app/src/pages/default_page.dart';
 
 class Home extends StatefulWidget {
@@ -17,8 +18,9 @@ class _HomeState extends State<Home> {
     return ZoomDrawer(
       borderRadius: 24,
       slideWidth: MediaQuery.of(context).size.width * 0.85,
-      showShadow: false,
+      showShadow: true,
       angle: 0.0,
+      drawerShadowsBackgroundColor: Colors.indigo[300]!,
       menuBackgroundColor: Colors.white,
       mainScreenTapClose: true,
       //style: DrawerStyle.style1,
@@ -41,8 +43,8 @@ class _HomeState extends State<Home> {
 
   Widget obtenerPage() {
     switch (itemSeleccionado) {
-      case '35':
-        return const DefaultPage();
+      case '23':
+        return const Proveedores();
       default:
         return const DefaultPage();
     }
