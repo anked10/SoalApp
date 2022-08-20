@@ -460,7 +460,7 @@ class Proveedores extends StatelessWidget {
           FocusedMenuItem(
             title: Expanded(
               child: Text(
-                "ver",
+                "Materiales",
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: ScreenUtil().setSp(18),
@@ -470,7 +470,7 @@ class Proveedores extends StatelessWidget {
               ),
             ),
             trailingIcon: Icon(
-              Icons.edit_outlined,
+              Icons.archive_outlined,
               color: Colors.grey,
               size: ScreenUtil().setHeight(20),
             ),

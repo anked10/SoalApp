@@ -294,4 +294,27 @@ class DatabaseHelper {
       'bancoOT TEXT, '
       'cuentaOT TEXT, '
       'estadoOT TEXT)';
+
+  static const String tableMaterialesProveedor = 'CREATE TABLE MaterialesProveedor('
+      'idMaterial TEXT PRIMARY KEY, '
+      'idProveedor TEXT, '
+      'idRecurso TEXT, '
+      'umMaterial TEXT, '
+      'solesMaterial TEXT, '
+      'igvSolesMaterial TEXT, '
+      'dolaresMaterial TEXT, '
+      'igvDolaresMaterial TEXT, '
+      'estadoMaterial TEXT, '
+      'idLogisticaClase TEXT, '
+      'idEmpresa TEXT, '
+      'idMedida TEXT, '
+      'recursoTipo TEXT, '
+      'recursoNombre TEXT, '
+      'recursoCodigo TEXT, '
+      'recursoComentario TEXT, '
+      'recursoFoto TEXT, '
+      'recursoEstado TEXT, '
+      'medidaCodigoUnidad TEXT, '
+      'medidaNombre TEXT, '
+      'medidaActivo TEXT)';
 }
