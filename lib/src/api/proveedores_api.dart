@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:soal_app/core/database/proveedor_database.dart';
@@ -98,10 +99,6 @@ class ProveedoresApi {
     }
   }
 
-
-
-
-
   Future<ApiResultModel> addProvider(ProveedorModel proveedor) async {
     ApiResultModel result = ApiResultModel();
 
@@ -142,5 +139,42 @@ class ProveedoresApi {
       return result;
     }
   }
-}
 
+  Future<ApiResultModel> uploadDocumentoProveedor(File documento, String idProveedor, String tipoDocumento, String referencia, String fecha) async {
+    ApiResultModel result = ApiResultModel();
+    try {
+      final url = Uri.parse('$API_BASE_URL/api/Proveedor/guardar_documento');
+
+      String? token = await StorageManager.readData('token');
+
+      final request = http.MultipartRequest('POST', url);
+
+      request.fields["app"] = "true";
+      request.fields["tn"] = token!;
+      request.fields["id_tipo"] = idProveedor;
+      request.fields["documento_tipo"] = tipoDocumento;
+      request.fields["documento_referencia"] = referencia;
+      request.fields["documento_fecha"] = fecha;
+
+      request.files.add(await http.MultipartFile.fromPath('documento_archivo', documento.path));
+
+      final response = await request.send();
+
+      final int code = response.statusCode;
+
+      if (code == 200) {
+        result.message = 'Archivo cargado correctamente';
+      } else {
+        result.message = 'Ocurrió un error, inténtelo nuevamente';
+      }
+      result.code = code;
+
+      return result;
+    } catch (e) {
+      print(e);
+      result.code = 2;
+      result.message = 'Ocurrió un error';
+      return result;
+    }
+  }
+}

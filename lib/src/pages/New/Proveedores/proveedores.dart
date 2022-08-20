@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:focused_menu/focused_menu.dart';
+import 'package:focused_menu/modals.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/proveedores_model.dart';
 import 'package:soal_app/src/pages/Home/menu_widget.dart';
+import 'package:soal_app/src/pages/New/Proveedores/documentos_proveedores.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
 
 class Proveedores extends StatelessWidget {
@@ -86,9 +89,8 @@ class Proveedores extends StatelessWidget {
                             ),
                           );
                         }
-
                         index = index - 1;
-                        return _proveedor(context, snapshot.data![index], index + 1);
+                        return focusGeneral(context, _proveedor(context, snapshot.data![index], index + 1), snapshot.data![index]);
                       },
                     );
                   } else {
@@ -393,6 +395,114 @@ class Proveedores extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  FocusedMenuHolder focusGeneral(
+    BuildContext context,
+    Widget childs,
+    ProveedorModel proveedor,
+  ) {
+    return FocusedMenuHolder(
+        blurBackgroundColor: Colors.black.withOpacity(0.2),
+        blurSize: 0,
+        animateMenuItems: true,
+        onPressed: () {},
+        openWithTap: true,
+        menuWidth: ScreenUtil().setWidth(210),
+        menuItems: [
+          FocusedMenuItem(
+            title: Expanded(
+              child: Text(
+                "Documentos",
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: ScreenUtil().setSp(18),
+                  letterSpacing: ScreenUtil().setSp(0.016),
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            trailingIcon: Icon(
+              Icons.insert_drive_file_sharp,
+              color: Colors.grey,
+              size: ScreenUtil().setHeight(20),
+            ),
+            onPressed: () {
+              //DetailProveedor
+
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return DocumentosProveedores(
+                      proveedor: proveedor,
+                    );
+                  },
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    var begin = Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
+
+                    var tween = Tween(begin: begin, end: end).chain(
+                      CurveTween(curve: curve),
+                    );
+
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
+                ),
+              );
+              //DocumentosProveedor
+            },
+          ),
+          FocusedMenuItem(
+            title: Expanded(
+              child: Text(
+                "ver",
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: ScreenUtil().setSp(18),
+                  letterSpacing: ScreenUtil().setSp(0.016),
+                  color: Colors.black,
+                ),
+              ),
+            ),
+            trailingIcon: Icon(
+              Icons.edit_outlined,
+              color: Colors.grey,
+              size: ScreenUtil().setHeight(20),
+            ),
+            onPressed: () async {
+              // Navigator.push(
+              //   context,
+              //   PageRouteBuilder(
+              //     pageBuilder: (context, animation, secondaryAnimation) {
+              //       return DetailProveedor(
+              //         proveedor: proveedores[index],
+              //       );
+              //     },
+              //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              //       var begin = Offset(0.0, 1.0);
+              //       var end = Offset.zero;
+              //       var curve = Curves.ease;
+
+              //       var tween = Tween(begin: begin, end: end).chain(
+              //         CurveTween(curve: curve),
+              //       );
+
+              //       return SlideTransition(
+              //         position: animation.drive(tween),
+              //         child: child,
+              //       );
+              //     },
+              //   ),
+              // );
+            },
+          ),
+        ],
+        child: childs);
   }
 
   datoBanco(String dato) {

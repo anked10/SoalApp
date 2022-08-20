@@ -40,4 +40,12 @@ En adjuntos de solicitud de compras es igual, sólo que documento_clase = 3 y el
       return [];
     }
   }
+
+  deleteDocumentos() async {
+    final db = await dbprovider.database;
+
+    final res = await db.rawDelete("DELETE FROM Documentos");
+
+    return res;
+  }
 }

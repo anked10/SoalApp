@@ -1,6 +1,5 @@
 //Solicitudcompra/listar_doc_varios_app
 
-
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -26,17 +25,18 @@ class DocumentosApi {
       final decodedData = json.decode(response.body);
       final int code = decodedData['result']['code'];
       if (code == 1) {
+        await documentosDatabase.deleteDocumentos();
         for (var i = 0; i < decodedData['result']['data'].length; i++) {
           DocumentoModel documentoModel = DocumentoModel();
           documentoModel.idDocumento = decodedData['result']['data'][i]['id_documento'];
           documentoModel.idPerson = decodedData['result']['data'][i]['id_person'];
-          documentoModel.idTipo= decodedData['result']['data'][i]['id_tipo'];
-          documentoModel.documentoClase= decodedData['result']['data'][i]['documento_clase'];
-          documentoModel.documentoTipo= decodedData['result']['data'][i]['documento_tipo'];
-          documentoModel.documentoArchivo= decodedData['result']['data'][i]['documento_archivo'];
-          documentoModel.documentoReferencia= decodedData['result']['data'][i]['documento_referencia'];
-          documentoModel.documentoFecha= decodedData['result']['data'][i]['documento_fecha'];
-          documentoModel.documentoFechaSubida= decodedData['result']['data'][i]['documento_fecha_subida'];
+          documentoModel.idTipo = decodedData['result']['data'][i]['id_tipo'];
+          documentoModel.documentoClase = decodedData['result']['data'][i]['documento_clase'];
+          documentoModel.documentoTipo = decodedData['result']['data'][i]['documento_tipo'];
+          documentoModel.documentoArchivo = decodedData['result']['data'][i]['documento_archivo'];
+          documentoModel.documentoReferencia = decodedData['result']['data'][i]['documento_referencia'];
+          documentoModel.documentoFecha = decodedData['result']['data'][i]['documento_fecha'];
+          documentoModel.documentoFechaSubida = decodedData['result']['data'][i]['documento_fecha_subida'];
 
           await documentosDatabase.insertarDocumentos(documentoModel);
         }
