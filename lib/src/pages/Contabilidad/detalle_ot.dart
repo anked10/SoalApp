@@ -37,9 +37,7 @@ class DetalleOT extends StatelessWidget {
             if (snapshot.data!.isNotEmpty) {
               return SingleChildScrollView(
                 child: Padding(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: ScreenUtil().setWidth(16),
-                      vertical: ScreenUtil().setHeight(10)),
+                  padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(16), vertical: ScreenUtil().setHeight(10)),
                   child: Column(
                     children: [
                       cards(
@@ -56,16 +54,17 @@ class DetalleOT extends StatelessWidget {
                             SizedBox(height: ScreenUtil().setHeight(6)),
                             rows(
                                 titulo: 'Fecha de Pago:',
-                                data:
-                                    obtenerFecha(ot.dateInicioObligacion ?? ''),
+                                data: obtenerFecha(ot.dateInicioObligacion ?? ''),
                                 st: 11,
-                                sd: 12),
+                                sd: 12,
+                                crossAxisAlignment: CrossAxisAlignment.start),
                             SizedBox(height: ScreenUtil().setHeight(4)),
                             rows(
                                 titulo: 'Fecha de Vencimiento:',
                                 data: obtenerFecha(ot.dateFinObligacion ?? ''),
                                 st: 11,
-                                sd: 12),
+                                sd: 12,
+                                crossAxisAlignment: CrossAxisAlignment.start),
                             SizedBox(
                               height: ScreenUtil().setHeight(6),
                             ),
@@ -148,7 +147,8 @@ class DetalleOT extends StatelessWidget {
                             data: detalle.cuentaOT ?? '',
                             st: 9,
                             sd: 12,
-                            active: (detalle.estadoOT == '1') ? null : '1'),
+                            active: (detalle.estadoOT == '1') ? null : '1',
+                            crossAxisAlignment: CrossAxisAlignment.start),
                       ],
                     ),
                   ),
@@ -162,9 +162,7 @@ class DetalleOT extends StatelessWidget {
                   ),
                 ],
               ),
-              fondo: (detalle.estadoOT == '1')
-                  ? Colors.white
-                  : Colors.red.withOpacity(0.4),
+              fondo: (detalle.estadoOT == '1') ? Colors.white : Colors.red.withOpacity(0.4),
               color: Colors.purple,
               height: 30,
               mtop: 20,
@@ -175,8 +173,7 @@ class DetalleOT extends StatelessWidget {
     );
   }
 
-  Widget totality(
-      {required String titulo, required String data, required Color color}) {
+  Widget totality({required String titulo, required String data, required Color color}) {
     return Row(
       children: [
         Expanded(

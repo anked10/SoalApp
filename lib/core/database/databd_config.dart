@@ -26,6 +26,7 @@ class DatabaseHelper {
       db.execute(tableRecursoDetalleOC);
       db.execute(tableObligacionTributariaSql);
       db.execute(tableDetalleOT);
+      db.execute(tableMaterialesProveedor);
       //Modulos DB
       db.execute(ModulosDB.modulosTableSql);
       db.execute(ModulosDB.submodulosTableSql);

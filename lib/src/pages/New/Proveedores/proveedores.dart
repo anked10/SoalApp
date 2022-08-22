@@ -6,6 +6,7 @@ import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/proveedores_model.dart';
 import 'package:soal_app/src/pages/Home/menu_widget.dart';
 import 'package:soal_app/src/pages/New/Proveedores/documentos_proveedores.dart';
+import 'package:soal_app/src/pages/New/Proveedores/materiales.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
 
 class Proveedores extends StatelessWidget {
@@ -475,30 +476,30 @@ class Proveedores extends StatelessWidget {
               size: ScreenUtil().setHeight(20),
             ),
             onPressed: () async {
-              // Navigator.push(
-              //   context,
-              //   PageRouteBuilder(
-              //     pageBuilder: (context, animation, secondaryAnimation) {
-              //       return DetailProveedor(
-              //         proveedor: proveedores[index],
-              //       );
-              //     },
-              //     transitionsBuilder: (context, animation, secondaryAnimation, child) {
-              //       var begin = Offset(0.0, 1.0);
-              //       var end = Offset.zero;
-              //       var curve = Curves.ease;
+              Navigator.push(
+                context,
+                PageRouteBuilder(
+                  pageBuilder: (context, animation, secondaryAnimation) {
+                    return Materiales(
+                      proveedor: proveedor,
+                    );
+                  },
+                  transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                    var begin = Offset(0.0, 1.0);
+                    var end = Offset.zero;
+                    var curve = Curves.ease;
 
-              //       var tween = Tween(begin: begin, end: end).chain(
-              //         CurveTween(curve: curve),
-              //       );
+                    var tween = Tween(begin: begin, end: end).chain(
+                      CurveTween(curve: curve),
+                    );
 
-              //       return SlideTransition(
-              //         position: animation.drive(tween),
-              //         child: child,
-              //       );
-              //     },
-              //   ),
-              // );
+                    return SlideTransition(
+                      position: animation.drive(tween),
+                      child: child,
+                    );
+                  },
+                ),
+              );
             },
           ),
         ],

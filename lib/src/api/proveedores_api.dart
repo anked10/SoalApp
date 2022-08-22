@@ -2,14 +2,17 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:http/http.dart' as http;
+import 'package:soal_app/core/database/materiales_proveedor_database.dart';
 import 'package:soal_app/core/database/proveedor_database.dart';
 import 'package:soal_app/core/sharedpreferences/storage_manager.dart';
 import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/src/models/api_result_model.dart';
+import 'package:soal_app/src/models/materiales_proveedor_model.dart';
 import 'package:soal_app/src/models/proveedores_model.dart';
 
 class ProveedoresApi {
   final proveedorDatabase = ProveedoresDatabase();
+  final materialesDatabase = MaterialesProveedorDatabase();
 
   Future<ApiResultModel> obtenerProveedores() async {
     ApiResultModel result = ApiResultModel();
@@ -175,6 +178,57 @@ class ProveedoresApi {
       result.code = 2;
       result.message = 'Ocurrió un error';
       return result;
+    }
+  }
+
+  Future<bool> getMaterialsProveedoresById(String id) async {
+    try {
+      final url = '$API_BASE_URL/api/Proveedor/listar_materiales_app';
+      String? token = await StorageManager.readData('token');
+      final response = await http.post(Uri.parse(url), body: {
+        'app': 'true',
+        'tn': token,
+        'id': id,
+      });
+
+      final decodedData = json.decode(response.body);
+      if (response.statusCode == 200) {
+        await materialesDatabase.deleteMaterialsProveedorById(id);
+
+        for (var i = 0; i < decodedData['result']['datos'].length; i++) {
+          var materials = decodedData['result']['datos'][i];
+
+          final material = MaterialesProveedorModel();
+
+          material.idMaterial = materials["id_logistica_materiales"];
+          material.idProveedor = materials["id_proveedor"];
+          material.idRecurso = materials["id_recurso"];
+          material.umMaterial = materials["logistica_materiales_um"];
+          material.solesMaterial = materials["logistica_materiales_soles"];
+          material.igvSolesMaterial = materials["logistica_materiales_soles_igv"];
+          material.dolaresMaterial = materials["logistica_materiales_dolares"];
+          material.igvDolaresMaterial = materials["logistica_materiales_dolares_igv"];
+          material.estadoMaterial = materials["logistica_materiales_estado"];
+          material.idLogisticaClase = materials["id_logistica_clase"];
+          material.idEmpresa = materials["id_empresa"];
+          material.idMedida = materials["id_medida"];
+          material.recursoTipo = materials["recurso_tipo"];
+          material.recursoNombre = materials["recurso_nombre"];
+          material.recursoCodigo = materials["recurso_codigo"];
+          material.recursoComentario = materials["recurso_comentario"];
+          material.recursoFoto = materials["recurso_foto"];
+          material.recursoEstado = materials["recurso_estado"];
+          material.medidaCodigoUnidad = materials["medida_codigo_unidad"];
+          material.medidaNombre = materials["medida_nombre"];
+          material.medidaActivo = materials["medida_activo"];
+
+          await materialesDatabase.insertMaterial(material);
+        }
+      }
+
+      return true;
+    } catch (e) {
+      return false;
     }
   }
 }

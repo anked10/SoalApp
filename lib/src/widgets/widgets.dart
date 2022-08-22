@@ -42,9 +42,15 @@ Widget cards({required Widget child, required Color color, required num height, 
   );
 }
 
-Widget rows({required String titulo, required String data, required num st, required num sd, String? active}) {
+Widget rows(
+    {required String titulo,
+    required String data,
+    required num st,
+    required num sd,
+    String? active,
+    required CrossAxisAlignment crossAxisAlignment}) {
   return Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
+    crossAxisAlignment: crossAxisAlignment,
     children: [
       Text(
         titulo,

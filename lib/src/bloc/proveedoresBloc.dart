@@ -2,21 +2,26 @@ import 'package:rxdart/rxdart.dart';
 import 'package:soal_app/core/database/clases_database.dart';
 import 'package:soal_app/core/database/proveedor_database.dart';
 import 'package:soal_app/src/api/proveedores_api.dart';
+import 'package:soal_app/src/models/materiales_proveedor_model.dart';
 import 'package:soal_app/src/models/proveedores_model.dart';
 
 class ProveedoresBloc {
   final proveedoresApi = ProveedoresApi();
   final clasesDatabase = ClasesDatabase();
   final proveedoresDatabase = ProveedoresDatabase();
-  final _proveedoresController = BehaviorSubject<List<ProveedorModel>>();
 
+  final _proveedoresController = BehaviorSubject<List<ProveedorModel>>();
   Stream<List<ProveedorModel>> get proveedoresStream => _proveedoresController.stream;
+
+  final _materialsProveedoresController = BehaviorSubject<List<MaterialesProveedorModel>>();
+  Stream<List<MaterialesProveedorModel>> get materialsProveedoresStream => _materialsProveedoresController.stream;
 
   final _cargandoController = BehaviorSubject<bool>();
   Stream<bool> get cargandoStream => _cargandoController.stream;
   dispose() {
     _proveedoresController.close();
     _cargandoController.close();
+    _materialsProveedoresController.close();
   }
 
   void obtenerProveedores() async {
@@ -25,6 +30,12 @@ class ProveedoresBloc {
     await proveedoresApi.obtenerProveedores();
     _cargandoController.sink.add(false);
     _proveedoresController.sink.add(await getProviders());
+  }
+
+  void getMaterialsProveedoresById(String id) async {
+    _materialsProveedoresController.sink.add(await proveedoresApi.materialesDatabase.getMaterialsProveedorById(id));
+    await proveedoresApi.getMaterialsProveedoresById(id);
+    _materialsProveedoresController.sink.add(await proveedoresApi.materialesDatabase.getMaterialsProveedorById(id));
   }
 
   Future<List<ProveedorModel>> getProviders() async {
