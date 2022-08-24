@@ -54,48 +54,55 @@ class Materiales extends StatelessWidget {
           ),
           SizedBox(height: ScreenUtil().setHeight(10)),
           Expanded(
-            child: StreamBuilder<List<MaterialesProveedorModel>>(
-              stream: materialsBloc.materialsProveedoresStream,
-              builder: (_, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data!.isNotEmpty) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length + 1,
-                      itemBuilder: (_, index) {
-                        if (index == 0) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(16),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Se encontraron ${snapshot.data!.length} resultado(s)',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: ScreenUtil().setSp(10),
+              child: StreamBuilder<bool>(
+            stream: materialsBloc.cargandoMStream,
+            builder: (_, c) {
+              if (c.hasData && c.data!) {
+                return ShowLoadding(active: true, color: Colors.transparent);
+              }
+              return StreamBuilder<List<MaterialesProveedorModel>>(
+                stream: materialsBloc.materialsProveedoresStream,
+                builder: (_, snapshot) {
+                  if (snapshot.hasData) {
+                    if (snapshot.data!.isNotEmpty) {
+                      return ListView.builder(
+                        itemCount: snapshot.data!.length + 1,
+                        itemBuilder: (_, index) {
+                          if (index == 0) {
+                            return Padding(
+                              padding: EdgeInsets.symmetric(
+                                horizontal: ScreenUtil().setWidth(16),
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'Se encontraron ${snapshot.data!.length} resultado(s)',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: ScreenUtil().setSp(10),
+                                    ),
                                   ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                        index = index - 1;
-                        return recursoItem(context, snapshot.data![index]);
-                      },
-                    );
+                                ],
+                              ),
+                            );
+                          }
+                          index = index - 1;
+                          return recursoItem(context, snapshot.data![index]);
+                        },
+                      );
+                    } else {
+                      return Center(
+                        child: Text('No existen materiales asignados a este proveedor'),
+                      );
+                    }
                   } else {
-                    return Center(
-                      child: Text('No existen materiales asignados a este proveedor'),
-                    );
+                    return ShowLoadding(active: true, color: Colors.transparent);
                   }
-                } else {
-                  return ShowLoadding(active: true, color: Colors.transparent);
-                }
-              },
-            ),
-          ),
+                },
+              );
+            },
+          )),
         ],
       ),
     );

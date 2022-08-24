@@ -18,10 +18,14 @@ class ProveedoresBloc {
 
   final _cargandoController = BehaviorSubject<bool>();
   Stream<bool> get cargandoStream => _cargandoController.stream;
+
+  final _cargandoMController = BehaviorSubject<bool>();
+  Stream<bool> get cargandoMStream => _cargandoMController.stream;
   dispose() {
     _proveedoresController.close();
     _cargandoController.close();
     _materialsProveedoresController.close();
+    _cargandoMController.close();
   }
 
   void obtenerProveedores() async {
@@ -34,7 +38,9 @@ class ProveedoresBloc {
 
   void getMaterialsProveedoresById(String id) async {
     _materialsProveedoresController.sink.add(await proveedoresApi.materialesDatabase.getMaterialsProveedorById(id));
+    _cargandoMController.sink.add(true);
     await proveedoresApi.getMaterialsProveedoresById(id);
+    _cargandoMController.sink.add(false);
     _materialsProveedoresController.sink.add(await proveedoresApi.materialesDatabase.getMaterialsProveedorById(id));
   }
 
