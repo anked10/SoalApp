@@ -7,6 +7,7 @@ import 'package:soal_app/src/api/proveedores_api.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/materiales_proveedor_model.dart';
 import 'package:soal_app/src/models/proveedores_model.dart';
+import 'package:soal_app/src/pages/New/Proveedores/eliminar_material_proveedor.dart';
 import 'package:soal_app/src/pages/New/Proveedores/upload_document.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
 import 'package:soal_app/src/widgets/text_field.dart';
@@ -155,7 +156,40 @@ class Materiales extends StatelessWidget {
             color: Colors.redAccent,
             size: ScreenUtil().setHeight(20),
           ),
-          onPressed: () async {},
+          onPressed: () {
+            //Eliminar OT
+            Navigator.push(
+              context,
+              PageRouteBuilder(
+                opaque: false,
+                pageBuilder: (context, animation, secondaryAnimation) {
+                  return EliminarMaterial(
+                    id: material.idMaterial!,
+                    onChanged: (v) {
+                      if (v == 1) {
+                        final materialsBloc = ProviderBloc.provee(context);
+                        materialsBloc.getMaterialsProveedoresById(proveedor.idProveedor!);
+                      }
+                    },
+                  );
+                },
+                transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                  var begin = const Offset(0.0, 1.0);
+                  var end = Offset.zero;
+                  var curve = Curves.ease;
+
+                  var tween = Tween(begin: begin, end: end).chain(
+                    CurveTween(curve: curve),
+                  );
+
+                  return SlideTransition(
+                    position: animation.drive(tween),
+                    child: child,
+                  );
+                },
+              ),
+            );
+          },
         ),
       ],
       child: Padding(

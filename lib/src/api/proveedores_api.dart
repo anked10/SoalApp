@@ -232,9 +232,32 @@ class ProveedoresApi {
     }
   }
 
+  Future<ApiResultModel> deleteProveedorMaterial(String idMaterial) async {
+    ApiResultModel result = ApiResultModel();
+
+    try {
+      final url = '$API_BASE_URL/api/Proveedor/cambiar_estado_materiales';
+      String? token = await StorageManager.readData('token');
+      final response = await http.post(Uri.parse(url), body: {
+        'app': 'true',
+        'tn': token,
+        'id': idMaterial,
+      });
+
+      final decodedData = json.decode(response.body);
+      print(decodedData);
+
+      result.code = decodedData;
+      return result;
+    } catch (e) {
+      result.code = 2;
+      result.message = 'Ocurrió un error';
+      return result;
+    }
+  }
+
   Future<ApiResultModel> editPriceMaterial(MaterialesProveedorModel material) async {
     ApiResultModel result = ApiResultModel();
-    print(material.igvSolesMaterial);
 
     try {
       final url = '$API_BASE_URL/api/Proveedor/editar_logistica_materiales';
