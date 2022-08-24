@@ -231,4 +231,35 @@ class ProveedoresApi {
       return false;
     }
   }
+
+  Future<ApiResultModel> editPriceMaterial(MaterialesProveedorModel material) async {
+    ApiResultModel result = ApiResultModel();
+    print(material.igvSolesMaterial);
+
+    try {
+      final url = '$API_BASE_URL/api/Proveedor/editar_logistica_materiales';
+      String? token = await StorageManager.readData('token');
+      final response = await http.post(Uri.parse(url), body: {
+        'app': 'true',
+        'tn': token,
+        'id_': material.idMaterial,
+        'um_': material.umMaterial,
+        'recurso_': material.idRecurso,
+        'logistica_materiales_soles_': material.solesMaterial,
+        'logistica_materiales_soles_igv_': material.igvSolesMaterial,
+        'logistica_materiales_dolares_': material.dolaresMaterial,
+        'logistica_materiales_dolares_igv_': material.igvDolaresMaterial,
+      });
+
+      final decodedData = json.decode(response.body);
+      print(decodedData);
+
+      result.code = decodedData;
+      return result;
+    } catch (e) {
+      result.code = 2;
+      result.message = 'Ocurrió un error';
+      return result;
+    }
+  }
 }

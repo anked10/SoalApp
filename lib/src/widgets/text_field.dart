@@ -10,12 +10,16 @@ class TextFieldSelect extends StatelessWidget {
       required this.readOnly,
       this.ontap,
       this.icon,
+      this.onchange,
+      this.keyboardType,
       this.autofocus = false})
       : super(key: key);
   final String label;
   final String hingText;
   final Function()? ontap;
+  final Function(String)? onchange;
   final TextEditingController controller;
+  final TextInputType? keyboardType;
   final Widget? widget;
   final bool readOnly;
   final bool? icon;
@@ -26,12 +30,14 @@ class TextFieldSelect extends StatelessWidget {
     return TextField(
       readOnly: readOnly,
       controller: controller,
+      onChanged: onchange,
       maxLines: null,
       style: const TextStyle(
         color: Color(0xff808080),
       ),
       autofocus: autofocus,
       onTap: ontap,
+      keyboardType: keyboardType,
       decoration: InputDecoration(
         suffix: (icon == true) ? null : widget,
         suffixIcon: (icon == true) ? widget : null,
