@@ -16,6 +16,7 @@ class AlmacenModel {
   String? idLogisticaTipo;
   String? logisticaClaseNombre;
   String? logisticaTipoNombre;
+  String? sedeNombre;
 
   AlmacenModel({
     this.idAlmacen,
@@ -35,6 +36,7 @@ class AlmacenModel {
     this.idLogisticaTipo,
     this.logisticaClaseNombre,
     this.logisticaTipoNombre,
+    this.sedeNombre,
   });
 
   static List<AlmacenModel> fromJsonList(List<dynamic> json) => json.map((i) => AlmacenModel.fromJson(i)).toList();

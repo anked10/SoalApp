@@ -34,11 +34,26 @@ class SedesDatabase {
       return [];
     }
   }
-  Future<List<SedesModel>> getSedesForName(String nombre ) async {
+
+  Future<List<SedesModel>> getSedesForName(String nombre) async {
     try {
       final Database db = await dbprovider.getDatabase();
       List<SedesModel> list = [];
       List<Map> maps = await db.rawQuery("SELECT * FROM Sedes where sedeNombre ='$nombre'");
+
+      if (maps.length > 0) list = SedesModel.fromJsonList(maps);
+      return list;
+    } catch (e) {
+      print(" $e Error en la base de datos Sedes");
+      return [];
+    }
+  }
+
+  Future<List<SedesModel>> getSedesById(String idSede) async {
+    try {
+      final Database db = await dbprovider.getDatabase();
+      List<SedesModel> list = [];
+      List<Map> maps = await db.rawQuery("SELECT * FROM Sedes where idSede ='$idSede'");
 
       if (maps.length > 0) list = SedesModel.fromJsonList(maps);
       return list;
