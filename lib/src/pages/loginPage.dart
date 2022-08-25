@@ -53,37 +53,63 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(
                       height: ScreenUtil().setHeight(50),
                     ),
-                    // Text(
-                    //   'Bienvenido ',
-                    //   style: TextStyle(
-                    //     fontWeight: FontWeight.w600,
-                    //     fontSize: ScreenUtil().setSp(24),
-                    //     fontStyle: FontStyle.normal,
-                    //   ),
-                    // ),
-                    SizedBox(
-                      height: ScreenUtil().setHeight(10),
-                    ),
                     Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(60)),
                       height: ScreenUtil().setHeight(250),
-                      width: ScreenUtil().setWidth(250),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        //shape: BoxShape.circle,
-                        // boxShadow: [
-                        //   BoxShadow(
-                        //     color: Colors.transparent.withOpacity(0.2),
-                        //     spreadRadius: 2,
-                        //     blurRadius: 5,
-                        //     offset: const Offset(0, 3),
-                        //   ),
-                        // ],
-                        image: DecorationImage(
-                          image: new ExactAssetImage('assets/images/logo.png'),
-                          fit: BoxFit.scaleDown,
-                        ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: Container(
+                              width: ScreenUtil().setWidth(100),
+                              height: ScreenUtil().setHeight(100),
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.transparent.withOpacity(0.3),
+                                    spreadRadius: 4,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: const Image(
+                                image: AssetImage('assets/images/soal.png'),
+                              ),
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: Container(
+                              width: ScreenUtil().setWidth(150),
+                              height: ScreenUtil().setHeight(150),
+                              padding: EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                shape: BoxShape.circle,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.transparent.withOpacity(0.3),
+                                    spreadRadius: 4,
+                                    blurRadius: 5,
+                                    offset: const Offset(0, 3),
+                                  ),
+                                ],
+                              ),
+                              child: const Image(
+                                image: AssetImage('assets/images/proonix.png'),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
+
                     SizedBox(
                       height: ScreenUtil().setHeight(15),
                     ),

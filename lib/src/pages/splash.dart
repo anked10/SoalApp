@@ -42,14 +42,60 @@ class _SplashState extends State<Splash> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-      child: Container(
-        height: ScreenUtil().setHeight(200),
-        width: double.infinity,
-        child: Image(
-          image: AssetImage('assets/images/logo.png'),
-        ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              width: ScreenUtil().setWidth(200),
+              height: ScreenUtil().setHeight(200),
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.transparent.withOpacity(0.3),
+                    spreadRadius: 6,
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: const Image(
+                image: AssetImage('assets/images/soal.png'),
+              ),
+            ),
+          ),
+          SizedBox(
+            height: ScreenUtil().setHeight(20),
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: Container(
+              width: ScreenUtil().setWidth(200),
+              height: ScreenUtil().setHeight(200),
+              padding: EdgeInsets.all(16),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                shape: BoxShape.circle,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.transparent.withOpacity(0.3),
+                    spreadRadius: 6,
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+              ),
+              child: const Image(
+                image: AssetImage('assets/images/proonix.png'),
+              ),
+            ),
+          ),
+        ],
       ),
-    ));
+    );
   }
 }
