@@ -37,17 +37,12 @@ class AlmacenBloc {
     _almacenController.sink.add(await almacenDatabase.getAlmacenPorSede(idSede));
   }
 
-  void getStockAlmacen(String idSede) async {
-    _stockRecursoAlmacenController.sink.add(await getStockAlmacenSede(idSede));
+  void getStockAlmacen(String idSede, String keyWord) async {
+    _stockRecursoAlmacenController.sink.add(await getStockAlmacenSede(idSede, keyWord));
     _cargandoController.sink.add(true);
     await almacenAPi.getStockRecursoAlmacenes();
     _cargandoController.sink.add(false);
-    _stockRecursoAlmacenController.sink.add(await getStockAlmacenSede(idSede));
-    // if (idSede.isNotEmpty) {
-    //   _stockRecursoAlmacenController.sink.add(await almacenDatabase.getAlmacenPorSede(idSede));
-    // } else {
-    //   _stockRecursoAlmacenController.sink.add(await almacenDatabase.getStockAlmacen());
-    // }
+    _stockRecursoAlmacenController.sink.add(await getStockAlmacenSede(idSede, keyWord));
   }
 
   void getSedes() async {
@@ -63,8 +58,9 @@ class AlmacenBloc {
     _busquedaAlmacenController.sink.add(await almacenDatabase.getAlmacenQuery(query));
   }
 
-  Future<List<AlmacenModel>> getStockAlmacenSede(String idSede) async {
-    final listrecursosDB = (idSede.isEmpty) ? await almacenDatabase.getStockAlmacen() : await almacenDatabase.getAlmacenPorSede(idSede);
+  Future<List<AlmacenModel>> getStockAlmacenSede(String idSede, String keyWord) async {
+    final listrecursosDB =
+        (idSede.isEmpty) ? await almacenDatabase.getStockAlmacen(keyWord) : await almacenDatabase.getAlmacenByIdAndQuery(idSede, keyWord);
 
     if (listrecursosDB.isEmpty) return [];
 

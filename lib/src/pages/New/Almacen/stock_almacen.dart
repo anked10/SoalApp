@@ -1,9 +1,12 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/almacenModel.dart';
+import 'package:soal_app/src/models/sedesModel.dart';
 import 'package:soal_app/src/pages/Home/menu_widget.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
+import 'package:soal_app/src/widgets/text_field.dart';
 import 'package:soal_app/src/widgets/widgets.dart';
 
 class StockAlmacen extends StatefulWidget {
@@ -15,6 +18,17 @@ class StockAlmacen extends StatefulWidget {
 
 class _StockAlmacenState extends State<StockAlmacen> {
   String idSede = '';
+  final _sedeNameController = TextEditingController();
+  final _wordKeyController = TextEditingController();
+
+  @override
+  void initState() {
+    Future.delayed(const Duration(microseconds: 100), () async {
+      filtro();
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final almacenBloc = ProviderBloc.almacen(context);
@@ -34,7 +48,7 @@ class _StockAlmacenState extends State<StockAlmacen> {
         actions: [
           IconButton(
             onPressed: () {
-              almacenBloc.getStockAlmacen('');
+              almacenBloc.getStockAlmacen(idSede, _wordKeyController.text.trim());
             },
             icon: Icon(
               Icons.refresh,
@@ -42,7 +56,9 @@ class _StockAlmacenState extends State<StockAlmacen> {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              filtro();
+            },
             icon: Icon(
               Icons.search,
               color: Colors.indigo,
@@ -59,7 +75,10 @@ class _StockAlmacenState extends State<StockAlmacen> {
                 stream: almacenBloc.stockRecursoAlmacenStream,
                 builder: (_, snapshot) {
                   if (!snapshot.hasData) return Container();
-                  if (snapshot.data!.isEmpty) return Text('Sin recursos disponibles');
+                  if (snapshot.data!.isEmpty)
+                    return Center(
+                        child: Text('Sin recursos disponibles para ' +
+                            "${(idSede.isNotEmpty && idSede != '') ? _sedeNameController.text : 'Todas las Sedes'}"));
 
                   return ListView.builder(
                     itemCount: snapshot.data!.length + 1,
@@ -69,15 +88,27 @@ class _StockAlmacenState extends State<StockAlmacen> {
                           padding: EdgeInsets.symmetric(
                             horizontal: ScreenUtil().setWidth(16),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
+                          child: Column(
                             children: [
                               Text(
-                                'Se encontraron ${snapshot.data!.length} resultado(s)',
+                                (idSede.isNotEmpty && idSede != '') ? _sedeNameController.text : 'Todas las Sedes',
                                 style: TextStyle(
                                   color: Colors.grey,
-                                  fontSize: ScreenUtil().setSp(10),
+                                  fontSize: ScreenUtil().setSp(14),
                                 ),
+                              ),
+                              SizedBox(height: ScreenUtil().setHeight(8)),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Text(
+                                    'Se encontraron ${snapshot.data!.length} resultado(s)',
+                                    style: TextStyle(
+                                      color: Colors.grey,
+                                      fontSize: ScreenUtil().setSp(10),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -161,6 +192,256 @@ class _StockAlmacenState extends State<StockAlmacen> {
         height: 80,
         mtop: 20,
       ),
+    );
+  }
+
+  void filtro() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Stack(
+          children: [
+            GestureDetector(
+              child: Container(
+                color: const Color.fromRGBO(0, 0, 0, 0.001),
+                child: GestureDetector(
+                  onTap: () {},
+                  child: DraggableScrollableSheet(
+                    initialChildSize: 0.8,
+                    minChildSize: 0.3,
+                    maxChildSize: 0.9,
+                    builder: (_, controller) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(25.0),
+                            topRight: Radius.circular(25.0),
+                          ),
+                        ),
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: ScreenUtil().setWidth(24),
+                            ),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(16),
+                                ),
+                                Center(
+                                  child: Container(
+                                    width: ScreenUtil().setWidth(100),
+                                    height: ScreenUtil().setHeight(5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(20),
+                                ),
+                                Text(
+                                  'Filtro',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: ScreenUtil().setSp(18),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(20),
+                                ),
+                                TextFieldSelect(
+                                  label: 'Sede',
+                                  hingText: 'Seleccionar Sede',
+                                  controller: _sedeNameController,
+                                  widget: Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: Colors.indigo,
+                                  ),
+                                  icon: true,
+                                  readOnly: true,
+                                  ontap: () {
+                                    FocusScope.of(context).unfocus();
+                                    _selectSede(context);
+                                  },
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(20),
+                                ),
+                                TextFieldSelect(
+                                  label: 'Referencia',
+                                  hingText: '',
+                                  controller: _wordKeyController,
+                                  widget: Icon(
+                                    Icons.edit,
+                                    color: Colors.indigo,
+                                  ),
+                                  icon: true,
+                                  readOnly: false,
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(20),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    final almacenBloc = ProviderBloc.almacen(context);
+                                    almacenBloc.getStockAlmacen(idSede, _wordKeyController.text.trim());
+                                    Navigator.pop(context);
+                                  },
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(18.0),
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(Colors.indigo),
+                                    padding: MaterialStateProperty.all<EdgeInsets>(
+                                      EdgeInsets.symmetric(
+                                        horizontal: ScreenUtil().setWidth(15),
+                                        vertical: ScreenUtil().setHeight(4),
+                                      ),
+                                    ),
+                                  ),
+                                  icon: Icon(
+                                    Icons.search,
+                                    size: ScreenUtil().setHeight(25),
+                                  ),
+                                  label: Text(
+                                    'Buscar ahora',
+                                    style: TextStyle(fontSize: ScreenUtil().setSp(20), fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _selectSede(BuildContext context) {
+    final almacenBloc = ProviderBloc.almacen(context);
+    almacenBloc.getSedes();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return GestureDetector(
+          child: Container(
+            color: const Color.fromRGBO(0, 0, 0, 0.001),
+            child: GestureDetector(
+              onTap: () {},
+              child: DraggableScrollableSheet(
+                initialChildSize: 0.7,
+                minChildSize: 0.2,
+                maxChildSize: 0.9,
+                builder: (_, controller) {
+                  return Container(
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(25.0),
+                        topRight: Radius.circular(25.0),
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        Icon(
+                          Icons.remove,
+                          color: Colors.grey[600],
+                        ),
+                        Text(
+                          'Seleccionar Estado',
+                          style: TextStyle(
+                            color: const Color(0xff5a5a5a),
+                            fontWeight: FontWeight.w600,
+                            fontSize: ScreenUtil().setSp(20),
+                          ),
+                        ),
+                        const Divider(
+                          thickness: 1,
+                          color: Colors.black,
+                        ),
+                        Expanded(
+                          child: StreamBuilder<List<SedesModel>>(
+                              stream: almacenBloc.sedesStream,
+                              builder: (context, snapshot) {
+                                if (!snapshot.hasData) {
+                                  return Center(
+                                    child: CupertinoActivityIndicator(),
+                                  );
+                                }
+
+                                if (snapshot.data!.isEmpty) {
+                                  return Center(
+                                    child: Text('Sin información disponible'),
+                                  );
+                                }
+
+                                return ListView.builder(
+                                  controller: controller,
+                                  itemCount: snapshot.data!.length + 1,
+                                  itemBuilder: (_, index) {
+                                    if (index == 0) {
+                                      return InkWell(
+                                        onTap: () {
+                                          idSede = '';
+                                          _sedeNameController.clear();
+
+                                          Navigator.pop(context);
+                                        },
+                                        child: Card(
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8),
+                                            child: Text('Todas las Sedes'),
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                    index = index - 1;
+                                    var sede = snapshot.data![index];
+                                    return InkWell(
+                                      onTap: () {
+                                        idSede = sede.idSede.toString();
+                                        _sedeNameController.text = sede.sedeNombre.toString().trim();
+
+                                        Navigator.pop(context);
+                                      },
+                                      child: Card(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: Text(sede.sedeNombre.toString().trim()),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                );
+                              }),
+                        ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      },
     );
   }
 }

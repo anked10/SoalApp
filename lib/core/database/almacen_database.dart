@@ -35,11 +35,13 @@ class AlmacenDatabase {
     }
   }
 
-  Future<List<AlmacenModel>> getStockAlmacen() async {
+  Future<List<AlmacenModel>> getStockAlmacen(String value) async {
+    String query = "SELECT * FROM Almacen WHERE recursoEstado='1'";
+    if (value.isNotEmpty) query += " AND recursoNombre LIKE '%$value%'";
     try {
       final Database db = await dbprovider.getDatabase();
       List<AlmacenModel> list = [];
-      List<Map> maps = await db.rawQuery("SELECT * FROM Almacen WHERE recursoEstado='1'");
+      List<Map> maps = await db.rawQuery(query);
 
       if (maps.length > 0) list = AlmacenModel.fromJsonList(maps);
       return list;
@@ -53,7 +55,7 @@ class AlmacenDatabase {
     try {
       final Database db = await dbprovider.getDatabase();
       List<AlmacenModel> list = [];
-      List<Map> maps = await db.rawQuery("SELECT * FROM Almacen where recursoNombre like '%$value%' or recursoCodigo like '%$value%'");
+      List<Map> maps = await db.rawQuery("SELECT * FROM Almacen where recursoNombre like '%$value%' AND recursoEstado='1'");
 
       if (maps.length > 0) list = AlmacenModel.fromJsonList(maps);
       return list;
@@ -61,5 +63,29 @@ class AlmacenDatabase {
       print(" $e Error en la base de datos");
       return [];
     }
+  }
+
+  Future<List<AlmacenModel>> getAlmacenByIdAndQuery(String idSede, String value) async {
+    String query = "SELECT * FROM Almacen WHERE idSede='$idSede' AND recursoEstado='1'";
+    if (value.isNotEmpty) query += " AND recursoNombre LIKE '%$value%'";
+    try {
+      final Database db = await dbprovider.getDatabase();
+      List<AlmacenModel> list = [];
+      List<Map> maps = await db.rawQuery(query);
+
+      if (maps.length > 0) list = AlmacenModel.fromJsonList(maps);
+      return list;
+    } catch (e) {
+      print(" $e Error en la base de datos");
+      return [];
+    }
+  }
+
+  deleteAll() async {
+    final db = await dbprovider.database;
+
+    final res = await db.rawDelete("DELETE FROM Almacen");
+
+    return res;
   }
 }
