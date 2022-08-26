@@ -497,7 +497,6 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
               );
             },
           ),
-           
         ],
         child: childs);
   }

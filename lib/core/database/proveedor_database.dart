@@ -15,7 +15,7 @@ class ProveedoresDatabase {
         category.toJson(),
         conflictAlgorithm: ConflictAlgorithm.replace,
       );
-     /*  await db.rawInsert("INSERT OR REPLACE INTO Category (idCategory,categoryName,categoryEstado,categoryImage) "
+      /*  await db.rawInsert("INSERT OR REPLACE INTO Category (idCategory,categoryName,categoryEstado,categoryImage) "
           "VALUES('${category.banco1}', '${category.banco1}', '${category.banco1}', '${category.banco1}')"); */
     } catch (e) {
       print("$e Error en la tabla ProveedorModel");
@@ -36,13 +36,11 @@ class ProveedoresDatabase {
     }
   }
 
-
-
   Future<List<ProveedorModel>> getProveedoresQuery(String value) async {
     try {
       final Database db = await dbprovider.getDatabase();
       List<ProveedorModel> list = [];
-      List<Map> maps = await db.rawQuery("SELECT * FROM Proveedores where nombre like '%$value%'");
+      List<Map> maps = await db.rawQuery("SELECT * FROM Proveedores where nombre like '%$value%' OR ruc like '%$value%'");
 
       if (maps.length > 0) list = ProveedorModel.fromJsonList(maps);
       return list;

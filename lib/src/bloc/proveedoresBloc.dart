@@ -29,11 +29,15 @@ class ProveedoresBloc {
   }
 
   void obtenerProveedores() async {
-    _proveedoresController.sink.add(await getProviders());
+    _proveedoresController.sink.add(await getProviders(''));
     _cargandoController.sink.add(true);
     await proveedoresApi.obtenerProveedores();
     _cargandoController.sink.add(false);
-    _proveedoresController.sink.add(await getProviders());
+    _proveedoresController.sink.add(await getProviders(''));
+  }
+
+  void searchProveedor(String value) async {
+    _proveedoresController.sink.add(await getProviders(value));
   }
 
   void getMaterialsProveedoresById(String id) async {
@@ -44,9 +48,9 @@ class ProveedoresBloc {
     _materialsProveedoresController.sink.add(await proveedoresApi.materialesDatabase.getMaterialsProveedorById(id));
   }
 
-  Future<List<ProveedorModel>> getProviders() async {
+  Future<List<ProveedorModel>> getProviders(String value) async {
     final List<ProveedorModel> listFinal = [];
-    final providerList = await proveedoresDatabase.getProveedores();
+    final providerList = (value.isNotEmpty) ? await proveedoresDatabase.getProveedoresQuery(value) : await proveedoresDatabase.getProveedores();
 
     if (providerList.length > 0) {
       for (var i = 0; i < providerList.length; i++) {

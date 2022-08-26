@@ -46,11 +46,14 @@ class Materiales extends StatelessWidget {
       body: Column(
         children: [
           SizedBox(height: ScreenUtil().setHeight(8)),
-          Text(
-            'Materiales asignados a ${proveedor.nombre}',
-            style: TextStyle(
-              fontSize: ScreenUtil().setSp(16),
-              fontWeight: FontWeight.w500,
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Materiales asignados a ${proveedor.nombre}',
+              style: TextStyle(
+                fontSize: ScreenUtil().setSp(16),
+                fontWeight: FontWeight.w500,
+              ),
             ),
           ),
           SizedBox(height: ScreenUtil().setHeight(10)),

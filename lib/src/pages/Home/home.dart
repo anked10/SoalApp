@@ -46,6 +46,8 @@ class _HomeState extends State<Home> {
     switch (itemSeleccionado) {
       case '23':
         return const Proveedores();
+      case '35':
+        return const DefaultPage();
       case '44':
         return const StockAlmacen();
       default:

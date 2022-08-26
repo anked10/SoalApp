@@ -9,13 +9,25 @@ import 'package:soal_app/src/pages/New/Proveedores/documentos_proveedores.dart';
 import 'package:soal_app/src/pages/New/Proveedores/materiales.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
 
-class Proveedores extends StatelessWidget {
+class Proveedores extends StatefulWidget {
   const Proveedores({Key? key}) : super(key: key);
 
   @override
+  State<Proveedores> createState() => _ProveedoresState();
+}
+
+class _ProveedoresState extends State<Proveedores> {
+  final _searchController = TextEditingController();
+  final _controller = SearchController();
+
+  int init = 0;
+  @override
   Widget build(BuildContext context) {
     final proveedoresBloc = ProviderBloc.provee(context);
-    proveedoresBloc.obtenerProveedores();
+    if (init == 0) {
+      proveedoresBloc.obtenerProveedores();
+      init++;
+    }
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -36,81 +48,127 @@ class Proveedores extends StatelessWidget {
             },
             icon: Icon(
               Icons.refresh,
-              color: Colors.indigo,
+              color: Colors.black,
             ),
           ),
           IconButton(
             onPressed: () {
-              //otBloc.searchOTPendientes('');
-              // Navigator.push(
-              //   context,
-              //   PageRouteBuilder(
-              //     pageBuilder: (context, animation, secondaryAnimation) {
-              //       return const BuscarOTPendientes();
-              //     },
-              //   ),
-              // );
+              proveedoresBloc.searchProveedor('');
+              _searchController.clear();
+              _controller.activateSearch(!_controller.isActiveSearch);
             },
-            icon: Icon(
-              Icons.search,
-              color: Colors.indigo,
-            ),
+            icon: AnimatedBuilder(
+                animation: _controller,
+                builder: (context, snapshot) {
+                  return Icon(
+                    Icons.search,
+                    color: _controller.isActiveSearch ? Colors.indigo : Colors.black,
+                  );
+                }),
           ),
         ],
         elevation: 0,
       ),
-      body: StreamBuilder<bool>(
-        stream: proveedoresBloc.cargandoStream,
-        builder: (_, c) {
-          if (c.hasData && !c.data!) {
-            return StreamBuilder<List<ProveedorModel>>(
-              stream: proveedoresBloc.proveedoresStream,
-              builder: (_, snapshot) {
-                if (snapshot.hasData) {
-                  if (snapshot.data!.isNotEmpty) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length + 1,
-                      itemBuilder: (_, index) {
-                        if (index == 0) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(16),
+      body: Column(
+        children: [
+          AnimatedBuilder(
+              animation: _controller,
+              builder: (context, snapshot) {
+                return _controller.isActiveSearch
+                    ? Container(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(16),
+                          vertical: ScreenUtil().setHeight(10),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(8),
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.indigo),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Expanded(
+                          child: TextField(
+                            controller: _searchController,
+                            onChanged: (value) {
+                              proveedoresBloc.searchProveedor(value.trim());
+                            },
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: ScreenUtil().setSp(16),
+                              fontWeight: FontWeight.w400,
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Se encontraron ${snapshot.data!.length} resultado(s)',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: ScreenUtil().setSp(10),
-                                  ),
+                            decoration: InputDecoration(
+                              label: Text(
+                                'Nombre o RUC del Proveedor',
+                                style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(12),
+                                  fontWeight: FontWeight.w400,
                                 ),
-                              ],
+                              ),
+                              border: InputBorder.none,
                             ),
+                          ),
+                        ),
+                      )
+                    : Container();
+              }),
+          Expanded(
+            child: StreamBuilder<bool>(
+              stream: proveedoresBloc.cargandoStream,
+              builder: (_, c) {
+                if (c.hasData && !c.data!) {
+                  return StreamBuilder<List<ProveedorModel>>(
+                    stream: proveedoresBloc.proveedoresStream,
+                    builder: (_, snapshot) {
+                      if (snapshot.hasData) {
+                        if (snapshot.data!.isNotEmpty) {
+                          return ListView.builder(
+                            itemCount: snapshot.data!.length + 1,
+                            itemBuilder: (_, index) {
+                              if (index == 0) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: ScreenUtil().setWidth(16),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Se encontraron ${snapshot.data!.length} resultado(s)',
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: ScreenUtil().setSp(10),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                              index = index - 1;
+                              return focusGeneral(context, _proveedor(context, snapshot.data![index], index + 1), snapshot.data![index]);
+                            },
+                          );
+                        } else {
+                          return Center(
+                            child: Text('No existen proveedores registrados'),
                           );
                         }
-                        index = index - 1;
-                        return focusGeneral(context, _proveedor(context, snapshot.data![index], index + 1), snapshot.data![index]);
-                      },
-                    );
-                  } else {
-                    return Center(
-                      child: Text('No existen proveedores registrados'),
-                    );
-                  }
+                      } else {
+                        return Container();
+                      }
+                    },
+                  );
                 } else {
-                  return Container();
+                  return ShowLoadding(
+                    active: true,
+                    color: Colors.transparent,
+                  );
                 }
               },
-            );
-          } else {
-            return ShowLoadding(
-              active: true,
-              color: Colors.transparent,
-            );
-          }
-        },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -519,5 +577,14 @@ class Proveedores extends StatelessWidget {
     }
 
     return result;
+  }
+}
+
+class SearchController extends ChangeNotifier {
+  bool isActiveSearch = false;
+
+  void activateSearch(bool activate) {
+    isActiveSearch = activate;
+    notifyListeners();
   }
 }
