@@ -446,8 +446,19 @@ class Materiales extends StatelessWidget {
                                   label: 'Precio en Soles con IGV (18%)',
                                   hingText: '',
                                   controller: priceSolesIGVController,
-                                  readOnly: true,
+                                  widget: Icon(
+                                    Icons.edit,
+                                    color: Colors.indigo,
+                                  ),
                                   icon: true,
+                                  readOnly: false,
+                                  onchange: (value) {
+                                    if (value.isNotEmpty) {
+                                      priceSolesController.text = (double.parse(value) / 1.18).toStringAsFixed(2);
+                                    } else {
+                                      priceSolesController.text = '0';
+                                    }
+                                  },
                                 ),
                                 SizedBox(
                                   height: ScreenUtil().setHeight(20),
@@ -477,8 +488,19 @@ class Materiales extends StatelessWidget {
                                   label: 'Precio en Dólares con IGV (18%)',
                                   hingText: '',
                                   controller: priceDollarIGVController,
-                                  icon: false,
-                                  readOnly: true,
+                                  widget: Icon(
+                                    Icons.edit,
+                                    color: Colors.indigo,
+                                  ),
+                                  icon: true,
+                                  readOnly: false,
+                                  onchange: (value) {
+                                    if (value.isNotEmpty) {
+                                      priceDollarController.text = (double.parse(value) / 1.18).toStringAsFixed(2);
+                                    } else {
+                                      priceDollarController.text = '0';
+                                    }
+                                  },
                                 ),
                                 SizedBox(
                                   height: ScreenUtil().setHeight(20),
