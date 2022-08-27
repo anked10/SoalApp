@@ -208,6 +208,7 @@ class DatabaseHelper {
   static const String tableOrdenCompraSql = 'CREATE TABLE OrdenCompraNew('
       'idOC TEXT PRIMARY KEY, '
       'ccOC TEXT, '
+      'numberOC TEXT, '
       'proformaOC TEXT, '
       'condicionPagoOC TEXT, '
       'subTotalOC TEXT, '

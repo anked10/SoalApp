@@ -3,6 +3,7 @@ import 'package:soal_app/src/models/recurso_detalle_oc_model.dart';
 class OrdenCompraNewModel {
   String? idOC;
   String? ccOC;
+  String? numberOC;
   String? proformaOC;
   String? condicionPagoOC;
   String? subTotalOC;
@@ -38,6 +39,7 @@ class OrdenCompraNewModel {
   OrdenCompraNewModel({
     this.idOC,
     this.ccOC,
+    this.numberOC,
     this.proformaOC,
     this.condicionPagoOC,
     this.subTotalOC,
@@ -74,6 +76,7 @@ class OrdenCompraNewModel {
   Map<String, dynamic> toJson() => {
         'idOC': idOC,
         'ccOC': ccOC,
+        'numberOC': numberOC,
         'proformaOC': proformaOC,
         'condicionPagoOC': condicionPagoOC,
         'subTotalOC': subTotalOC,
@@ -107,6 +110,7 @@ class OrdenCompraNewModel {
   factory OrdenCompraNewModel.fromJson(Map<String, dynamic> json) => OrdenCompraNewModel(
         idOC: json["idOC"],
         ccOC: json["ccOC"],
+        numberOC: json["numberOC"],
         proformaOC: json["proformaOC"],
         condicionPagoOC: json["condicionPagoOC"],
         subTotalOC: json["subTotalOC"],

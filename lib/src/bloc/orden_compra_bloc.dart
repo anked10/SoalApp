@@ -11,6 +11,9 @@ class OrdenCompraBloc {
   final _opController = BehaviorSubject<List<OrdenCompraModel>>();
   Stream<List<OrdenCompraModel>> get opStream => _opController.stream;
 
+  final _ocGeneradasController = BehaviorSubject<List<OrdenCompraNewModel>>();
+  Stream<List<OrdenCompraNewModel>> get ocGeneradasStream => _ocGeneradasController.stream;
+
   final _ocPendientesController = BehaviorSubject<List<OrdenCompraNewModel>>();
   Stream<List<OrdenCompraNewModel>> get ocPendientesStream => _ocPendientesController.stream;
 
@@ -20,22 +23,36 @@ class OrdenCompraBloc {
   final _detalleOCController = BehaviorSubject<List<OrdenCompraNewModel>>();
   Stream<List<OrdenCompraNewModel>> get detalleOCStream => _detalleOCController.stream;
 
-  //Controlador para motrar que se está cargando la consulta
+  //Controlador para mostrar que se está cargando la consulta
   final _cargandoController = BehaviorSubject<bool>();
   Stream<bool> get cargandoStream => _cargandoController.stream;
+
+  //Controlador para mostrar que se está cargando la consulta
+  final _cargando2Controller = BehaviorSubject<bool>();
+  Stream<bool> get cargando2Stream => _cargando2Controller.stream;
 
   dispose() {
     _opController.close();
     _ocPendientesController.close();
     _cargandoController.close();
+    _cargando2Controller.close();
     _detalleOCController.close();
     _searchOCPendientesController.close();
+    _ocGeneradasController.close();
   }
 
   void obtenerOp() async {
     _opController.sink.add(await ordenCompraDatabase.getOP());
     await ordenCompraApi.getOrdenCompra();
     _opController.sink.add(await ordenCompraDatabase.getOP());
+  }
+
+  void getOrdenCompraGeneradas() async {
+    _ocGeneradasController.sink.add(await ordenCompraApi.ocDB.getOCGeneradas());
+    _cargando2Controller.sink.add(true);
+    await ordenCompraApi.getOrdenCompra();
+    _cargando2Controller.sink.add(false);
+    _ocGeneradasController.sink.add(await ordenCompraApi.ocDB.getOCGeneradas());
   }
 
   void ocPendientes() async {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_zoom_drawer/flutter_zoom_drawer.dart';
 import 'package:soal_app/src/pages/Home/menu.dart';
 import 'package:soal_app/src/pages/New/Almacen/stock_almacen.dart';
+import 'package:soal_app/src/pages/New/OrdenCompra/orden_compra.dart';
 import 'package:soal_app/src/pages/New/Proveedores/proveedores.dart';
 import 'package:soal_app/src/pages/default_page.dart';
 
@@ -47,7 +48,7 @@ class _HomeState extends State<Home> {
       case '23':
         return const Proveedores();
       case '35':
-        return const DefaultPage();
+        return const OrdenCompra();
       case '44':
         return const StockAlmacen();
       default:
