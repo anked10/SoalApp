@@ -236,6 +236,9 @@ class DatabaseHelper {
       'direccionProveedor TEXT, '
       'telefonoProveedor TEXT, '
       'contactoProveedor TEXT, '
+      'cotizacion TEXT, '
+      'montoEstado TEXT, '
+      'montoRendicion TEXT, '
       'emailProveedor TEXT)';
 
   static const String tableRecursoDetalleOC = 'CREATE TABLE RecursoDetalleOC('

@@ -27,7 +27,6 @@ class OrdenCompraApi {
       });
 
       final decodedData = json.decode(response.body);
-      print(decodedData);
       final int code = decodedData['result']['code'];
       // if (code == 1) {
       //   for (var i = 0; i < decodedData['result']['data'].length; i++) {
@@ -105,6 +104,7 @@ class OrdenCompraApi {
           orden.dateTimeAprobacionOC = item["op_datetime_aprobacion"];
           orden.estadoOC = item["op_estado"];
           orden.activoOC = item["op_activo"];
+          orden.cotizacion = item["op_file"];
           orden.nombreProyectoOC = item["proyecto_nombre"];
           orden.codigoProyectoOC = item["proyecto_codigo"];
           orden.idMoneda = item["moneda"];
@@ -121,6 +121,8 @@ class OrdenCompraApi {
           orden.telefonoProveedor = item["proveedor_telefono"];
           orden.contactoProveedor = item["proveedor_contacto"];
           orden.emailProveedor = item["proveedor_email"];
+          orden.montoEstado = item["monto_estado"];
+          orden.montoRendicion = item["monto_rendicion"];
           await ocDB.insertarOrdenCompra(orden);
 
           for (var x = 0; x < item["detalle"].length; x++) {

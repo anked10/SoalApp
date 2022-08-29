@@ -32,6 +32,9 @@ class OrdenCompraNewModel {
   String? telefonoProveedor;
   String? contactoProveedor;
   String? emailProveedor;
+  String? cotizacion;
+  String? montoEstado;
+  String? montoRendicion;
 
   //NO EN DB
   List<RecursoDetalleOCModel>? recursos;
@@ -69,6 +72,9 @@ class OrdenCompraNewModel {
     this.contactoProveedor,
     this.emailProveedor,
     this.recursos,
+    this.cotizacion,
+    this.montoEstado,
+    this.montoRendicion,
   });
 
   static List<OrdenCompraNewModel> fromJsonList(List<dynamic> json) => json.map((i) => OrdenCompraNewModel.fromJson(i)).toList();
@@ -105,6 +111,9 @@ class OrdenCompraNewModel {
         'telefonoProveedor': telefonoProveedor,
         'contactoProveedor': contactoProveedor,
         'emailProveedor': emailProveedor,
+        'cotizacion': cotizacion,
+        'montoEstado': montoEstado,
+        'montoRendicion': montoRendicion,
       };
 
   factory OrdenCompraNewModel.fromJson(Map<String, dynamic> json) => OrdenCompraNewModel(
@@ -139,5 +148,8 @@ class OrdenCompraNewModel {
         telefonoProveedor: json["telefonoProveedor"],
         contactoProveedor: json["contactoProveedor"],
         emailProveedor: json["emailProveedor"],
+        cotizacion: json["cotizacion"],
+        montoEstado: json["montoEstado"],
+        montoRendicion: json["montoRendicion"],
       );
 }
