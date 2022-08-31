@@ -27,6 +27,7 @@ class DatabaseHelper {
       db.execute(tableObligacionTributariaSql);
       db.execute(tableDetalleOT);
       db.execute(tableMaterialesProveedor);
+      db.execute(tablePagos);
       //Modulos DB
       db.execute(ModulosDB.modulosTableSql);
       db.execute(ModulosDB.submodulosTableSql);
@@ -322,4 +323,24 @@ class DatabaseHelper {
       'medidaCodigoUnidad TEXT, '
       'medidaNombre TEXT, '
       'medidaActivo TEXT)';
+
+  static const String tablePagos = 'CREATE TABLE Pagos('
+      'idPago TEXT PRIMARY KEY, '
+      'idOC TEXT, '
+      'idObligacion TEXT, '
+      'idUser TEXT, '
+      'bancoPago TEXT, '
+      'monedaPago TEXT, '
+      'montoPago TEXT, '
+      'fechaPago TEXT, '
+      'voucherPago TEXT, '
+      'tipoPago TEXT, '
+      'referenciaPago TEXT, '
+      'comprobanteTipo TEXT, '
+      'rucPago TEXT, '
+      'nroComprobantePago TEXT, '
+      'rencidicionAprobacionPago TEXT, '
+      'codRegPago TEXT, '
+      'fechaAdjuntadaPago TEXT, '
+      'nameAtended TEXT)';
 }

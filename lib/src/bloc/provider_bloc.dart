@@ -7,6 +7,7 @@ import 'package:soal_app/src/bloc/detalle_op_bloc.dart';
 import 'package:soal_app/src/bloc/detalle_si_bloc.dart';
 import 'package:soal_app/src/bloc/documento_oc_bloc.dart';
 import 'package:soal_app/src/bloc/documentos_bloc.dart';
+import 'package:soal_app/src/bloc/gestion_pagos_bloc.dart';
 import 'package:soal_app/src/bloc/modulos_bloc.dart';
 import 'package:soal_app/src/bloc/orden_compra_bloc.dart';
 import 'package:soal_app/src/bloc/ot_bloc.dart';
@@ -28,6 +29,7 @@ class ProviderBloc extends InheritedWidget {
   final detalleOpBloc = DetalleOpBloc();
   final documentoOCBloc = DocumentoOCBloc();
   final otBloc = OTBloc();
+  final gestionPagosBloc = GestionPagosBloc();
 
   ProviderBloc({required Widget child}) : super(child: child);
 
@@ -84,5 +86,9 @@ class ProviderBloc extends InheritedWidget {
 
   static OTBloc ot(BuildContext context) {
     return (context.findAncestorWidgetOfExactType<ProviderBloc>())!.otBloc;
+  }
+
+  static GestionPagosBloc gestionPagos(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.gestionPagosBloc;
   }
 }

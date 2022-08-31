@@ -13,6 +13,7 @@ import 'package:soal_app/src/api/pdf_api.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/orden_compra_model.dart';
 import 'package:soal_app/src/pages/Home/menu_widget.dart';
+import 'package:soal_app/src/pages/New/OrdenCompra/gestion_pago.dart';
 import 'package:soal_app/src/widgets/responsive.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
 import 'package:soal_app/src/widgets/text_field.dart';
@@ -197,7 +198,32 @@ class _OrdenCompraState extends State<OrdenCompra> {
                       : (orden.montoEstado == orden.totalOC)
                           ? Colors.redAccent
                           : Colors.orangeAccent,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return GestionPago(
+                            orden: orden,
+                          );
+                        },
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          var begin = Offset(0.0, 1.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+
+                          var tween = Tween(begin: begin, end: end).chain(
+                            CurveTween(curve: curve),
+                          );
+
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
                 itemOption(
                   title: "Detalle",
@@ -261,29 +287,6 @@ class _OrdenCompraState extends State<OrdenCompra> {
                       ),
                       Text(
                         orden.numberOC ?? '',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(10),
-                          fontWeight: FontWeight.w400,
-                          color: Colors.black,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      Text(
-                        orden.montoEstado ?? '',
-                        style: TextStyle(
-                          fontSize: ScreenUtil().setSp(10),
-                          fontWeight: FontWeight.w400,
-                          color: (orden.activoOC == '0') ? Colors.grey : Colors.black,
-                        ),
-                      ),
-                      SizedBox(
-                        width: ScreenUtil().setWidth(4),
-                      ),
-                      Text(
-                        orden.totalOC ?? '',
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(10),
                           fontWeight: FontWeight.w400,
