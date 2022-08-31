@@ -11,6 +11,7 @@ import 'package:soal_app/src/models/orden_compra_model.dart';
 import 'package:soal_app/src/models/pagos_model.dart';
 import 'package:soal_app/src/widgets/responsive.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
+import 'package:soal_app/src/widgets/text_field.dart';
 import 'package:soal_app/src/widgets/widgets.dart';
 
 class GestionPago extends StatefulWidget {
@@ -23,6 +24,9 @@ class GestionPago extends StatefulWidget {
 
 class _GestionPagoState extends State<GestionPago> {
   final provider = ControllerFileGP();
+  final _fechaComprobanteController = TextEditingController();
+  final _nroComprobanteController = TextEditingController();
+  final _referenciaController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     final responsive = Responsive.of(context);
@@ -83,6 +87,66 @@ class _GestionPagoState extends State<GestionPago> {
                     color: Colors.blue,
                     height: 40,
                     mtop: 15,
+                  ),
+                  SizedBox(height: ScreenUtil().setHeight(20)),
+                  cards(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Registrar Pago",
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(14),
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        Divider(),
+                        SizedBox(height: ScreenUtil().setHeight(15)),
+                        TextFieldSelect(
+                          label: 'Fecha de Comprobante RUC',
+                          hingText: '',
+                          controller: _fechaComprobanteController,
+                          widget: Icon(
+                            Icons.calendar_month_outlined,
+                            color: Colors.indigo,
+                          ),
+                          readOnly: true,
+                          icon: true,
+                          ontap: () {
+                            FocusScope.of(context).unfocus();
+                            selectdate(context, _fechaComprobanteController);
+                          },
+                        ),
+                        SizedBox(height: ScreenUtil().setHeight(15)),
+                        TextFieldSelect(
+                          label: 'Nro Comprobante',
+                          hingText: '',
+                          controller: _nroComprobanteController,
+                          widget: Icon(
+                            Icons.edit,
+                            color: Colors.indigo,
+                          ),
+                          icon: true,
+                          readOnly: false,
+                        ),
+                        SizedBox(height: ScreenUtil().setHeight(15)),
+                        TextFieldSelect(
+                          label: 'Referencia',
+                          hingText: '',
+                          controller: _referenciaController,
+                          widget: Icon(
+                            Icons.edit,
+                            color: Colors.indigo,
+                          ),
+                          icon: true,
+                          readOnly: false,
+                        ),
+                      ],
+                    ),
+                    fondo: Colors.white,
+                    color: Colors.green,
+                    height: 40,
+                    mtop: 20,
                   ),
                   SizedBox(height: ScreenUtil().setHeight(20)),
                   StreamBuilder<bool>(
