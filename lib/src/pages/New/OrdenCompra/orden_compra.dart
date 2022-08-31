@@ -1,12 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:focused_menu/focused_menu.dart';
 import 'package:focused_menu/modals.dart';
+import 'package:path/path.dart';
+import 'package:percent_indicator/linear_percent_indicator.dart';
+import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/core/util/utils.dart';
+import 'package:soal_app/src/api/orden_compra_api.dart';
+import 'package:soal_app/src/api/pdf_api.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/orden_compra_model.dart';
 import 'package:soal_app/src/pages/Home/menu_widget.dart';
+import 'package:soal_app/src/widgets/responsive.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
+import 'package:soal_app/src/widgets/text_field.dart';
 
 class OrdenCompra extends StatefulWidget {
   const OrdenCompra({Key? key}) : super(key: key);
@@ -17,6 +26,8 @@ class OrdenCompra extends StatefulWidget {
 
 class _OrdenCompraState extends State<OrdenCompra> {
   int init = 0;
+
+  final provider = ControllerFileOC();
   @override
   Widget build(BuildContext context) {
     final ordenCompraBloc = ProviderBloc.op(context);
@@ -24,6 +35,8 @@ class _OrdenCompraState extends State<OrdenCompra> {
       ordenCompraBloc.getOrdenCompraGeneradas();
       init++;
     }
+
+    final responsive = Responsive.of(context);
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -69,40 +82,74 @@ class _OrdenCompraState extends State<OrdenCompra> {
         builder: (_, c) {
           if (c.hasData) {
             if (c.data!) return ShowLoadding(active: true, color: Colors.transparent);
-            return StreamBuilder<List<OrdenCompraNewModel>>(
-              stream: ordenCompraBloc.ocGeneradasStream,
-              builder: (_, snapshot) {
-                if (!snapshot.hasData) return Container();
-                if (snapshot.data!.isEmpty) return Center(child: Text('No existen ordenes de compras registradas'));
+            return Stack(
+              children: [
+                StreamBuilder<List<OrdenCompraNewModel>>(
+                  stream: ordenCompraBloc.ocGeneradasStream,
+                  builder: (_, snapshot) {
+                    if (!snapshot.hasData) return Container();
+                    if (snapshot.data!.isEmpty) return Center(child: Text('No existen ordenes de compras registradas'));
 
-                return ListView.builder(
-                  itemCount: snapshot.data!.length + 1,
-                  itemBuilder: (_, index) {
-                    if (index == 0) {
-                      return Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(16),
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            Text(
-                              'Se encontraron ${snapshot.data!.length} resultado(s)',
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontSize: ScreenUtil().setSp(10),
+                    return ListView.builder(
+                      itemCount: snapshot.data!.length + 1,
+                      itemBuilder: (_, index) {
+                        if (index == 0) {
+                          return Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: ScreenUtil().setWidth(16),
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                Text(
+                                  'Se encontraron ${snapshot.data!.length} resultado(s)',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: ScreenUtil().setSp(10),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }
+
+                        index = index - 1;
+                        return _item(context, snapshot.data![index]);
+                      },
+                    );
+                  },
+                ),
+                AnimatedBuilder(
+                  animation: provider,
+                  builder: (context, s) {
+                    return Positioned(
+                      bottom: 20,
+                      left: 0,
+                      right: 0,
+                      child: (!provider.load)
+                          ? Container()
+                          : Padding(
+                              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
+                              child: Container(
+                                height: ScreenUtil().setHeight(40),
+                                child: Column(
+                                  children: [
+                                    Text('Cargando'),
+                                    LinearPercentIndicator(
+                                      width: responsive.wp(90),
+                                      lineHeight: 14.0,
+                                      percent: 50 / 100,
+                                      backgroundColor: Colors.white,
+                                      progressColor: Colors.blue,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
-                          ],
-                        ),
-                      );
-                    }
-
-                    index = index - 1;
-                    return _item(context, snapshot.data![index]);
+                    );
                   },
-                );
-              },
+                ),
+              ],
             );
           } else {
             return ShowLoadding(active: true, color: Colors.transparent);
@@ -129,13 +176,27 @@ class _OrdenCompraState extends State<OrdenCompra> {
                   colorText: Colors.black,
                   icon: (orden.cotizacion != "") ? Icons.insert_drive_file_sharp : Icons.file_upload_sharp,
                   colorIcon: Colors.blue,
-                  onPressed: () {},
+                  onPressed: () async {
+                    if (orden.cotizacion != "") {
+                      provider.changeLoad(true);
+                      final _apiPDF = PdfApi();
+                      await _apiPDF.openFile(url: '$API_BASE_URL/${orden.cotizacion}');
+
+                      provider.changeLoad(false);
+                    } else {
+                      subir(context, orden.idOC!);
+                    }
+                  },
                 ),
                 itemOption(
                   title: "Estado",
                   colorText: Colors.black,
-                  icon: Icons.remove_red_eye,
-                  colorIcon: Colors.grey,
+                  icon: (orden.montoEstado == '0.00') ? Icons.check_circle : Icons.error,
+                  colorIcon: (orden.montoEstado == '0.00')
+                      ? Colors.green
+                      : (orden.montoEstado == orden.totalOC)
+                          ? Colors.redAccent
+                          : Colors.orangeAccent,
                   onPressed: () {},
                 ),
                 itemOption(
@@ -200,6 +261,29 @@ class _OrdenCompraState extends State<OrdenCompra> {
                       ),
                       Text(
                         orden.numberOC ?? '',
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(10),
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        orden.montoEstado ?? '',
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(10),
+                          fontWeight: FontWeight.w400,
+                          color: (orden.activoOC == '0') ? Colors.grey : Colors.black,
+                        ),
+                      ),
+                      SizedBox(
+                        width: ScreenUtil().setWidth(4),
+                      ),
+                      Text(
+                        orden.totalOC ?? '',
                         style: TextStyle(
                           fontSize: ScreenUtil().setSp(10),
                           fontWeight: FontWeight.w400,
@@ -415,5 +499,191 @@ class _OrdenCompraState extends State<OrdenCompra> {
       ),
       onPressed: onPressed,
     );
+  }
+
+  void subir(BuildContext context, String idOC) {
+    final _controller = ControllerFileOC();
+    final _archivoController = TextEditingController();
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      useRootNavigator: true,
+      backgroundColor: Colors.transparent,
+      builder: (context) {
+        return Stack(
+          children: [
+            GestureDetector(
+              child: Container(
+                color: const Color.fromRGBO(0, 0, 0, 0.001),
+                child: GestureDetector(
+                  onTap: () {},
+                  child: DraggableScrollableSheet(
+                    initialChildSize: 0.8,
+                    minChildSize: 0.3,
+                    maxChildSize: 0.9,
+                    builder: (_, controller) {
+                      return Container(
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(25.0),
+                            topRight: Radius.circular(25.0),
+                          ),
+                        ),
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: ScreenUtil().setWidth(24),
+                            ),
+                            child: Column(
+                              children: [
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(16),
+                                ),
+                                Center(
+                                  child: Container(
+                                    width: ScreenUtil().setWidth(100),
+                                    height: ScreenUtil().setHeight(5),
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(20),
+                                ),
+                                Text(
+                                  'Agregar Cotización',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: ScreenUtil().setSp(18),
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(20),
+                                ),
+                                TextFieldSelect(
+                                  label: 'Seleccionar Archivo',
+                                  hingText: '',
+                                  controller: _archivoController,
+                                  widget: Icon(
+                                    Icons.file_copy,
+                                    color: Colors.indigo,
+                                  ),
+                                  icon: true,
+                                  readOnly: true,
+                                  ontap: () async {
+                                    FocusScope.of(context).unfocus();
+                                    final path = await PdfApi().seleccionarDoc();
+
+                                    _archivoController.text = path?.path != null ? basename(path!.path) : 'Seleccionar Archivo';
+                                    _controller.changeFile(path);
+                                  },
+                                ),
+                                SizedBox(
+                                  height: ScreenUtil().setHeight(20),
+                                ),
+                                ElevatedButton.icon(
+                                  onPressed: () async {
+                                    if (_archivoController.value.text.isEmpty && _archivoController.value.text == 'Seleccionar Archivo')
+                                      return showToast2('Seleccione un Archivo', Colors.redAccent);
+
+                                    _controller.changeCargando(true);
+                                    final _api = OrdenCompraApi();
+                                    final res = await _api.uploadCotizacionOC(
+                                      _controller.file!,
+                                      idOC,
+                                    );
+                                    if (res.code == 200) {
+                                      showToast2(res.message, Colors.green);
+                                      final ordenCompraBloc = ProviderBloc.op(context);
+                                      ordenCompraBloc.getOrdenCompraGeneradas();
+                                      _archivoController.clear();
+                                      _controller.file = null;
+                                      Navigator.pop(context);
+                                    } else {
+                                      showToast2(res.message, Colors.redAccent);
+                                    }
+                                    _controller.changeCargando(false);
+                                  },
+                                  style: ButtonStyle(
+                                    shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(18.0),
+                                      ),
+                                    ),
+                                    backgroundColor: MaterialStateProperty.all(Colors.indigo),
+                                    padding: MaterialStateProperty.all<EdgeInsets>(
+                                      EdgeInsets.symmetric(
+                                        horizontal: ScreenUtil().setWidth(15),
+                                        vertical: ScreenUtil().setHeight(4),
+                                      ),
+                                    ),
+                                  ),
+                                  icon: Icon(
+                                    Icons.upload_file_outlined,
+                                    size: ScreenUtil().setHeight(25),
+                                  ),
+                                  label: Text(
+                                    'Subir',
+                                    style: TextStyle(fontSize: ScreenUtil().setSp(20), fontWeight: FontWeight.w500),
+                                  ),
+                                ),
+                                SizedBox(height: ScreenUtil().setHeight(6)),
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text(
+                                    'Cerrar',
+                                    style: TextStyle(color: Colors.red, fontSize: ScreenUtil().setSp(18)),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
+              ),
+            ),
+            AnimatedBuilder(
+                animation: _controller,
+                builder: (context, snapshot) {
+                  return ShowLoadding(
+                    active: _controller.cargando,
+                    color: Colors.black.withOpacity(0.4),
+                  );
+                }),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ControllerFileOC extends ChangeNotifier {
+  File? file;
+  bool cargando = false;
+
+  bool load = false;
+
+  void changeLoad(bool l) {
+    load = l;
+    notifyListeners();
+  }
+
+  void changeCargando(bool c) {
+    cargando = c;
+    notifyListeners();
+  }
+
+  void changeFile(File? f) {
+    file = f;
+    notifyListeners();
   }
 }

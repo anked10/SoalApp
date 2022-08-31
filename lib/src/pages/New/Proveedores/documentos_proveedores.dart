@@ -101,45 +101,46 @@ class _DocumentosProveedoresState extends State<DocumentosProveedores> {
             },
           ),
           AnimatedBuilder(
-              animation: provider,
-              builder: (context, s) {
-                return Positioned(
-                  bottom: 20,
-                  left: 0,
-                  right: 0,
-                  child: (!provider.load)
-                      ? Container()
-                      // : (provider.cargando == 100.0)
-                      //     ? Container(
-                      //         margin: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
-                      //         padding: EdgeInsets.symmetric(vertical: responsive.hp(.5)),
-                      //         decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(10)),
-                      //         child: Center(
-                      //           child: Text(
-                      //             'Descarga  completa',
-                      //             style: TextStyle(color: Colors.white),
-                      //           ),
-                      //         ))
-                      : Padding(
-                          padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
-                          child: Container(
-                            height: ScreenUtil().setHeight(40),
-                            child: Column(
-                              children: [
-                                Text('Cargando'),
-                                LinearPercentIndicator(
-                                  width: responsive.wp(90),
-                                  lineHeight: 14.0,
-                                  percent: 50 / 100,
-                                  backgroundColor: Colors.white,
-                                  progressColor: Colors.blue,
-                                ),
-                              ],
-                            ),
+            animation: provider,
+            builder: (context, s) {
+              return Positioned(
+                bottom: 20,
+                left: 0,
+                right: 0,
+                child: (!provider.load)
+                    ? Container()
+                    // : (provider.cargando == 100.0)
+                    //     ? Container(
+                    //         margin: EdgeInsets.symmetric(horizontal: responsive.wp(5)),
+                    //         padding: EdgeInsets.symmetric(vertical: responsive.hp(.5)),
+                    //         decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.circular(10)),
+                    //         child: Center(
+                    //           child: Text(
+                    //             'Descarga  completa',
+                    //             style: TextStyle(color: Colors.white),
+                    //           ),
+                    //         ))
+                    : Padding(
+                        padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
+                        child: Container(
+                          height: ScreenUtil().setHeight(40),
+                          child: Column(
+                            children: [
+                              Text('Cargando'),
+                              LinearPercentIndicator(
+                                width: responsive.wp(90),
+                                lineHeight: 14.0,
+                                percent: 50 / 100,
+                                backgroundColor: Colors.white,
+                                progressColor: Colors.blue,
+                              ),
+                            ],
                           ),
                         ),
-                );
-              })
+                      ),
+              );
+            },
+          ),
         ],
       ),
     );

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:soal_app/core/database/detalle_op_database.dart';
 import 'package:soal_app/core/database/orden_compra_database.dart';
@@ -276,6 +277,41 @@ class OrdenCompraApi {
       }
     } catch (e) {
       return 2;
+    }
+  }
+
+  Future<ApiResultModel> uploadCotizacionOC(File cotizacion, String idOC) async {
+    ApiResultModel result = ApiResultModel();
+    try {
+      final url = Uri.parse('$API_BASE_URL/api/Ordencompra/agregar_cotizacion');
+
+      String? token = await StorageManager.readData('token');
+
+      final request = http.MultipartRequest('POST', url);
+
+      request.fields["app"] = "true";
+      request.fields["tn"] = token!;
+      request.fields["id_op_coti"] = idOC;
+
+      request.files.add(await http.MultipartFile.fromPath('coti_file', cotizacion.path));
+
+      final response = await request.send();
+
+      final int code = response.statusCode;
+
+      if (code == 200) {
+        result.message = 'Archivo cargado correctamente';
+      } else {
+        result.message = 'Ocurrió un error, inténtelo nuevamente';
+      }
+      result.code = code;
+
+      return result;
+    } catch (e) {
+      print(e);
+      result.code = 2;
+      result.message = 'Ocurrió un error';
+      return result;
     }
   }
 }
