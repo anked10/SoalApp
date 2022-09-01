@@ -61,6 +61,56 @@ class GestionPagosApi {
     }
   }
 
+  Future<ApiResultModel> getRendicionesPagosOC(String idOC) async {
+    ApiResultModel result = ApiResultModel();
+    try {
+      final url = '$API_BASE_URL/api/Ordencompra/ws_listar_documentos_rendicion';
+      String? token = await StorageManager.readData('token');
+      final response = await http.post(Uri.parse(url), body: {
+        'app': 'true',
+        'tn': token,
+        'id': idOC,
+      });
+
+      final decodedData = json.decode(response.body);
+      final int code = decodedData['result']['code'];
+      if (code == 1) {
+        for (var i = 0; i < decodedData['result']['datos'].length; i++) {
+          var datito = decodedData['result']['datos'][i];
+
+          PagosModel pago = PagosModel();
+          pago.idPago = datito['id_pago'];
+          pago.idOC = datito['id_op'];
+          pago.idObligacion = datito['id_obligacion'];
+          pago.idUser = datito['id_user'];
+          pago.bancoPago = datito['pago_banco'];
+          pago.monedaPago = datito['pago_moneda'];
+          pago.montoPago = datito['pago_monto'];
+          pago.fechaPago = datito['pago_fecha'];
+          pago.voucherPago = datito['pago_voucher'];
+          pago.tipoPago = datito['pago_tipo'];
+          pago.referenciaPago = datito['pago_referencia'];
+          pago.comprobanteTipo = datito['tipo_comprobante'];
+          pago.rucPago = datito['pago_ruc'];
+          pago.nroComprobantePago = datito['pago_nro_comprobante'];
+          pago.rencidicionAprobacionPago = datito['pago_rendicion_aprobacion'];
+          pago.codRegPago = datito['pago_reg_cod'];
+          pago.fechaAdjuntadaPago = datito['pago_fecha_adjuntada'];
+          //pago.nameAtended = datito['nombre'];
+
+          await pagosDB.insertarPago(pago);
+        }
+      }
+      result.code = code;
+      result.message = decodedData['result']['message'];
+      return result;
+    } catch (e) {
+      result.code = 2;
+      result.message = 'Ocurrió un error';
+      return result;
+    }
+  }
+
   Future<ApiResultModel> uploadPagoOC({
     required File archivo,
     required String idOC,

@@ -226,6 +226,8 @@ class DatabaseHelper {
       'codigoProyectoOC TEXT, '
       'idMoneda TEXT, '
       'nameCreateOC TEXT, '
+      'nameAprobeOC TEXT, '
+      'mesOC TEXT, '
       'surnameCreateOC TEXT, '
       'surnameCreate2OC TEXT, '
       'nombreEmpresa TEXT, '

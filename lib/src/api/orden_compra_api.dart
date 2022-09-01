@@ -110,6 +110,9 @@ class OrdenCompraApi {
           orden.codigoProyectoOC = item["proyecto_codigo"];
           orden.idMoneda = item["moneda"];
           orden.nameCreateOC = item["person_name"];
+          orden.nameAprobeOC = item["person_name"];
+          var meses = item["op_datetime"].split("-");
+          orden.mesOC = meses[1];
           orden.surnameCreateOC = item["person_surname"];
           orden.surnameCreate2OC = item["person_surname2"];
           orden.nombreEmpresa = item["empresa_nombre"];
@@ -154,6 +157,7 @@ class OrdenCompraApi {
       result.message = decodedData['result']['message'];
       return result;
     } catch (e) {
+      print(e);
       result.code = 2;
       result.message = 'Ocurrió un error';
       return result;
@@ -294,6 +298,60 @@ class OrdenCompraApi {
       request.fields["id_op_coti"] = idOC;
 
       request.files.add(await http.MultipartFile.fromPath('coti_file', cotizacion.path));
+
+      final response = await request.send();
+
+      final int code = response.statusCode;
+
+      if (code == 200) {
+        result.message = 'Archivo cargado correctamente';
+      } else {
+        result.message = 'Ocurrió un error, inténtelo nuevamente';
+      }
+      result.code = code;
+
+      return result;
+    } catch (e) {
+      print(e);
+      result.code = 2;
+      result.message = 'Ocurrió un error';
+      return result;
+    }
+  }
+
+  Future<ApiResultModel> uploadDocumentoPagoOC({
+    required File archivo,
+    required String idOC,
+    required String tipoComprobante,
+    required String rucPago,
+    required String nroComprobante,
+    required String monedaPago,
+    required String montoPago,
+    required String fechaPago,
+    required String referenciaPago,
+  }) async {
+    ApiResultModel result = ApiResultModel();
+    try {
+      final url = Uri.parse('$API_BASE_URL/api/Ordencompra/guardar_documento_op_app');
+
+      String? token = await StorageManager.readData('token');
+      String? idPerson = await StorageManager.readData('idPerson');
+
+      final request = http.MultipartRequest('POST', url);
+
+      request.fields["app"] = "true";
+      request.fields["tn"] = token!;
+      request.fields["id_obligacion"] = idOC;
+      request.fields["tipo_comprobante"] = tipoComprobante;
+      request.fields["pago_ruc"] = rucPago;
+      request.fields["pago_nro_comprobante"] = nroComprobante;
+      request.fields["pago_moneda"] = monedaPago;
+      request.fields["pago_monto"] = montoPago;
+      request.fields["pago_fecha"] = fechaPago;
+      request.fields["pago_referencia"] = referenciaPago;
+      request.fields["id_persona"] = idPerson!;
+
+      request.files.add(await http.MultipartFile.fromPath('archivo', archivo.path));
 
       final response = await request.send();
 

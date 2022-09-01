@@ -6,7 +6,8 @@ import 'package:path/path.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/core/util/utils.dart';
-import 'package:soal_app/src/api/gestion_pagos_api.dart';
+import 'package:soal_app/src/api/consulta_ruc_api.dart';
+import 'package:soal_app/src/api/orden_compra_api.dart';
 import 'package:soal_app/src/api/pdf_api.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/orden_compra_model.dart';
@@ -16,53 +17,47 @@ import 'package:soal_app/src/widgets/show_loading.dart';
 import 'package:soal_app/src/widgets/text_field.dart';
 import 'package:soal_app/src/widgets/widgets.dart';
 
-class GestionPago extends StatefulWidget {
-  const GestionPago({Key? key, required this.orden, required this.mes}) : super(key: key);
+class RendicionOC extends StatefulWidget {
+  const RendicionOC({Key? key, required this.orden, required this.mes}) : super(key: key);
   final OrdenCompraNewModel orden;
   final String mes;
 
   @override
-  State<GestionPago> createState() => _GestionPagoState();
+  State<RendicionOC> createState() => _RendicionOCState();
 }
 
-class _GestionPagoState extends State<GestionPago> {
+class _RendicionOCState extends State<RendicionOC> {
   final provider = ControllerFileGP();
-  final _entidadFinancieraComprobanteController = TextEditingController();
+  final _tipoComprobanteController = TextEditingController();
   final _monedaComprobanteController = TextEditingController();
   final _montoRestanteOCController = TextEditingController();
   final _importePagoController = TextEditingController();
   final _saldoController = TextEditingController();
-  final _fechaPagoController = TextEditingController();
+  final _fechaComprobanteController = TextEditingController();
+  final _rucController = TextEditingController();
+  final _nroComprobanteController = TextEditingController();
   final _referenciaController = TextEditingController();
   final _archivoController = TextEditingController();
 
   @override
   void initState() {
-    _montoRestanteOCController.text = widget.orden.montoEstado ?? '';
-    _saldoController.text = widget.orden.montoEstado ?? '';
+    _montoRestanteOCController.text = widget.orden.montoRendicion ?? '';
+    _saldoController.text = widget.orden.montoRendicion ?? '';
     super.initState();
   }
 
-  List<String> entidadFinancieraList = [
-    'BANBIF',
-    'BANCO DE COMERCIO',
-    'BANCO DE LA NACION',
-    'BANCO FALABELLA',
-    'BANCO PICHINCHA',
-    'BANCO GNB',
-    'BANCO CONTINENTAL',
-    'BANCO DE CREDITO',
-    'CAJA AREQUIPA',
-    'CAJA CUSCO',
-    'CAJA PIURA',
-    'CAJA SULLANA',
-    'CAJA TRUJILLO',
-    'CITIBANK',
-    'CREDISCOTIA',
-    'INTERBANK',
-    'MIBANCO',
-    'SCOTIABANK',
-    'EFECTIVO',
+  List<String> tipoComprobanteList = [
+    'Factura de Venta',
+    'Boleta de Venta',
+    'Nota de Crédito',
+    'Nota de Débito',
+    'Recibo por honorarios',
+    'Devolución a la Empresa',
+    'Acta de Comunidades',
+    'Transferencia',
+    'Cheque',
+    'Efectivo',
+    'Otros',
   ];
 
   List<String> monedas = ['SOLES', 'DOLARES'];
@@ -77,14 +72,14 @@ class _GestionPagoState extends State<GestionPago> {
 
     if (cargaInicial == 0) {
       ordenCompraBloc.getOCById(widget.orden.idOC!);
-      pagosBloc.getDocumentosOC(widget.orden.idOC!, '1');
+      pagosBloc.getDocumentosOC(widget.orden.idOC!, '2');
       cargaInicial++;
     }
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
-          'Gestión de Pagos',
+          'Orden de Compra',
           style: TextStyle(
             fontSize: ScreenUtil().setSp(18),
             fontWeight: FontWeight.bold,
@@ -142,12 +137,12 @@ class _GestionPagoState extends State<GestionPago> {
                               ],
                             ),
                             fondo: Colors.white,
-                            color: Colors.blue,
+                            color: Colors.indigo,
                             height: 40,
                             mtop: 15,
                           ),
                           SizedBox(height: ScreenUtil().setHeight(20)),
-                          (double.parse(snapshots.data![0].montoEstado!) <= 0) ? Container() : registerPay(context),
+                          (double.parse(snapshots.data![0].montoRendicion!) <= 0) ? Container() : registerDocPay(context),
                           SizedBox(height: ScreenUtil().setHeight(20)),
                           StreamBuilder<bool>(
                             stream: pagosBloc.cargandoStream,
@@ -230,13 +225,13 @@ class _GestionPagoState extends State<GestionPago> {
     );
   }
 
-  Widget registerPay(BuildContext context) {
+  Widget registerDocPay(BuildContext context) {
     return ExpansionTile(
       initiallyExpanded: false,
       maintainState: true,
       backgroundColor: Colors.transparent,
       title: Text(
-        'Registrar Pago',
+        'Registrar Información de Pago',
         style: TextStyle(
           fontSize: ScreenUtil().setSp(16),
           fontWeight: FontWeight.w500,
@@ -248,9 +243,9 @@ class _GestionPagoState extends State<GestionPago> {
           children: [
             SizedBox(height: ScreenUtil().setHeight(15)),
             TextFieldSelect(
-              label: 'Entidad Financiera',
+              label: 'Tipo de Comprobante',
               hingText: 'Seleccionar',
-              controller: _entidadFinancieraComprobanteController,
+              controller: _tipoComprobanteController,
               widget: Icon(
                 Icons.keyboard_arrow_down,
                 color: Colors.indigo,
@@ -259,7 +254,7 @@ class _GestionPagoState extends State<GestionPago> {
               readOnly: true,
               ontap: () {
                 FocusScope.of(context).unfocus();
-                _selectEntityBanck(context);
+                _selectTypeDoc(context);
               },
             ),
             SizedBox(height: ScreenUtil().setHeight(15)),
@@ -303,9 +298,9 @@ class _GestionPagoState extends State<GestionPago> {
               keyboardType: TextInputType.number,
               onchange: (value) {
                 if (value.isNotEmpty)
-                  _saldoController.text = (double.parse(widget.orden.montoEstado!) - double.parse(value)).toStringAsFixed(2);
+                  _saldoController.text = (double.parse(widget.orden.montoRendicion!) - double.parse(value)).toStringAsFixed(2);
                 else
-                  _saldoController.text = widget.orden.montoEstado!;
+                  _saldoController.text = widget.orden.montoRendicion!;
               },
             ),
             SizedBox(height: ScreenUtil().setHeight(15)),
@@ -321,9 +316,9 @@ class _GestionPagoState extends State<GestionPago> {
             ),
             SizedBox(height: ScreenUtil().setHeight(15)),
             TextFieldSelect(
-              label: 'Fecha de Pago',
+              label: 'Fecha de Comprobante',
               hingText: '',
-              controller: _fechaPagoController,
+              controller: _fechaComprobanteController,
               widget: Icon(
                 Icons.calendar_month_outlined,
                 color: Colors.indigo,
@@ -332,8 +327,33 @@ class _GestionPagoState extends State<GestionPago> {
               icon: true,
               ontap: () {
                 FocusScope.of(context).unfocus();
-                selectdate(context, _fechaPagoController);
+                selectdate(context, _fechaComprobanteController);
               },
+            ),
+            SizedBox(height: ScreenUtil().setHeight(15)),
+            TextFieldSelect(
+              label: 'RUC',
+              hingText: '',
+              controller: _rucController,
+              keyboardType: TextInputType.number,
+              widget: Icon(
+                Icons.edit,
+                color: Colors.indigo,
+              ),
+              icon: true,
+              readOnly: false,
+            ),
+            SizedBox(height: ScreenUtil().setHeight(15)),
+            TextFieldSelect(
+              label: 'Nro Comprobante',
+              hingText: '',
+              controller: _nroComprobanteController,
+              widget: Icon(
+                Icons.edit,
+                color: Colors.indigo,
+              ),
+              icon: true,
+              readOnly: false,
             ),
             SizedBox(height: ScreenUtil().setHeight(15)),
             TextFieldSelect(
@@ -351,7 +371,7 @@ class _GestionPagoState extends State<GestionPago> {
               height: ScreenUtil().setHeight(15),
             ),
             TextFieldSelect(
-              label: 'Documento',
+              label: 'Seleccionar Archivo',
               hingText: '',
               controller: _archivoController,
               widget: Icon(
@@ -368,71 +388,124 @@ class _GestionPagoState extends State<GestionPago> {
               },
             ),
             SizedBox(height: ScreenUtil().setHeight(20)),
-            ElevatedButton.icon(
-              onPressed: () async {
-                if (_entidadFinancieraComprobanteController.value.text.isEmpty)
-                  return showToast2('Seleccione una Entidad Financiera', Colors.redAccent);
-                if (_monedaComprobanteController.value.text.isEmpty) return showToast2('Seleccione un tipo de Moneda', Colors.redAccent);
-                if (_importePagoController.value.text.isEmpty) return showToast2('Ingrese el Importe de Pago', Colors.redAccent);
-                if (_fechaPagoController.value.text.isEmpty) return showToast2('Ingrese la Fecha de Pago', Colors.redAccent);
-                if (_referenciaController.value.text.isEmpty) return showToast2('Ingrese una Referencia de Pago', Colors.redAccent);
-                if (_archivoController.value.text.isEmpty || _archivoController.value.text == 'Seleccionar Archivo')
-                  return showToast2('Seleccione un Archivo', Colors.redAccent);
+            AnimatedBuilder(
+                animation: provider,
+                builder: (_, b) {
+                  return provider.isActivebuttonConsultaRuc
+                      ? ElevatedButton.icon(
+                          onPressed: () async {
+                            if (_tipoComprobanteController.value.text.isEmpty)
+                              return showToast2('Seleccione una Entidad Financiera', Colors.redAccent);
+                            if (_monedaComprobanteController.value.text.isEmpty) return showToast2('Seleccione un tipo de Moneda', Colors.redAccent);
+                            if (_importePagoController.value.text.isEmpty) return showToast2('Ingrese el Importe de Pago', Colors.redAccent);
+                            if (_fechaComprobanteController.value.text.isEmpty)
+                              return showToast2('Ingrese la Fecha del Comprobante RUC', Colors.redAccent);
+                            if (_nroComprobanteController.value.text.isEmpty) return showToast2('Ingrese el Número de Comprobante', Colors.redAccent);
+                            if (_referenciaController.value.text.isEmpty) return showToast2('Ingrese una Referencia de Pago', Colors.redAccent);
+                            if (_archivoController.value.text.isEmpty || _archivoController.value.text == 'Seleccionar Archivo')
+                              return showToast2('Seleccione un Archivo', Colors.redAccent);
 
-                final _api = GestionPagosApi();
-                provider.changeCargando(true);
-                final res = await _api.uploadPagoOC(
-                  archivo: provider.file!,
-                  idOC: widget.orden.idOC!,
-                  bancoPago: _entidadFinancieraComprobanteController.value.text,
-                  monedaPago: _monedaComprobanteController.value.text,
-                  montoPago: _importePagoController.value.text,
-                  fechaPago: _fechaPagoController.value.text,
-                  referenciaPago: _referenciaController.value.text.trim(),
-                );
-                provider.changeCargando(false);
+                            provider.changeCargando(true);
+                            final _api = OrdenCompraApi();
+                            final res = await _api.uploadDocumentoPagoOC(
+                              archivo: provider.file!,
+                              idOC: widget.orden.idOC!,
+                              tipoComprobante: _tipoComprobanteController.value.text,
+                              rucPago: _rucController.value.text,
+                              nroComprobante: _nroComprobanteController.value.text,
+                              monedaPago: _monedaComprobanteController.value.text,
+                              montoPago: _importePagoController.value.text,
+                              fechaPago: _fechaComprobanteController.value.text,
+                              referenciaPago: _referenciaController.value.text.trim(),
+                            );
 
-                if (res.code != 200) return showToast2(res.message, Colors.redAccent);
+                            if (res.code != 200) return showToast2(res.message, Colors.redAccent);
 
-                showToast2(res.message, Colors.green);
-                final ordenCompraBloc = ProviderBloc.op(context);
-                ordenCompraBloc.getOCById(widget.orden.idOC!);
-                ordenCompraBloc.getOrdenCompraGeneradas(widget.mes);
-                final pagosBloc = ProviderBloc.gestionPagos(context);
-                pagosBloc.getDocumentosOC(widget.orden.idOC!, '1');
-                _entidadFinancieraComprobanteController.clear();
-                _monedaComprobanteController.clear();
-                _montoRestanteOCController.text = _saldoController.text;
-                _importePagoController.clear();
-                _fechaPagoController.clear();
-                _referenciaController.clear();
-                _archivoController.clear();
-                provider.file = null;
-              },
-              style: ButtonStyle(
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18.0),
-                  ),
-                ),
-                alignment: Alignment.center,
-                backgroundColor: MaterialStateProperty.all(Colors.indigo),
-                padding: MaterialStateProperty.all<EdgeInsets>(
-                  EdgeInsets.symmetric(
-                    horizontal: ScreenUtil().setWidth(15),
-                    vertical: ScreenUtil().setHeight(4),
-                  ),
-                ),
-              ),
-              icon: Icon(
-                Icons.upload_file_outlined,
-                size: ScreenUtil().setHeight(25),
-              ),
-              label: Text(
-                'Subir',
-                style: TextStyle(fontSize: ScreenUtil().setSp(20), fontWeight: FontWeight.w500),
-              ),
-            ),
+                            showToast2(res.message, Colors.green);
+                            final ordenCompraBloc = ProviderBloc.op(context);
+                            ordenCompraBloc.getOCById(widget.orden.idOC!);
+                            ordenCompraBloc.getOrdenCompraGeneradas(widget.mes);
+                            final pagosBloc = ProviderBloc.gestionPagos(context);
+                            pagosBloc.getDocumentosOC(widget.orden.idOC!, '2');
+                            _tipoComprobanteController.clear();
+                            _monedaComprobanteController.clear();
+                            _rucController.clear();
+                            _montoRestanteOCController.text = _saldoController.text;
+                            _importePagoController.clear();
+                            _fechaComprobanteController.clear();
+                            _nroComprobanteController.clear();
+                            _referenciaController.clear();
+                            _archivoController.clear();
+                            provider.file = null;
+                            provider.changeButton(false);
+
+                            provider.changeCargando(false);
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            backgroundColor: MaterialStateProperty.all(Colors.indigo),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.symmetric(
+                                horizontal: ScreenUtil().setWidth(15),
+                                vertical: ScreenUtil().setHeight(4),
+                              ),
+                            ),
+                          ),
+                          icon: Icon(
+                            Icons.upload_file_outlined,
+                            size: ScreenUtil().setHeight(25),
+                          ),
+                          label: Text(
+                            'Subir',
+                            style: TextStyle(fontSize: ScreenUtil().setSp(20), fontWeight: FontWeight.w500),
+                          ),
+                        )
+                      : ElevatedButton.icon(
+                          onPressed: () async {
+                            if (_rucController.value.text.isEmpty) return showToast2('Ingrese un número de RUC', Colors.redAccent);
+                            if (_rucController.value.text.length != 11)
+                              return showToast2('El número de RUC debe contener 11 dígitos', Colors.redAccent);
+
+                            final _api = ConsultaRucApi();
+                            provider.changeCargando(true);
+                            final res = await _api.searchRUC(_rucController.value.text);
+                            provider.changeCargando(false);
+
+                            if (res.code != 200) return showToast2(res.message, Colors.redAccent);
+
+                            showToast2(res.message, Colors.green);
+                            provider.changeButton(true);
+                          },
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              ),
+                            ),
+                            alignment: Alignment.center,
+                            backgroundColor: MaterialStateProperty.all(Colors.cyan),
+                            padding: MaterialStateProperty.all<EdgeInsets>(
+                              EdgeInsets.symmetric(
+                                horizontal: ScreenUtil().setWidth(15),
+                                vertical: ScreenUtil().setHeight(4),
+                              ),
+                            ),
+                          ),
+                          icon: Icon(
+                            Icons.upload_file_outlined,
+                            size: ScreenUtil().setHeight(25),
+                          ),
+                          label: Text(
+                            'Validar RUC',
+                            style: TextStyle(fontSize: ScreenUtil().setSp(20), fontWeight: FontWeight.w500),
+                          ),
+                        );
+                }),
             SizedBox(height: ScreenUtil().setHeight(20)),
           ],
         ),
@@ -456,20 +529,29 @@ class _GestionPagoState extends State<GestionPago> {
                   Expanded(
                     child: Column(
                       children: [
-                        rows(titulo: 'Entidad Bancaria:', data: pago.bancoPago ?? '', st: 10, sd: 12, crossAxisAlignment: CrossAxisAlignment.start),
+                        rows(
+                            titulo: 'Tipo de Comprobante:',
+                            data: pago.comprobanteTipo ?? '',
+                            st: 10,
+                            sd: 12,
+                            crossAxisAlignment: CrossAxisAlignment.start),
+                        SizedBox(height: ScreenUtil().setHeight(4)),
+                        rows(titulo: 'RUC:', data: pago.rucPago ?? '', st: 10, sd: 12, crossAxisAlignment: CrossAxisAlignment.start),
+                        SizedBox(height: ScreenUtil().setHeight(4)),
+                        rows(
+                            titulo: 'Nro Comprobante:',
+                            data: pago.nroComprobantePago ?? '',
+                            st: 10,
+                            sd: 12,
+                            crossAxisAlignment: CrossAxisAlignment.start),
                         SizedBox(height: ScreenUtil().setHeight(4)),
                         rows(titulo: 'Referencia:', data: pago.referenciaPago ?? '', st: 10, sd: 12, crossAxisAlignment: CrossAxisAlignment.start),
                         SizedBox(height: ScreenUtil().setHeight(4)),
                         rows(titulo: pago.monedaPago ?? '', data: pago.montoPago ?? '', st: 12, sd: 12, crossAxisAlignment: CrossAxisAlignment.start),
                         Divider(),
-                        rows(
-                            titulo: 'Fecha  de Pago:',
-                            data: obtenerFecha(pago.fechaAdjuntadaPago ?? ''),
-                            st: 9,
-                            sd: 10,
-                            crossAxisAlignment: CrossAxisAlignment.start),
+                        rows(titulo: 'Fecha:', data: obtenerFecha(pago.fechaPago ?? ''), st: 9, sd: 10, crossAxisAlignment: CrossAxisAlignment.start),
                         SizedBox(height: ScreenUtil().setHeight(4)),
-                        rows(titulo: 'Atendido por:', data: pago.nameAtended ?? '', st: 9, sd: 10, crossAxisAlignment: CrossAxisAlignment.start),
+                        rows(titulo: 'Adjuntado por:', data: pago.nameAtended ?? '', st: 9, sd: 10, crossAxisAlignment: CrossAxisAlignment.start),
                       ],
                     ),
                   ),
@@ -488,7 +570,7 @@ class _GestionPagoState extends State<GestionPago> {
                 ],
               ),
               fondo: Colors.white,
-              color: Colors.purple,
+              color: Colors.deepPurple,
               height: 45,
               mtop: 20,
             ),
@@ -498,7 +580,7 @@ class _GestionPagoState extends State<GestionPago> {
     );
   }
 
-  void _selectEntityBanck(BuildContext context) {
+  void _selectTypeDoc(BuildContext context) {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
@@ -529,7 +611,7 @@ class _GestionPagoState extends State<GestionPago> {
                           color: Colors.grey[600],
                         ),
                         Text(
-                          'Seleccionar Entidad Financiera',
+                          'Seleccionar Tipo',
                           style: TextStyle(
                             color: const Color(0xff5a5a5a),
                             fontWeight: FontWeight.w600,
@@ -543,17 +625,17 @@ class _GestionPagoState extends State<GestionPago> {
                         Expanded(
                           child: ListView.builder(
                             controller: controller,
-                            itemCount: entidadFinancieraList.length,
+                            itemCount: tipoComprobanteList.length,
                             itemBuilder: (_, index) {
                               return InkWell(
                                 onTap: () {
-                                  _entidadFinancieraComprobanteController.text = entidadFinancieraList[index];
+                                  _tipoComprobanteController.text = tipoComprobanteList[index];
                                   Navigator.pop(context);
                                 },
                                 child: Card(
                                   child: Padding(
                                     padding: const EdgeInsets.all(8),
-                                    child: Text(entidadFinancieraList[index]),
+                                    child: Text(tipoComprobanteList[index]),
                                   ),
                                 ),
                               );
@@ -650,11 +732,17 @@ class _GestionPagoState extends State<GestionPago> {
 class ControllerFileGP extends ChangeNotifier {
   File? file;
   bool cargando = false;
+  bool isActivebuttonConsultaRuc = false;
 
   bool load = false;
 
   void changeLoad(bool l) {
     load = l;
+    notifyListeners();
+  }
+
+  void changeButton(bool l) {
+    isActivebuttonConsultaRuc = l;
     notifyListeners();
   }
 

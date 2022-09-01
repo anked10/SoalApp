@@ -15,6 +15,8 @@ import 'package:soal_app/src/models/orden_compra_model.dart';
 import 'package:soal_app/src/pages/Home/menu_widget.dart';
 import 'package:soal_app/src/pages/New/OrdenCompra/detalle_oc.dart';
 import 'package:soal_app/src/pages/New/OrdenCompra/gestion_pago.dart';
+import 'package:soal_app/src/pages/New/OrdenCompra/meses_model.dart';
+import 'package:soal_app/src/pages/New/OrdenCompra/rendicion_oc.dart';
 import 'package:soal_app/src/widgets/responsive.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
 import 'package:soal_app/src/widgets/text_field.dart';
@@ -28,13 +30,23 @@ class OrdenCompra extends StatefulWidget {
 
 class _OrdenCompraState extends State<OrdenCompra> {
   int init = 0;
+  String mes = '';
 
   final provider = ControllerFileOC();
+
+  @override
+  void initState() {
+    var data = DateTime.now().month;
+    mes = data.toString();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final ordenCompraBloc = ProviderBloc.op(context);
     if (init == 0) {
-      ordenCompraBloc.getOrdenCompraGeneradas();
+      print(mes.length);
+      ordenCompraBloc.getOrdenCompraGeneradas((mes.length == 1) ? '0$mes' : mes);
       init++;
     }
 
@@ -48,7 +60,7 @@ class _OrdenCompraState extends State<OrdenCompra> {
         title: Text(
           'Orden de Compra Generadas',
           style: TextStyle(
-            fontSize: ScreenUtil().setSp(18),
+            fontSize: ScreenUtil().setSp(14),
             fontWeight: FontWeight.bold,
             color: Colors.black,
           ),
@@ -56,7 +68,7 @@ class _OrdenCompraState extends State<OrdenCompra> {
         actions: [
           IconButton(
             onPressed: () {
-              ordenCompraBloc.getOrdenCompraGeneradas();
+              ordenCompraBloc.getOrdenCompraGeneradas((mes.length == 1) ? '0$mes' : mes);
             },
             icon: Icon(
               Icons.refresh,
@@ -65,16 +77,44 @@ class _OrdenCompraState extends State<OrdenCompra> {
           ),
           // IconButton(
           //   onPressed: () {
-
+          //     provider.changeLActive(!provider.isActiveSearch);
+          //     filtro();
           //   },
           //   icon: AnimatedBuilder(
-          //       animation: _controller,
-          //       builder: (context, snapshot) {
+          //       animation: provider,
+          //       builder: (_, snapshot) {
           //         return Icon(
           //           Icons.search,
-          //           color: _controller.isActiveSearch ? Colors.indigo : Colors.black,
+          //           color: provider.isActiveSearch ? Colors.indigo : Colors.black,
           //         );
           //       }),
+          // ),
+          PopupMenuButton<MesesModel>(
+              onSelected: (value) {
+                mes = value.id!;
+                ordenCompraBloc.getOrdenCompraGeneradas(value.id!);
+              },
+              icon: Icon(
+                Icons.calendar_month_outlined,
+                color: Colors.black,
+              ),
+              padding: const EdgeInsets.all(0),
+              itemBuilder: (context) {
+                return listMeses
+                    .map((mes) => PopupMenuItem(
+                          child: Text(mes.mes!),
+                          value: mes,
+                        ))
+                    .toList();
+              }),
+          // IconButton(
+          //   onPressed: () {
+          //     ordenCompraBloc.getOrdenCompraGeneradas();
+          //   },
+          //   icon: Icon(
+          //     Icons.calendar_month,
+          //     color: Colors.black,
+          //   ),
           // ),
         ],
         elevation: 0,
@@ -90,7 +130,8 @@ class _OrdenCompraState extends State<OrdenCompra> {
                   stream: ordenCompraBloc.ocGeneradasStream,
                   builder: (_, snapshot) {
                     if (!snapshot.hasData) return Container();
-                    if (snapshot.data!.isEmpty) return Center(child: Text('No existen ordenes de compras registradas'));
+                    if (snapshot.data!.isEmpty)
+                      return Center(child: Text('No existen ordenes de compras generadas para el mes consultado', textAlign: TextAlign.center));
 
                     return ListView.builder(
                       itemCount: snapshot.data!.length + 1,
@@ -123,7 +164,7 @@ class _OrdenCompraState extends State<OrdenCompra> {
                 ),
                 AnimatedBuilder(
                   animation: provider,
-                  builder: (context, s) {
+                  builder: (_, s) {
                     return Positioned(
                       bottom: 20,
                       left: 0,
@@ -206,6 +247,7 @@ class _OrdenCompraState extends State<OrdenCompra> {
                         pageBuilder: (context, animation, secondaryAnimation) {
                           return GestionPago(
                             orden: orden,
+                            mes: (mes.length == 1) ? '0$mes' : mes,
                           );
                         },
                         transitionsBuilder: (context, animation, secondaryAnimation, child) {
@@ -267,7 +309,33 @@ class _OrdenCompraState extends State<OrdenCompra> {
                       : (orden.montoRendicion == orden.totalOC)
                           ? Colors.redAccent
                           : Colors.orangeAccent,
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return RendicionOC(
+                            orden: orden,
+                            mes: (mes.length == 1) ? '0$mes' : mes,
+                          );
+                        },
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          var begin = Offset(0.0, 1.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+
+                          var tween = Tween(begin: begin, end: end).chain(
+                            CurveTween(curve: curve),
+                          );
+
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
               ],
               child: contenidoItem(orden),
@@ -632,7 +700,7 @@ class _OrdenCompraState extends State<OrdenCompra> {
                                     if (res.code == 200) {
                                       showToast2(res.message, Colors.green);
                                       final ordenCompraBloc = ProviderBloc.op(context);
-                                      ordenCompraBloc.getOrdenCompraGeneradas();
+                                      ordenCompraBloc.getOrdenCompraGeneradas(mes);
                                       _archivoController.clear();
                                       _controller.file = null;
                                       Navigator.pop(context);
@@ -702,11 +770,17 @@ class _OrdenCompraState extends State<OrdenCompra> {
 class ControllerFileOC extends ChangeNotifier {
   File? file;
   bool cargando = false;
+  bool isActiveSearch = false;
 
   bool load = false;
 
   void changeLoad(bool l) {
     load = l;
+    notifyListeners();
+  }
+
+  void changeLActive(bool l) {
+    isActiveSearch = l;
     notifyListeners();
   }
 

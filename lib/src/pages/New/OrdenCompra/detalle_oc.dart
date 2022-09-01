@@ -67,6 +67,10 @@ class DetalleOC extends StatelessWidget {
                                 ),
                               ],
                             ),
+                            (orden.estadoOC == '0')
+                                ? Container()
+                                : rows(titulo: 'OC:', data: orden.numberOC ?? '', st: 11, sd: 12, crossAxisAlignment: CrossAxisAlignment.start),
+                            (orden.estadoOC == '0') ? Container() : SizedBox(height: ScreenUtil().setHeight(4)),
                             Text(
                               orden.nombreProyectoOC ?? '',
                               style: TextStyle(
@@ -235,66 +239,68 @@ class DetalleOC extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: ScreenUtil().setHeight(20)),
-                      Align(
-                        alignment: Alignment.bottomRight,
-                        child: ElevatedButton.icon(
-                          onPressed: () {
-                            //Aprobar OC
-                            Navigator.push(
-                              context,
-                              PageRouteBuilder(
-                                opaque: false,
-                                pageBuilder: (context, animation, secondaryAnimation) {
-                                  return AprobarOC(
-                                    id: idOC,
-                                    onChanged: (v) {
-                                      Navigator.pop(context);
-                                      final ocBloc = ProviderBloc.op(context);
+                      (orden.estadoOC == '0')
+                          ? Align(
+                              alignment: Alignment.bottomRight,
+                              child: ElevatedButton.icon(
+                                onPressed: () {
+                                  //Aprobar OC
+                                  Navigator.push(
+                                    context,
+                                    PageRouteBuilder(
+                                      opaque: false,
+                                      pageBuilder: (context, animation, secondaryAnimation) {
+                                        return AprobarOC(
+                                          id: idOC,
+                                          onChanged: (v) {
+                                            Navigator.pop(context);
+                                            final ocBloc = ProviderBloc.op(context);
 
-                                      ocBloc.ocPendientes();
-                                    },
+                                            ocBloc.ocPendientes();
+                                          },
+                                        );
+                                      },
+                                      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                                        var begin = const Offset(0.0, 1.0);
+                                        var end = Offset.zero;
+                                        var curve = Curves.ease;
+
+                                        var tween = Tween(begin: begin, end: end).chain(
+                                          CurveTween(curve: curve),
+                                        );
+
+                                        return SlideTransition(
+                                          position: animation.drive(tween),
+                                          child: child,
+                                        );
+                                      },
+                                    ),
                                   );
                                 },
-                                transitionsBuilder: (context, animation, secondaryAnimation, child) {
-                                  var begin = const Offset(0.0, 1.0);
-                                  var end = Offset.zero;
-                                  var curve = Curves.ease;
-
-                                  var tween = Tween(begin: begin, end: end).chain(
-                                    CurveTween(curve: curve),
-                                  );
-
-                                  return SlideTransition(
-                                    position: animation.drive(tween),
-                                    child: child,
-                                  );
-                                },
+                                style: ButtonStyle(
+                                  shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                                    RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ),
+                                  ),
+                                  padding: MaterialStateProperty.all<EdgeInsets>(
+                                    EdgeInsets.symmetric(
+                                      horizontal: ScreenUtil().setWidth(15),
+                                      vertical: ScreenUtil().setHeight(4),
+                                    ),
+                                  ),
+                                ),
+                                icon: Icon(
+                                  Icons.check_circle_outline,
+                                  size: ScreenUtil().setHeight(25),
+                                ),
+                                label: Text(
+                                  'Aprobar',
+                                  style: TextStyle(fontSize: ScreenUtil().setSp(20), fontWeight: FontWeight.w500),
+                                ),
                               ),
-                            );
-                          },
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                            ),
-                            padding: MaterialStateProperty.all<EdgeInsets>(
-                              EdgeInsets.symmetric(
-                                horizontal: ScreenUtil().setWidth(15),
-                                vertical: ScreenUtil().setHeight(4),
-                              ),
-                            ),
-                          ),
-                          icon: Icon(
-                            Icons.check_circle_outline,
-                            size: ScreenUtil().setHeight(25),
-                          ),
-                          label: Text(
-                            'Aprobar',
-                            style: TextStyle(fontSize: ScreenUtil().setSp(20), fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
+                            )
+                          : Container(),
                       SizedBox(height: ScreenUtil().setHeight(50)),
                     ],
                   ),

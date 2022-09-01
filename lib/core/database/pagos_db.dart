@@ -19,11 +19,11 @@ class PagosDB {
     }
   }
 
-  Future<List<PagosModel>> getPagosyIdOC(String idOC) async {
+  Future<List<PagosModel>> getPagosyIdOC(String idOC, String tipoPago) async {
     try {
       final Database db = await dbprovider.getDatabase();
       List<PagosModel> list = [];
-      List<Map> maps = await db.rawQuery("SELECT * FROM Pagos WHERE idOC='$idOC'");
+      List<Map> maps = await db.rawQuery("SELECT * FROM Pagos WHERE idOC='$idOC' AND tipoPago='$tipoPago'");
 
       if (maps.length > 0) list = PagosModel.fromJsonList(maps);
       return list;

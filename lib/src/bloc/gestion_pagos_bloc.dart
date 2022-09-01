@@ -16,11 +16,11 @@ class GestionPagosBloc {
     _cargandoController.close();
   }
 
-  void getDocumentosOC(String idOC) async {
-    _documentosPagosOCController.sink.add(await _api.pagosDB.getPagosyIdOC(idOC));
+  void getDocumentosOC(String idOC, String tipoDoc) async {
+    _documentosPagosOCController.sink.add(await _api.pagosDB.getPagosyIdOC(idOC, tipoDoc));
     _cargandoController.sink.add(true);
-    await _api.getPagosOC(idOC);
+    (tipoDoc == '1') ? await _api.getPagosOC(idOC) : await _api.getRendicionesPagosOC(idOC);
     _cargandoController.sink.add(false);
-    _documentosPagosOCController.sink.add(await _api.pagosDB.getPagosyIdOC(idOC));
+    _documentosPagosOCController.sink.add(await _api.pagosDB.getPagosyIdOC(idOC, tipoDoc));
   }
 }

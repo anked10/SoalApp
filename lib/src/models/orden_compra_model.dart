@@ -20,6 +20,8 @@ class OrdenCompraNewModel {
   String? codigoProyectoOC;
   String? idMoneda;
   String? nameCreateOC;
+  String? nameAprobeOC;
+  String? mesOC;
   String? surnameCreateOC;
   String? surnameCreate2OC;
   String? nombreEmpresa;
@@ -63,6 +65,8 @@ class OrdenCompraNewModel {
     this.surnameCreate2OC,
     this.nombreEmpresa,
     this.rucEmpresa,
+    this.mesOC,
+    this.nameAprobeOC,
     this.direccionEmpresa,
     this.nombreSede,
     this.nombreProveedor,
@@ -85,6 +89,8 @@ class OrdenCompraNewModel {
         'numberOC': numberOC,
         'proformaOC': proformaOC,
         'condicionPagoOC': condicionPagoOC,
+        'mesOC': mesOC,
+        'nameAprobeOC': nameAprobeOC,
         'subTotalOC': subTotalOC,
         'percentDescuentoOC': percentDescuentoOC,
         'descuentoOC': descuentoOC,
@@ -120,6 +126,8 @@ class OrdenCompraNewModel {
         idOC: json["idOC"],
         ccOC: json["ccOC"],
         numberOC: json["numberOC"],
+        mesOC: json["mesOC"],
+        nameAprobeOC: json["nameAprobeOC"],
         proformaOC: json["proformaOC"],
         condicionPagoOC: json["condicionPagoOC"],
         subTotalOC: json["subTotalOC"],

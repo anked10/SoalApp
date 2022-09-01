@@ -55,12 +55,13 @@ class OrdenCompraBloc {
     _opController.sink.add(await ordenCompraDatabase.getOP());
   }
 
-  void getOrdenCompraGeneradas() async {
-    _ocGeneradasController.sink.add(await ordenCompraApi.ocDB.getOCGeneradas());
+  void getOrdenCompraGeneradas(String mes) async {
+    print(mes);
+    _ocGeneradasController.sink.add(await ordenCompraApi.ocDB.getOCGeneradasByMes(mes));
     _cargando2Controller.sink.add(true);
     await ordenCompraApi.getOrdenCompra();
     _cargando2Controller.sink.add(false);
-    _ocGeneradasController.sink.add(await ordenCompraApi.ocDB.getOCGeneradas());
+    _ocGeneradasController.sink.add(await ordenCompraApi.ocDB.getOCGeneradasByMes(mes));
   }
 
   void getOCById(String idOC) async {
@@ -102,6 +103,7 @@ class OrdenCompraBloc {
       orden.ccOC = res[0].ccOC;
       orden.proformaOC = res[0].proformaOC;
       orden.condicionPagoOC = res[0].condicionPagoOC;
+      orden.numberOC = res[0].numberOC;
       orden.subTotalOC = res[0].subTotalOC;
       orden.percentDescuentoOC = res[0].percentDescuentoOC;
       orden.descuentoOC = res[0].descuentoOC;
