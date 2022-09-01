@@ -5,7 +5,7 @@ import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/orden_compra_model.dart';
 import 'package:soal_app/src/pages/Actions/eliminar.dart';
 import 'package:soal_app/src/pages/OrdenCompra/buscar_oc_pendientes.dart';
-import 'package:soal_app/src/pages/OrdenCompra/detalle_oc.dart';
+import 'package:soal_app/src/pages/New/OrdenCompra/detalle_oc.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
 
 class OCPendientes extends StatelessWidget {

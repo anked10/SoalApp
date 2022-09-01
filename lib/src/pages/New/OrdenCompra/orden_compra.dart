@@ -13,6 +13,7 @@ import 'package:soal_app/src/api/pdf_api.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/orden_compra_model.dart';
 import 'package:soal_app/src/pages/Home/menu_widget.dart';
+import 'package:soal_app/src/pages/New/OrdenCompra/detalle_oc.dart';
 import 'package:soal_app/src/pages/New/OrdenCompra/gestion_pago.dart';
 import 'package:soal_app/src/widgets/responsive.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
@@ -192,8 +193,8 @@ class _OrdenCompraState extends State<OrdenCompra> {
                 itemOption(
                   title: "Estado",
                   colorText: Colors.black,
-                  icon: (orden.montoEstado == '0.00') ? Icons.check_circle : Icons.error,
-                  colorIcon: (orden.montoEstado == '0.00')
+                  icon: (double.parse(orden.montoEstado!) <= 0) ? Icons.check_circle : Icons.error,
+                  colorIcon: (double.parse(orden.montoEstado!) <= 0)
                       ? Colors.green
                       : (orden.montoEstado == orden.totalOC)
                           ? Colors.redAccent
@@ -229,14 +230,43 @@ class _OrdenCompraState extends State<OrdenCompra> {
                   title: "Detalle",
                   colorText: Colors.black,
                   icon: Icons.remove_red_eye,
-                  colorIcon: Colors.grey,
-                  onPressed: () {},
+                  colorIcon: Colors.blueGrey,
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      PageRouteBuilder(
+                        pageBuilder: (context, animation, secondaryAnimation) {
+                          return DetalleOC(
+                            idOC: orden.idOC!,
+                          );
+                        },
+                        transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                          var begin = Offset(0.0, 1.0);
+                          var end = Offset.zero;
+                          var curve = Curves.ease;
+
+                          var tween = Tween(begin: begin, end: end).chain(
+                            CurveTween(curve: curve),
+                          );
+
+                          return SlideTransition(
+                            position: animation.drive(tween),
+                            child: child,
+                          );
+                        },
+                      ),
+                    );
+                  },
                 ),
                 itemOption(
                   title: "Rendición",
                   colorText: Colors.black,
-                  icon: Icons.remove_red_eye,
-                  colorIcon: Colors.grey,
+                  icon: (double.parse(orden.montoRendicion!) <= 0) ? Icons.check_circle_outline : Icons.error_outline,
+                  colorIcon: (double.parse(orden.montoRendicion!) <= 0)
+                      ? Colors.green
+                      : (orden.montoRendicion == orden.totalOC)
+                          ? Colors.redAccent
+                          : Colors.orangeAccent,
                   onPressed: () {},
                 ),
               ],

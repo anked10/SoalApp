@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart' as http;
 import 'package:soal_app/core/database/pagos_db.dart';
@@ -54,6 +55,54 @@ class GestionPagosApi {
       result.message = decodedData['result']['message'];
       return result;
     } catch (e) {
+      result.code = 2;
+      result.message = 'Ocurrió un error';
+      return result;
+    }
+  }
+
+  Future<ApiResultModel> uploadPagoOC({
+    required File archivo,
+    required String idOC,
+    required String bancoPago,
+    required String monedaPago,
+    required String montoPago,
+    required String fechaPago,
+    required String referenciaPago,
+  }) async {
+    ApiResultModel result = ApiResultModel();
+    try {
+      final url = Uri.parse('$API_BASE_URL/api/Obligacionlaboral/guardar_pago_op');
+
+      String? token = await StorageManager.readData('token');
+
+      final request = http.MultipartRequest('POST', url);
+
+      request.fields["app"] = "true";
+      request.fields["tn"] = token!;
+      request.fields["id_obligacion"] = idOC;
+      request.fields["pago_banco"] = bancoPago;
+      request.fields["pago_moneda"] = monedaPago;
+      request.fields["pago_monto"] = montoPago;
+      request.fields["pago_fecha"] = fechaPago;
+      request.fields["referencia"] = referenciaPago;
+
+      request.files.add(await http.MultipartFile.fromPath('archivo', archivo.path));
+
+      final response = await request.send();
+
+      final int code = response.statusCode;
+
+      if (code == 200) {
+        result.message = 'Archivo cargado correctamente';
+      } else {
+        result.message = 'Ocurrió un error, inténtelo nuevamente';
+      }
+      result.code = code;
+
+      return result;
+    } catch (e) {
+      print(e);
       result.code = 2;
       result.message = 'Ocurrió un error';
       return result;
