@@ -61,6 +61,21 @@ class OrdenCompraDB {
     }
   }
 
+  Future<List<OrdenCompraNewModel>> getOCGeneradasByMesANDQuery(String mes, String query) async {
+    try {
+      final Database db = await dbprovider.getDatabase();
+      List<OrdenCompraNewModel> list = [];
+      List<Map> maps = await db.rawQuery(
+          "SELECT * FROM OrdenCompraNew WHERE estadoOC='1' AND mesOC='$mes' AND ( numberOC LIKE '%$query%' OR nombreProyectoOC LIKE '%$query%' OR nombreProveedor LIKE '%$query%' OR rucProveedor LIKE '%$query%' )");
+
+      if (maps.length > 0) list = OrdenCompraNewModel.fromJsonList(maps);
+      return list;
+    } catch (e) {
+      print(" $e Error en la base de datos OrdenCompraNew");
+      return [];
+    }
+  }
+
   Future<List<OrdenCompraNewModel>> buscarOCPendientes(String query) async {
     try {
       final Database db = await dbprovider.getDatabase();

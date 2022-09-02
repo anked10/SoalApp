@@ -95,7 +95,7 @@ class OrdenCompraApi {
           orden.ccOC = item["generar_orden_compra_cc"];
           orden.proformaOC = item["generar_orden_compra_proforma"];
           orden.condicionPagoOC = item["generar_orden_compra_condicion_pago"];
-          orden.subTotalOC = item["total_parcial"];
+          orden.subTotalOC = item["subtotal"].toString();
           orden.percentDescuentoOC = item["generar_orden_compra_descuento"];
           orden.descuentoOC = item["descuento"].toString();
           orden.igvOC = item["generar_orden_compra_igv"];
@@ -110,7 +110,7 @@ class OrdenCompraApi {
           orden.codigoProyectoOC = item["proyecto_codigo"];
           orden.idMoneda = item["moneda"];
           orden.nameCreateOC = item["person_name"];
-          orden.nameAprobeOC = item["person_name"];
+          orden.nameAprobeOC = item["aprobado_por"];
           var meses = item["op_datetime"].split("-");
           orden.mesOC = meses[1];
           orden.surnameCreateOC = item["person_surname"];

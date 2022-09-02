@@ -82,6 +82,23 @@ class DetalleOC extends StatelessWidget {
                             rows(titulo: 'CC:', data: orden.ccOC ?? '', st: 11, sd: 12, crossAxisAlignment: CrossAxisAlignment.start),
                             SizedBox(height: ScreenUtil().setHeight(4)),
                             rows(titulo: 'Cliente:', data: orden.nombreEmpresa ?? '', st: 11, sd: 12, crossAxisAlignment: CrossAxisAlignment.start),
+                            Divider(),
+                            SizedBox(height: ScreenUtil().setHeight(4)),
+                            rows(
+                                titulo: 'Solicitado por:',
+                                data: '${orden.nameCreateOC ?? ''} ${orden.surnameCreateOC ?? ''} ${orden.surnameCreate2OC ?? ''}',
+                                st: 10,
+                                sd: 11,
+                                crossAxisAlignment: CrossAxisAlignment.start),
+                            (orden.estadoOC == '0') ? Container() : SizedBox(height: ScreenUtil().setHeight(4)),
+                            (orden.estadoOC == '0')
+                                ? Container()
+                                : rows(
+                                    titulo: 'Aprobado por:',
+                                    data: orden.nameAprobeOC ?? '',
+                                    st: 10,
+                                    sd: 11,
+                                    crossAxisAlignment: CrossAxisAlignment.start),
                             SizedBox(
                               height: ScreenUtil().setHeight(6),
                             ),
@@ -220,16 +237,18 @@ class DetalleOC extends StatelessWidget {
                             children: [
                               totality(
                                   titulo: 'Sub Total',
-                                  data: "${(orden.idMoneda == '1') ? 'S/.' : 'US\$'} ${orden.subTotalOC ?? ''}",
+                                  data: "${(orden.idMoneda == 'SOLES') ? 'S/.' : 'US\$'} ${orden.subTotalOC ?? ''}",
                                   color: Colors.black),
                               totality(
                                   titulo: 'Descuento ${orden.percentDescuentoOC ?? ''} %',
-                                  data: "${(orden.idMoneda == '1') ? 'S/.' : 'US\$'} ${orden.descuentoOC ?? ''}",
+                                  data: "${(orden.idMoneda == 'SOLES') ? 'S/.' : 'US\$'} ${orden.descuentoOC ?? ''}",
                                   color: Colors.black),
                               totality(titulo: 'IGV 18%', data: "S/. ${orden.igvOC ?? ''}", color: Colors.black),
                               Divider(),
                               totality(
-                                  titulo: 'Total', data: "${(orden.idMoneda == '1') ? 'S/.' : 'US\$'} ${orden.totalOC ?? ''}", color: Colors.green),
+                                  titulo: 'Total',
+                                  data: "${(orden.idMoneda == 'SOLES') ? 'S/.' : 'US\$'} ${orden.totalOC ?? ''}",
+                                  color: Colors.green),
                             ],
                           ),
                           fondo: Colors.white,

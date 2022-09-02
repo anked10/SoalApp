@@ -32,6 +32,7 @@ class _OrdenCompraState extends State<OrdenCompra> {
   int init = 0;
   String mes = '';
 
+  final _searchController = TextEditingController();
   final provider = ControllerFileOC();
 
   @override
@@ -45,7 +46,6 @@ class _OrdenCompraState extends State<OrdenCompra> {
   Widget build(BuildContext context) {
     final ordenCompraBloc = ProviderBloc.op(context);
     if (init == 0) {
-      print(mes.length);
       ordenCompraBloc.getOrdenCompraGeneradas((mes.length == 1) ? '0$mes' : mes);
       init++;
     }
@@ -75,20 +75,21 @@ class _OrdenCompraState extends State<OrdenCompra> {
               color: Colors.black,
             ),
           ),
-          // IconButton(
-          //   onPressed: () {
-          //     provider.changeLActive(!provider.isActiveSearch);
-          //     filtro();
-          //   },
-          //   icon: AnimatedBuilder(
-          //       animation: provider,
-          //       builder: (_, snapshot) {
-          //         return Icon(
-          //           Icons.search,
-          //           color: provider.isActiveSearch ? Colors.indigo : Colors.black,
-          //         );
-          //       }),
-          // ),
+          IconButton(
+            onPressed: () {
+              ordenCompraBloc.searchOrdenCompraGeneradas(mes, '');
+              _searchController.clear();
+              provider.activateSearch(!provider.isActiveSearch);
+            },
+            icon: AnimatedBuilder(
+                animation: provider,
+                builder: (_, snapshot) {
+                  return Icon(
+                    Icons.search,
+                    color: provider.isActiveSearch ? Colors.indigo : Colors.black,
+                  );
+                }),
+          ),
           PopupMenuButton<MesesModel>(
               onSelected: (value) {
                 mes = value.id!;
@@ -107,97 +108,136 @@ class _OrdenCompraState extends State<OrdenCompra> {
                         ))
                     .toList();
               }),
-          // IconButton(
-          //   onPressed: () {
-          //     ordenCompraBloc.getOrdenCompraGeneradas();
-          //   },
-          //   icon: Icon(
-          //     Icons.calendar_month,
-          //     color: Colors.black,
-          //   ),
-          // ),
         ],
         elevation: 0,
       ),
-      body: StreamBuilder<bool>(
-        stream: ordenCompraBloc.cargando2Stream,
-        builder: (_, c) {
-          if (c.hasData) {
-            if (c.data!) return ShowLoadding(active: true, color: Colors.transparent);
-            return Stack(
-              children: [
-                StreamBuilder<List<OrdenCompraNewModel>>(
-                  stream: ordenCompraBloc.ocGeneradasStream,
-                  builder: (_, snapshot) {
-                    if (!snapshot.hasData) return Container();
-                    if (snapshot.data!.isEmpty)
-                      return Center(child: Text('No existen ordenes de compras generadas para el mes consultado', textAlign: TextAlign.center));
-
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length + 1,
-                      itemBuilder: (_, index) {
-                        if (index == 0) {
-                          return Padding(
-                            padding: EdgeInsets.symmetric(
-                              horizontal: ScreenUtil().setWidth(16),
+      body: Column(
+        children: [
+          AnimatedBuilder(
+              animation: provider,
+              builder: (context, snapshot) {
+                return provider.isActiveSearch
+                    ? Container(
+                        margin: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(16),
+                          vertical: ScreenUtil().setHeight(10),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: ScreenUtil().setWidth(8),
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.indigo),
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        child: Expanded(
+                          child: TextField(
+                            controller: _searchController,
+                            onChanged: (value) {
+                              ordenCompraBloc.searchOrdenCompraGeneradas(mes, value.trim());
+                            },
+                            textAlign: TextAlign.left,
+                            style: TextStyle(
+                              fontSize: ScreenUtil().setSp(16),
+                              fontWeight: FontWeight.w400,
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.end,
-                              children: [
-                                Text(
-                                  'Se encontraron ${snapshot.data!.length} resultado(s)',
-                                  style: TextStyle(
-                                    color: Colors.grey,
-                                    fontSize: ScreenUtil().setSp(10),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-
-                        index = index - 1;
-                        return _item(context, snapshot.data![index]);
-                      },
-                    );
-                  },
-                ),
-                AnimatedBuilder(
-                  animation: provider,
-                  builder: (_, s) {
-                    return Positioned(
-                      bottom: 20,
-                      left: 0,
-                      right: 0,
-                      child: (!provider.load)
-                          ? Container()
-                          : Padding(
-                              padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
-                              child: Container(
-                                height: ScreenUtil().setHeight(40),
-                                child: Column(
-                                  children: [
-                                    Text('Cargando'),
-                                    LinearPercentIndicator(
-                                      width: responsive.wp(90),
-                                      lineHeight: 14.0,
-                                      percent: 50 / 100,
-                                      backgroundColor: Colors.white,
-                                      progressColor: Colors.blue,
-                                    ),
-                                  ],
+                            decoration: InputDecoration(
+                              label: Text(
+                                'Nombre o RUC del Proveedor',
+                                style: TextStyle(
+                                  fontSize: ScreenUtil().setSp(12),
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
+                              border: InputBorder.none,
                             ),
-                    );
-                  },
-                ),
-              ],
-            );
-          } else {
-            return ShowLoadding(active: true, color: Colors.transparent);
-          }
-        },
+                          ),
+                        ),
+                      )
+                    : Container();
+              }),
+          Expanded(
+            child: StreamBuilder<bool>(
+              stream: ordenCompraBloc.cargando2Stream,
+              builder: (_, c) {
+                if (c.hasData) {
+                  if (c.data!) return ShowLoadding(active: true, color: Colors.transparent);
+                  return Stack(
+                    children: [
+                      StreamBuilder<List<OrdenCompraNewModel>>(
+                        stream: ordenCompraBloc.ocGeneradasStream,
+                        builder: (_, snapshot) {
+                          if (!snapshot.hasData) return Container();
+                          if (snapshot.data!.isEmpty)
+                            return Center(child: Text('No existen ordenes de compras generadas para el mes consultado', textAlign: TextAlign.center));
+
+                          return ListView.builder(
+                            itemCount: snapshot.data!.length + 1,
+                            itemBuilder: (_, index) {
+                              if (index == 0) {
+                                return Padding(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: ScreenUtil().setWidth(16),
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        'Se encontraron ${snapshot.data!.length} resultado(s)',
+                                        style: TextStyle(
+                                          color: Colors.grey,
+                                          fontSize: ScreenUtil().setSp(10),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+
+                              index = index - 1;
+                              return _item(context, snapshot.data![index]);
+                            },
+                          );
+                        },
+                      ),
+                      AnimatedBuilder(
+                        animation: provider,
+                        builder: (_, s) {
+                          return Positioned(
+                            bottom: 20,
+                            left: 0,
+                            right: 0,
+                            child: (!provider.load)
+                                ? Container()
+                                : Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: ScreenUtil().setWidth(10)),
+                                    child: Container(
+                                      height: ScreenUtil().setHeight(40),
+                                      child: Column(
+                                        children: [
+                                          Text('Cargando'),
+                                          LinearPercentIndicator(
+                                            width: responsive.wp(90),
+                                            lineHeight: 14.0,
+                                            percent: 50 / 100,
+                                            backgroundColor: Colors.white,
+                                            progressColor: Colors.blue,
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                          );
+                        },
+                      ),
+                    ],
+                  );
+                } else {
+                  return ShowLoadding(active: true, color: Colors.transparent);
+                }
+              },
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -779,7 +819,7 @@ class ControllerFileOC extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeLActive(bool l) {
+  void activateSearch(bool l) {
     isActiveSearch = l;
     notifyListeners();
   }
