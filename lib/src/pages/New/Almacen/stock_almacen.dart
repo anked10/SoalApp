@@ -160,6 +160,8 @@ class _StockAlmacenState extends State<StockAlmacen> {
             Container(
               width: ScreenUtil().setWidth(80),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
                     'Stock',
@@ -177,6 +179,7 @@ class _StockAlmacenState extends State<StockAlmacen> {
                   ),
                   Text(
                     material.almacenUnidad ?? '',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: ScreenUtil().setSp(12),
                       fontWeight: FontWeight.w400,
@@ -189,7 +192,7 @@ class _StockAlmacenState extends State<StockAlmacen> {
         ),
         fondo: Colors.white,
         color: Colors.indigo,
-        height: 80,
+        height: 60,
         mtop: 20,
       ),
     );
