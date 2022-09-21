@@ -12,6 +12,7 @@ import 'package:soal_app/src/bloc/modulos_bloc.dart';
 import 'package:soal_app/src/bloc/orden_compra_bloc.dart';
 import 'package:soal_app/src/bloc/ot_bloc.dart';
 import 'package:soal_app/src/bloc/proveedoresBloc.dart';
+import 'package:soal_app/src/bloc/request_bloc.dart';
 import 'package:soal_app/src/bloc/si_bloc.dart';
 
 //singleton para obtner una unica instancia del Bloc
@@ -30,6 +31,7 @@ class ProviderBloc extends InheritedWidget {
   final documentoOCBloc = DocumentoOCBloc();
   final otBloc = OTBloc();
   final gestionPagosBloc = GestionPagosBloc();
+  final requestBloc = RequestBloc();
 
   ProviderBloc({required Widget child}) : super(child: child);
 
@@ -90,5 +92,9 @@ class ProviderBloc extends InheritedWidget {
 
   static GestionPagosBloc gestionPagos(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.gestionPagosBloc;
+  }
+
+  static RequestBloc requerimets(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.requestBloc;
   }
 }

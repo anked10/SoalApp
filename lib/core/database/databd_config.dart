@@ -28,6 +28,8 @@ class DatabaseHelper {
       db.execute(tableDetalleOT);
       db.execute(tableMaterialesProveedor);
       db.execute(tablePagos);
+      db.execute(tableRequests);
+      db.execute(tableResourseRequest);
       //Modulos DB
       db.execute(ModulosDB.modulosTableSql);
       db.execute(ModulosDB.submodulosTableSql);
@@ -345,4 +347,44 @@ class DatabaseHelper {
       'codRegPago TEXT, '
       'fechaAdjuntadaPago TEXT, '
       'nameAtended TEXT)';
+
+  static const String tableRequests = 'CREATE TABLE Requests('
+      'requestID TEXT PRIMARY KEY, '
+      'businessID TEXT, '
+      'proyectID TEXT, '
+      'userID TEXT, '
+      'requestCode TEXT, '
+      'requestDate TEXT, '
+      'requestDateTime TEXT, '
+      'requestStatus TEXT, '
+      'userAprobeID TEXT, '
+      'userAprobeName TEXT, '
+      'requestDateTimeAprobe TEXT, '
+      'businessName TEXT, '
+      'businessRUC TEXT, '
+      'businessAddress TEXT, '
+      'proyectName TEXT, '
+      'proyectCode TEXT, '
+      'proyectDateStart TEXT, '
+      'proyectDateEnd TEXT, '
+      'personCreatedName TEXT)';
+
+  static const String tableResourseRequest = 'CREATE TABLE ResourseRequest('
+      'requestDetailID TEXT PRIMARY KEY, '
+      'requestID TEXT, '
+      'resourceID TEXT, '
+      'requestDetailQuantity TEXT, '
+      'requestDetailStatus TEXT, '
+      'classLogisticID TEXT, '
+      'businessID TEXT, '
+      'measureID TEXT, '
+      'resourceType TEXT, '
+      'resourceName TEXT, '
+      'resourceCode TEXT, '
+      'resourceComent TEXT, '
+      'resourcePicture TEXT, '
+      'resourceStatus TEXT, '
+      'measureUnidCode TEXT, '
+      'measureName TEXT, '
+      'measureIsActive TEXT)';
 }

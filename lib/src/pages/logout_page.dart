@@ -144,7 +144,6 @@ class _LogoutPageState extends State<LogoutPage> {
     String? nomb = await StorageManager.readData('personName');
     if (nomb!.length > 0) {
       var nombres = nomb.split(' ');
-      print(nombres[0]);
       nombre = nombres[0];
       setState(() {});
     }

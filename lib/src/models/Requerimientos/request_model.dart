@@ -1,4 +1,4 @@
-class RequerimientosModel {
+class RequestModel {
   String? requestID;
   String? businessID;
   String? proyectID;
@@ -19,7 +19,7 @@ class RequerimientosModel {
   String? proyectDateEnd;
   String? personCreatedName;
 
-  RequerimientosModel({
+  RequestModel({
     this.requestID,
     this.businessID,
     this.proyectID,
@@ -41,7 +41,7 @@ class RequerimientosModel {
     this.personCreatedName,
   });
 
-  static List<RequerimientosModel> fromJsonList(List<dynamic> json) => json.map((i) => RequerimientosModel.fromJson(i)).toList();
+  static List<RequestModel> fromJsonList(List<dynamic> json) => json.map((i) => RequestModel.fromJson(i)).toList();
 
   Map<String, dynamic> toJson() => {
         'requestID': requestID,
@@ -65,7 +65,7 @@ class RequerimientosModel {
         'personCreatedName': personCreatedName,
       };
 
-  factory RequerimientosModel.fromJson(Map<String, dynamic> json) => RequerimientosModel(
+  factory RequestModel.fromJson(Map<String, dynamic> json) => RequestModel(
         requestID: json["requestID"],
         businessID: json["businessID"],
         proyectID: json["proyectID"],
@@ -87,7 +87,7 @@ class RequerimientosModel {
         personCreatedName: json["personCreatedName"],
       );
 
-  factory RequerimientosModel.fromJsonApi(Map<String, dynamic> json) => RequerimientosModel(
+  factory RequestModel.fromJsonApi(Map<String, dynamic> json) => RequestModel(
         requestID: json["id_requerimiento"],
         businessID: json["id_empresa"],
         proyectID: json["id_proyecto"],
@@ -97,7 +97,7 @@ class RequerimientosModel {
         requestDateTime: json["requerimiento_datetime"],
         requestStatus: json["requerimiento_estado"],
         userAprobeID: json["id_usuario_aprobacion"],
-        userAprobeName: json["  "],
+        userAprobeName: json["aprobado_por"],
         requestDateTimeAprobe: json["requerimiento_datetime_aprobacion"],
         businessName: json["empresa"],
         businessRUC: json["empresa_ruc"],
