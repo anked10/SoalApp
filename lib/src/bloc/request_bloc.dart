@@ -21,12 +21,12 @@ class RequestBloc {
     _cargandoController.close();
   }
 
-  void getApprovedRequeriments() async {
-    _requestController.sink.add(await _api.requestDB.getRequets());
+  void getRequerimentsByStatus(String status) async {
+    _requestController.sink.add(await _api.requestDB.getRequetsByStatus(status));
     _cargandoController.sink.add(true);
-    await _api.getApprovedRequest();
+    status == '1' ? await _api.getPendingRequest() : await _api.getApprovedRequest();
     _cargandoController.sink.add(false);
-    _requestController.sink.add(await _api.requestDB.getRequets());
+    _requestController.sink.add(await _api.requestDB.getRequetsByStatus(status));
   }
 
   void getDetailRequest(String requestID) async {

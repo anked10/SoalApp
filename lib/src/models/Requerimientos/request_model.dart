@@ -108,4 +108,24 @@ class RequestModel {
         proyectDateEnd: json["proyecto_fin"],
         personCreatedName: json["generado_por"],
       );
+
+  factory RequestModel.fromJsonApi2(Map<String, dynamic> json) => RequestModel(
+        requestID: json["id_requerimiento"],
+        businessID: json["id_empresa"],
+        proyectID: json["id_proyecto"],
+        userID: json["id_usuario"],
+        requestCode: json["requerimiento_codigo"],
+        requestDate: json["requerimiento_fecha"],
+        requestDateTime: json["requerimiento_datetime"],
+        requestStatus: json["requerimiento_estado"],
+        requestDateTimeAprobe: json["requerimiento_datetime_aprobacion"],
+        businessName: json["empresa"],
+        businessRUC: json["empresa_ruc"],
+        businessAddress: json["empresa_direccion"],
+        proyectName: json["proyecto"],
+        proyectCode: json["proyecto_codigo"],
+        proyectDateStart: json["proyecto_inicio"],
+        proyectDateEnd: json["proyecto_fin"],
+        personCreatedName: json["generado_por"],
+      );
 }

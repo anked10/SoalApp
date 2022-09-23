@@ -6,13 +6,13 @@ import 'package:soal_app/src/models/Requerimientos/request_model.dart';
 import 'package:soal_app/src/pages/New/Requeriments/detail_request.dart';
 import 'package:soal_app/src/widgets/show_loading.dart';
 
-class ApprovedRequeriments extends StatelessWidget {
-  const ApprovedRequeriments({Key? key}) : super(key: key);
+class PendingRequeriments extends StatelessWidget {
+  const PendingRequeriments({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final requestBloc = ProviderBloc.requerimets(context);
-    requestBloc.getRequerimentsByStatus('2');
+    requestBloc.getRequerimentsByStatus('1');
     return StreamBuilder<bool>(
       stream: requestBloc.cargandoMStream,
       builder: (_, isLoadding) {
@@ -22,7 +22,7 @@ class ApprovedRequeriments extends StatelessWidget {
           stream: requestBloc.requestStream,
           builder: (_, snapshot) {
             if (!snapshot.hasData) return Container();
-            if (snapshot.data!.isEmpty) return Center(child: Text('No existen requerimientos aprobados'));
+            if (snapshot.data!.isEmpty) return Center(child: Text('No existen requerimientos pendientes por aprobar'));
             return ListView.builder(
               itemCount: snapshot.data!.length,
               itemBuilder: (_, index) {
@@ -164,7 +164,7 @@ class ApprovedRequeriments extends StatelessWidget {
                                   width: ScreenUtil().setWidth(6),
                                   height: ScreenUtil().setHeight(60),
                                   decoration: BoxDecoration(
-                                    color: Colors.indigo,
+                                    color: Colors.orangeAccent,
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(5),
                                       bottomLeft: Radius.circular(5),

@@ -22,7 +22,7 @@ class RequestApi {
       });
 
       if (response.statusCode == 200) {
-        await requestDB.deleteByStatus('1');
+        await requestDB.deleteByStatus('2');
         await resourceRequestDB.deleteByStatus('1');
         final decodedData = json.decode(response.body);
         for (var i = 0; i < decodedData["result"]["aprobados"].length; i++) {
@@ -30,6 +30,35 @@ class RequestApi {
           for (var x = 0; x < decodedData["result"]["aprobados"][i]["detalle_requerimiento"].length; x++) {
             resourceRequestDB
                 .insertResourceRequest(ResourseRequestModel.fromJsonApi(decodedData["result"]["aprobados"][i]["detalle_requerimiento"][x]));
+          }
+        }
+      }
+
+      return 1;
+    } catch (e) {
+      print(e);
+      return 2;
+    }
+  }
+
+  Future<int> getPendingRequest() async {
+    try {
+      final url = '$API_BASE_URL/api/Requerimiento/ws_requerimientos_pendientes';
+      String? token = await StorageManager.readData('token');
+      final response = await http.post(Uri.parse(url), body: {
+        'app': 'true',
+        'tn': token,
+      });
+
+      if (response.statusCode == 200) {
+        await requestDB.deleteByStatus('1');
+        await resourceRequestDB.deleteByStatus('1');
+        final decodedData = json.decode(response.body);
+        for (var i = 0; i < decodedData["result"]["pendientes"].length; i++) {
+          requestDB.insertRequest(RequestModel.fromJsonApi2(decodedData["result"]["pendientes"][i]));
+          for (var x = 0; x < decodedData["result"]["pendientes"][i]["detalle_requerimiento"].length; x++) {
+            resourceRequestDB
+                .insertResourceRequest(ResourseRequestModel.fromJsonApi(decodedData["result"]["pendientes"][i]["detalle_requerimiento"][x]));
           }
         }
       }

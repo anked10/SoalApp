@@ -19,7 +19,7 @@ class DetailRequest extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Text(
-          'Lista de herramientas #${request.requestCode ?? ''}',
+          'Lista de herramientas ${(request.requestStatus == '1') ? '' : '#'}${request.requestCode ?? ''}',
           style: TextStyle(
             fontSize: ScreenUtil().setSp(13),
             fontWeight: FontWeight.bold,
@@ -87,8 +87,8 @@ class DetailRequest extends StatelessWidget {
                             st: 10,
                             sd: 11,
                             crossAxisAlignment: CrossAxisAlignment.start),
-                        (request.requestStatus == '0') ? Container() : SizedBox(height: ScreenUtil().setHeight(4)),
-                        (request.requestStatus == '0')
+                        (request.requestStatus == '1') ? Container() : SizedBox(height: ScreenUtil().setHeight(4)),
+                        (request.requestStatus == '1')
                             ? Container()
                             : rows(
                                 titulo: 'Aprobado por:',

@@ -33,10 +33,24 @@ class RequestDatabase {
     }
   }
 
+  Future<List<RequestModel>> getRequetsByStatus(String status) async {
+    try {
+      final Database db = await dbprovider.getDatabase();
+      List<RequestModel> list = [];
+      List<Map> maps = await db.rawQuery("SELECT * FROM Requests WHERE requestStatus='$status'");
+
+      if (maps.length > 0) list = RequestModel.fromJsonList(maps);
+      return list;
+    } catch (e) {
+      print(" $e Error en la base de datos Requests");
+      return [];
+    }
+  }
+
   deleteByStatus(String status) async {
     final db = await dbprovider.database;
 
-    final res = await db.rawDelete("DELETE FROM Requests WHERE requestStatus='1'");
+    final res = await db.rawDelete("DELETE FROM Requests WHERE requestStatus='$status'");
 
     return res;
   }
