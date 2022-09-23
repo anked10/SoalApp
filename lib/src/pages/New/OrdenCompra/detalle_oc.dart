@@ -243,7 +243,10 @@ class DetalleOC extends StatelessWidget {
                                   titulo: 'Descuento ${orden.percentDescuentoOC ?? ''} %',
                                   data: "${(orden.idMoneda == 'SOLES') ? 'S/.' : 'US\$'} ${orden.descuentoOC ?? ''}",
                                   color: Colors.black),
-                              totality(titulo: 'IGV 18%', data: "S/. ${orden.igvOC ?? ''}", color: Colors.black),
+                              totality(
+                                  titulo: 'IGV 18%',
+                                  data: "${(orden.idMoneda == 'SOLES') ? 'S/.' : 'US\$'} ${orden.igvOC ?? ''}",
+                                  color: Colors.black),
                               Divider(),
                               totality(
                                   titulo: 'Total',
