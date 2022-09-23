@@ -26,19 +26,19 @@ class _RequerimentsState extends State<Requeriments> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: idRol == '' ? Colors.orangeAccent : Colors.white,
+        backgroundColor: idRol == '11' ? Colors.orangeAccent : Colors.white,
         leading: const MenuWidget(),
         title: Text(
-          'Requerimientos ${idRol == '' ? 'Pendientes' : 'Aprobados'} ',
+          'Requerimientos ${idRol == '11' ? 'Pendientes' : 'Aprobados'} ',
           style: TextStyle(
             fontSize: ScreenUtil().setSp(18),
             fontWeight: FontWeight.bold,
-            color: idRol == '' ? Colors.white : Colors.black,
+            color: idRol == '11' ? Colors.white : Colors.black,
           ),
         ),
         elevation: 0,
       ),
-      body: idRol == '' ? PendingRequeriments() : ApprovedRequeriments(),
+      body: idRol == '11' ? PendingRequeriments() : ApprovedRequeriments(),
     );
   }
 
