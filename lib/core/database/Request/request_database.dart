@@ -32,4 +32,12 @@ class RequestDatabase {
       return [];
     }
   }
+
+  deleteByStatus(String status) async {
+    final db = await dbprovider.database;
+
+    final res = await db.rawDelete("DELETE FROM Requests WHERE requestStatus='1'");
+
+    return res;
+  }
 }

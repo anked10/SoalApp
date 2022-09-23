@@ -22,6 +22,8 @@ class RequestApi {
       });
 
       if (response.statusCode == 200) {
+        await requestDB.deleteByStatus('1');
+        await resourceRequestDB.deleteByStatus('1');
         final decodedData = json.decode(response.body);
         for (var i = 0; i < decodedData["result"]["aprobados"].length; i++) {
           requestDB.insertRequest(RequestModel.fromJsonApi(decodedData["result"]["aprobados"][i]));

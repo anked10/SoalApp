@@ -32,4 +32,12 @@ class ResourceRequestDatabase {
       return [];
     }
   }
+
+  deleteByStatus(String status) async {
+    final db = await dbprovider.database;
+
+    final res = await db.rawDelete("DELETE FROM ResourseRequest WHERE resourceStatus='1'");
+
+    return res;
+  }
 }

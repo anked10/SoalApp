@@ -33,9 +33,8 @@ class _LoginPageState extends State<LoginPage> {
       final clasesApi = ClasesApi();
 
       await clasesApi.getClases();
-
-      super.initState();
     });
+    super.initState();
   }
 
   @override

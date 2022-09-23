@@ -4,6 +4,7 @@ import 'package:soal_app/src/pages/Home/menu.dart';
 import 'package:soal_app/src/pages/New/Almacen/stock_almacen.dart';
 import 'package:soal_app/src/pages/New/OrdenCompra/orden_compra.dart';
 import 'package:soal_app/src/pages/New/Proveedores/proveedores.dart';
+import 'package:soal_app/src/pages/New/Requeriments/requeriments.dart';
 import 'package:soal_app/src/pages/default_page.dart';
 
 class Home extends StatefulWidget {
@@ -51,6 +52,8 @@ class _HomeState extends State<Home> {
         return const OrdenCompra();
       case '44':
         return const StockAlmacen();
+      case '77':
+        return const Requeriments();
       default:
         return const DefaultPage();
     }
