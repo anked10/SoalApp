@@ -19,8 +19,15 @@ class DataUserBloc {
     userModel.userImage = await StorageManager.readData('userImage');
     userModel.personName = await StorageManager.readData('personName');
     userModel.personSurname = await StorageManager.readData('personSurname');
+    userModel.personSurname2 = await StorageManager.readData('personSurname2');
     userModel.idRoleUser = await StorageManager.readData('idRoleUser');
     userModel.roleName = await StorageManager.readData('roleName');
+    userModel.dniPerson = await StorageManager.readData('dniPerson');
+    userModel.cargoID = await StorageManager.readData('cargoID');
+    userModel.cargoName = await StorageManager.readData('cargoName');
+    userModel.peridoID = await StorageManager.readData('peridoID');
+    userModel.businessID = await StorageManager.readData('businessID');
+    userModel.businessName = await StorageManager.readData('businessName');
     _dataUserController.sink.add(userModel);
   }
 }
@@ -33,8 +40,15 @@ class UserModel {
   String? userImage;
   String? personName;
   String? personSurname;
+  String? personSurname2;
   String? idRoleUser;
   String? roleName;
+  String? dniPerson;
+  String? cargoID;
+  String? cargoName;
+  String? peridoID;
+  String? businessID;
+  String? businessName;
 
   UserModel({
     this.idUser,
@@ -44,7 +58,14 @@ class UserModel {
     this.userImage,
     this.personName,
     this.personSurname,
+    this.personSurname2,
     this.idRoleUser,
     this.roleName,
+    this.dniPerson,
+    this.cargoID,
+    this.cargoName,
+    this.peridoID,
+    this.businessID,
+    this.businessName,
   });
 }

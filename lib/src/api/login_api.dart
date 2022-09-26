@@ -33,8 +33,15 @@ class LoginApi {
         StorageManager.saveData('userImage', decodedData['data']['u_i']);
         StorageManager.saveData('personName', decodedData['data']['p_n']);
         StorageManager.saveData('personSurname', decodedData['data']['p_s']);
+        StorageManager.saveData('personSurname2', decodedData['data']['p_p']);
         StorageManager.saveData('idRoleUser', decodedData['data']['ru']);
         StorageManager.saveData('roleName', decodedData['data']['rn']);
+        StorageManager.saveData('dniPerson', decodedData['data']['dni']);
+        StorageManager.saveData('cargoID', decodedData['data']['id_c']);
+        StorageManager.saveData('cargoName', decodedData['data']['c_n']);
+        StorageManager.saveData('peridoID', decodedData['data']['id_p']);
+        StorageManager.saveData('businessID', decodedData['data']['em']);
+        StorageManager.saveData('businessName', decodedData['data']['em_n']);
         StorageManager.saveData('token', decodedData['data']['tn']);
       }
       result.code = code;

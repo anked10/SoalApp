@@ -64,6 +64,7 @@ class MyApp extends StatelessWidget {
             title: 'Soal',
             theme: ThemeData(
               primarySwatch: Colors.indigo,
+              unselectedWidgetColor: Colors.indigo,
             ),
             localizationsDelegates: const [
               GlobalMaterialLocalizations.delegate,

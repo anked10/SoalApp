@@ -84,3 +84,9 @@ selectdate(BuildContext context, TextEditingController date) async {
 
   date.text = "${picked!.year.toString().padLeft(2, '0')}-${picked.month.toString().padLeft(2, '0')}-${picked.day.toString().padLeft(2, '0')}";
 }
+
+selectHour(BuildContext context, TextEditingController hour) async {
+  TimeOfDay? picked = await showTimePicker(context: context, initialTime: TimeOfDay.now());
+
+  hour.text = "${picked!.hour.toString().padLeft(2, '0')}:${picked.minute.toString().padLeft(2, '0')}";
+}
