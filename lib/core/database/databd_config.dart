@@ -30,6 +30,7 @@ class DatabaseHelper {
       db.execute(tablePagos);
       db.execute(tableRequests);
       db.execute(tableResourseRequest);
+      db.execute(tableIncidencias);
       //Modulos DB
       db.execute(ModulosDB.modulosTableSql);
       db.execute(ModulosDB.submodulosTableSql);
@@ -387,4 +388,57 @@ class DatabaseHelper {
       'measureUnidCode TEXT, '
       'measureName TEXT, '
       'measureIsActive TEXT)';
+
+  static const String tableIncidencias = 'CREATE TABLE Incidencias('
+      'idIncidencia TEXT PRIMARY KEY, '
+      'correlativoIncidencia TEXT, '
+      'idUsuario TEXT, '
+      'personGenerated TEXT, '
+      'personVericated TEXT, '
+      'dateGenerated TEXT, '
+      'dateVericated TEXT, '
+      'cargoGenerado TEXT, '
+      'businessName TEXT, '
+      'statusName TEXT, '
+      'dateCreated TEXT, '
+      'typeIncidencia TEXT, '
+      'locationIncidencia TEXT, '
+      'hourIncidencia TEXT, '
+      'placeEspecificIncidencia TEXT, '
+      'descripcionObsIncidencia TEXT, '
+      'accionRealizadaIncidencia TEXT, '
+      'openClosedIncidencia TEXT, '
+      'actoSeguroIncidencia TEXT, '
+      'actitudFrustracion TEXT, '
+      'actitudFatiga TEXT, '
+      'actitudPrisa TEXT, '
+      'appElementoInadeciado TEXT, '
+      'appMalUso TEXT, '
+      'appNoUso TEXT, '
+      'herramientaInadecuado TEXT, '
+      'herramientaMalUso TEXT, '
+      'herramientaNoUso TEXT, '
+      'proceNoseComprende TEXT, '
+      'proceNoseSabe TEXT, '
+      'proceNoseSigue TEXT, '
+      'evaluacionCausaOtro TEXT, '
+      'condicionSegura TEXT, '
+      'herraInadecuada TEXT, '
+      'herraDanada TEXT, '
+      'herraFaltaMante TEXT, '
+      'herraInexistente TEXT, '
+      'ambienteExcesoRuido TEXT, '
+      'ambienteFaltaOrden TEXT, '
+      'ambientePeligroso TEXT, '
+      'ambienteInaIluminacion TEXT, '
+      'ambienteMalaSenalizacion TEXT, '
+      'inseguraOtro TEXT, '
+      'hseComentario TEXT, '
+      'hseVerificacionFirma TEXT, '
+      'hseVerificacionFecha TEXT, '
+      'hseVerificacionHora TEXT, '
+      'estadoAprobadoIncidencia TEXT, '
+      'fechaEnviadoPendienteIncidencia TEXT, '
+      'usuarioEnviadoPendienteIncidencia TEXT, '
+      'statusIncidencia TEXT)';
 }
