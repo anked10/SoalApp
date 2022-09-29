@@ -1,11 +1,14 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
+import 'package:soal_app/core/database/QHSE/incidencias_database.dart';
 import 'package:soal_app/core/sharedpreferences/storage_manager.dart';
 import 'package:soal_app/core/util/constants.dart';
+import 'package:soal_app/src/models/Rqhse/incidencia_model.dart';
 import 'package:soal_app/src/models/api_result_model.dart';
 
 class QHSEApi {
+  final incidenciaDB = IncidenciasDatabase();
   Future<ApiResultModel> generateIncidencia({
     required String idEmpresa,
     required String idPerido,
@@ -101,6 +104,32 @@ class QHSEApi {
       result.code = 2;
       result.message = 'Ocurrió un error, inténtelo nuevamente';
       return result;
+    }
+  }
+
+  Future<int> getIncidenciasPendientes() async {
+    try {
+      final url = '$API_BASE_URL/api/Incidencia/ws_incidencia_pendientes';
+      String? token = await StorageManager.readData('token');
+      final response = await http.post(Uri.parse(url), body: {
+        'app': 'true',
+        'tn': token,
+      });
+
+      if (response.statusCode == 200) {
+        final decodedData = json.decode(response.body);
+
+        List<dynamic> incidencias = decodedData["result"]["data"];
+
+        incidencias.forEach((element) async {
+          final _incidencia = IncidenciaModel.fromJson2(element);
+          await incidenciaDB.insertIncidencia(_incidencia);
+        });
+      }
+
+      return 1;
+    } catch (e) {
+      return 2;
     }
   }
 }

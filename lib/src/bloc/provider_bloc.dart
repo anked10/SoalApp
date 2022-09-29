@@ -12,6 +12,7 @@ import 'package:soal_app/src/bloc/modulos_bloc.dart';
 import 'package:soal_app/src/bloc/orden_compra_bloc.dart';
 import 'package:soal_app/src/bloc/ot_bloc.dart';
 import 'package:soal_app/src/bloc/proveedoresBloc.dart';
+import 'package:soal_app/src/bloc/qhse_bloc.dart';
 import 'package:soal_app/src/bloc/request_bloc.dart';
 import 'package:soal_app/src/bloc/si_bloc.dart';
 
@@ -32,6 +33,7 @@ class ProviderBloc extends InheritedWidget {
   final otBloc = OTBloc();
   final gestionPagosBloc = GestionPagosBloc();
   final requestBloc = RequestBloc();
+  final incidenciasBloc = QHSEBloc();
 
   ProviderBloc({required Widget child}) : super(child: child);
 
@@ -96,5 +98,9 @@ class ProviderBloc extends InheritedWidget {
 
   static RequestBloc requerimets(BuildContext context) {
     return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.requestBloc;
+  }
+
+  static QHSEBloc incidencias(BuildContext context) {
+    return (context.dependOnInheritedWidgetOfExactType<ProviderBloc>())!.incidenciasBloc;
   }
 }
