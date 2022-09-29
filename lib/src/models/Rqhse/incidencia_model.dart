@@ -2,6 +2,7 @@ class IncidenciaModel {
   String? idIncidencia;
   String? correlativoIncidencia;
   String? idUsuario;
+  String? dniGenerated;
   String? personGenerated;
   String? personVericated;
   String? dateGenerated;
@@ -56,6 +57,7 @@ class IncidenciaModel {
     this.idIncidencia,
     this.correlativoIncidencia,
     this.idUsuario,
+    this.dniGenerated,
     this.personGenerated,
     this.personVericated,
     this.dateGenerated,
@@ -113,6 +115,7 @@ class IncidenciaModel {
         'idIncidencia': idIncidencia,
         'correlativoIncidencia': correlativoIncidencia,
         'idUsuario': idUsuario,
+        'dniGenerated': dniGenerated,
         'personGenerated': personGenerated,
         'personVericated': personVericated,
         'dateGenerated': dateGenerated,
@@ -168,6 +171,7 @@ class IncidenciaModel {
         idIncidencia: json["idIncidencia"],
         correlativoIncidencia: json["correlativoIncidencia"],
         idUsuario: json["idUsuario"],
+        dniGenerated: json["dniGenerated"],
         personGenerated: json["personGenerated"],
         personVericated: json["personVericated"],
         dateGenerated: json["dateGenerated"],
@@ -223,6 +227,7 @@ class IncidenciaModel {
         idIncidencia: json["id_incidencia"],
         correlativoIncidencia: json["incidencia_correlativo"],
         idUsuario: json["id_usuario"],
+        dniGenerated: json["dni"],
         personGenerated: json["generado_por"],
         personVericated: json["verificado_por"],
         dateGenerated: json["fecha_generada"],

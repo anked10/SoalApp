@@ -74,6 +74,18 @@ obtenerFecha(String date) {
   return fech.format(fecha);
 }
 
+obtenerFechaHour(String date) {
+  if (date == 'null' || date == '') {
+    return '';
+  }
+
+  var fecha = DateTime.parse(date);
+
+  final DateFormat fech = DateFormat('dd MMM yyyy HH:mm:ss', 'es');
+
+  return fech.format(fecha);
+}
+
 selectdate(BuildContext context, TextEditingController date) async {
   DateTime? picked = await showDatePicker(
     context: context,

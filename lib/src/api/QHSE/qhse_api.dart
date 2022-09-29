@@ -117,6 +117,7 @@ class QHSEApi {
       });
 
       if (response.statusCode == 200) {
+        await incidenciaDB.deleteAll();
         final decodedData = json.decode(response.body);
 
         List<dynamic> incidencias = decodedData["result"]["data"];

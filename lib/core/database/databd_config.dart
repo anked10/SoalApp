@@ -393,6 +393,7 @@ class DatabaseHelper {
       'idIncidencia TEXT PRIMARY KEY, '
       'correlativoIncidencia TEXT, '
       'idUsuario TEXT, '
+      'dniGenerated TEXT, '
       'personGenerated TEXT, '
       'personVericated TEXT, '
       'dateGenerated TEXT, '
