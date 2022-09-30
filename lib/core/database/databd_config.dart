@@ -31,6 +31,7 @@ class DatabaseHelper {
       db.execute(tableRequests);
       db.execute(tableResourseRequest);
       db.execute(tableIncidencias);
+      db.execute(tableDocumentsAnexo);
       //Modulos DB
       db.execute(ModulosDB.modulosTableSql);
       db.execute(ModulosDB.submodulosTableSql);
@@ -442,4 +443,14 @@ class DatabaseHelper {
       'fechaEnviadoPendienteIncidencia TEXT, '
       'usuarioEnviadoPendienteIncidencia TEXT, '
       'statusIncidencia TEXT)';
+
+  static const String tableDocumentsAnexo = 'CREATE TABLE DocumentsAnexo('
+      'idDoc TEXT PRIMARY KEY, '
+      'idIncidencia TEXT, '
+      'dateCreated TEXT, '
+      'typeDoc TEXT, '
+      'descripcionDoc TEXT, '
+      'urlDoc TEXT, '
+      'dateRegisterDoc TEXT, '
+      'statusDoc TEXT)';
 }

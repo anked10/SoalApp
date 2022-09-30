@@ -3,11 +3,16 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart';
+import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/core/util/utils.dart';
 import 'package:soal_app/src/api/pdf_api.dart';
+import 'package:soal_app/src/bloc/provider_bloc.dart';
+import 'package:soal_app/src/models/Rqhse/documentos_anexados_model.dart';
 import 'package:soal_app/src/models/Rqhse/incidencia_model.dart';
 import 'package:soal_app/src/pages/New/QHSE/check_box_state.dart';
+import 'package:soal_app/src/widgets/show_loading.dart';
 import 'package:soal_app/src/widgets/text_field.dart';
+import 'package:soal_app/src/widgets/widgets.dart';
 
 class DetailIncidencia extends StatefulWidget {
   const DetailIncidencia({Key? key, required this.incidencia}) : super(key: key);
@@ -115,6 +120,8 @@ class _DetailIncidenciaState extends State<DetailIncidencia> {
 
   @override
   Widget build(BuildContext context) {
+    final docsBloc = ProviderBloc.incidencias(context);
+    docsBloc.getDocumentsByIdIncidencia(widget.incidencia.idIncidencia!);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -130,329 +137,368 @@ class _DetailIncidenciaState extends State<DetailIncidencia> {
         iconTheme: IconThemeData(color: Colors.black),
         elevation: 0,
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(10), horizontal: ScreenUtil().setWidth(16)),
-          child: Column(
-            children: [
-              ExpansionTile(
-                initiallyExpanded: true,
-                maintainState: true,
-                title: Text(
-                  'DATOS',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(16),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(10), horizontal: ScreenUtil().setWidth(16)),
+              child: Column(
                 children: [
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  TextFieldSelect(
-                    label: 'Fecha',
-                    hingText: '',
-                    controller: _dateController,
-                    readOnly: true,
-                    icon: true,
-                    widget: Icon(Icons.calendar_month, color: Colors.indigo),
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  TextFieldSelect(
-                    label: 'DNI',
-                    hingText: '',
-                    controller: _dniController,
-                    readOnly: true,
-                    icon: false,
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  TextFieldSelect(
-                    label: 'Nombre',
-                    hingText: '',
-                    controller: _personNameController,
-                    readOnly: true,
-                    icon: false,
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  TextFieldSelect(
-                    label: 'Cargo',
-                    hingText: '',
-                    controller: _cargoController,
-                    readOnly: true,
-                    icon: false,
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  TextFieldSelect(
-                    label: 'Empresa',
-                    hingText: '',
-                    controller: _empresaController,
-                    readOnly: true,
-                    icon: false,
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  RadioListTile<String>(value: '1', groupValue: selectRadio, title: Text('Seguridad'), onChanged: (i) {}),
-                  RadioListTile<String>(value: '2', groupValue: selectRadio, title: Text('Salud'), onChanged: (i) {}),
-                  RadioListTile<String>(value: ' 3', groupValue: selectRadio, title: Text('Ambiental'), onChanged: (i) {}),
-                ],
-              ),
-              SizedBox(height: ScreenUtil().setHeight(10)),
-              ExpansionTile(
-                initiallyExpanded: true,
-                maintainState: true,
-                title: Text(
-                  'OBSERVACIÓN',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(16),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                children: [
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  TextFieldSelect(
-                    label: 'Locación',
-                    hingText: '',
-                    controller: _locationController,
-                    readOnly: true,
-                    icon: false,
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  TextFieldSelect(
-                    label: 'Hora',
-                    hingText: '',
-                    controller: _hourController,
-                    readOnly: true,
-                    icon: true,
-                    widget: Icon(Icons.watch_later, color: Colors.indigo),
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  TextFieldSelect(
-                    label: 'Lugar Específico',
-                    hingText: '',
-                    controller: _placeSController,
-                    readOnly: true,
-                    icon: false,
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  TextFieldSelect(
-                    label: 'Breve Descripción',
-                    hingText: '',
-                    controller: _descripcionBreveController,
-                    readOnly: true,
-                    icon: false,
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                ],
-              ),
-              SizedBox(height: ScreenUtil().setHeight(10)),
-              ExpansionTile(
-                initiallyExpanded: true,
-                maintainState: true,
-                title: Text(
-                  'ACCIÓN REALIZADA',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(16),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                children: [
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  TextFieldSelect(
-                    label: '',
-                    hingText: '',
-                    controller: _actionRealizedController,
-                    readOnly: true,
-                    icon: false,
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  RadioListTile<String>(value: '1', groupValue: selectRadio2, title: Text('Abierto'), onChanged: (i) {}),
-                  RadioListTile<String>(value: '2', groupValue: selectRadio2, title: Text('Cerrado'), onChanged: (i) {}),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                ],
-              ),
-              SizedBox(height: ScreenUtil().setHeight(10)),
-              ExpansionTile(
-                initiallyExpanded: true,
-                maintainState: true,
-                title: Text(
-                  'EVALUACIÓN DE CAUSAS',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(16),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                children: [
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  TextFieldSelect(
-                    label: 'Acto Seguro',
-                    hingText: '',
-                    controller: _saveActController,
-                    readOnly: true,
-                    icon: false,
+                  ExpansionTile(
+                    initiallyExpanded: true,
+                    maintainState: true,
+                    title: Text(
+                      'DATOS',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(16),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    children: [
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      TextFieldSelect(
+                        label: 'Fecha',
+                        hingText: '',
+                        controller: _dateController,
+                        readOnly: true,
+                        icon: true,
+                        widget: Icon(Icons.calendar_month, color: Colors.indigo),
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      TextFieldSelect(
+                        label: 'DNI',
+                        hingText: '',
+                        controller: _dniController,
+                        readOnly: true,
+                        icon: false,
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      TextFieldSelect(
+                        label: 'Nombre',
+                        hingText: '',
+                        controller: _personNameController,
+                        readOnly: true,
+                        icon: false,
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      TextFieldSelect(
+                        label: 'Cargo',
+                        hingText: '',
+                        controller: _cargoController,
+                        readOnly: true,
+                        icon: false,
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      TextFieldSelect(
+                        label: 'Empresa',
+                        hingText: '',
+                        controller: _empresaController,
+                        readOnly: true,
+                        icon: false,
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      RadioListTile<String>(value: '1', groupValue: selectRadio, title: Text('Seguridad'), onChanged: (i) {}),
+                      RadioListTile<String>(value: '2', groupValue: selectRadio, title: Text('Salud'), onChanged: (i) {}),
+                      RadioListTile<String>(value: ' 3', groupValue: selectRadio, title: Text('Ambiental'), onChanged: (i) {}),
+                    ],
                   ),
                   SizedBox(height: ScreenUtil().setHeight(10)),
-                  Divider(),
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  Text('ACTO INSEGURO', style: TextStyle(fontSize: ScreenUtil().setSp(16), fontWeight: FontWeight.w500, color: Colors.indigo)),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text('ACTITUD', style: TextStyle(fontSize: ScreenUtil().setSp(14), fontWeight: FontWeight.w500, color: Colors.indigo))),
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  ...actitud.map(buildSingleCheckBox).toList(),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text('EPP', style: TextStyle(fontSize: ScreenUtil().setSp(14), fontWeight: FontWeight.w500, color: Colors.indigo))),
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  ...epp.map(buildSingleCheckBox).toList(),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text('HERRAMIENTAS Y EQUIPOS',
-                          style: TextStyle(fontSize: ScreenUtil().setSp(14), fontWeight: FontWeight.w500, color: Colors.indigo))),
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  ...herramientas.map(buildSingleCheckBox).toList(),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text('PROCEDIMIENTOS Y NORMAS',
-                          style: TextStyle(fontSize: ScreenUtil().setSp(14), fontWeight: FontWeight.w500, color: Colors.indigo))),
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  ...procedimientos.map(buildSingleCheckBox).toList(),
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  Divider(),
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  TextFieldSelect(
-                    label: 'Otro',
-                    hingText: '',
-                    controller: _othersInsaveController,
-                    readOnly: true,
-                    icon: false,
+                  ExpansionTile(
+                    initiallyExpanded: true,
+                    maintainState: true,
+                    title: Text(
+                      'OBSERVACIÓN',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(16),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    children: [
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      TextFieldSelect(
+                        label: 'Locación',
+                        hingText: '',
+                        controller: _locationController,
+                        readOnly: true,
+                        icon: false,
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      TextFieldSelect(
+                        label: 'Hora',
+                        hingText: '',
+                        controller: _hourController,
+                        readOnly: true,
+                        icon: true,
+                        widget: Icon(Icons.watch_later, color: Colors.indigo),
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      TextFieldSelect(
+                        label: 'Lugar Específico',
+                        hingText: '',
+                        controller: _placeSController,
+                        readOnly: true,
+                        icon: false,
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      TextFieldSelect(
+                        label: 'Breve Descripción',
+                        hingText: '',
+                        controller: _descripcionBreveController,
+                        readOnly: true,
+                        icon: false,
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                    ],
                   ),
                   SizedBox(height: ScreenUtil().setHeight(10)),
-                  Divider(color: Colors.indigo, thickness: 2),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  TextFieldSelect(
-                    label: 'Condición Segura',
-                    hingText: '',
-                    controller: _saveCondictionController,
-                    readOnly: true,
-                    icon: false,
+                  ExpansionTile(
+                    initiallyExpanded: true,
+                    maintainState: true,
+                    title: Text(
+                      'ACCIÓN REALIZADA',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(16),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    children: [
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      TextFieldSelect(
+                        label: '',
+                        hingText: '',
+                        controller: _actionRealizedController,
+                        readOnly: true,
+                        icon: false,
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      RadioListTile<String>(value: '1', groupValue: selectRadio2, title: Text('Abierto'), onChanged: (i) {}),
+                      RadioListTile<String>(value: '2', groupValue: selectRadio2, title: Text('Cerrado'), onChanged: (i) {}),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                    ],
                   ),
                   SizedBox(height: ScreenUtil().setHeight(10)),
-                  Divider(),
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  Text('CONDICIÓN INSEGURA', style: TextStyle(fontSize: ScreenUtil().setSp(16), fontWeight: FontWeight.w500, color: Colors.indigo)),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text('Herramientas y Equipos',
-                          style: TextStyle(fontSize: ScreenUtil().setSp(14), fontWeight: FontWeight.w500, color: Colors.indigo))),
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  ...herraEquipos.map(buildSingleCheckBox).toList(),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  Align(
-                      alignment: Alignment.topLeft,
-                      child: Text('AMBIENTES DE TRABAJO',
-                          style: TextStyle(fontSize: ScreenUtil().setSp(14), fontWeight: FontWeight.w500, color: Colors.indigo))),
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  ...ambientes.map(buildSingleCheckBox).toList(),
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  Divider(),
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  TextFieldSelect(
-                    label: 'Otro',
-                    hingText: '',
-                    controller: _othersInsave2Controller,
-                    readOnly: true,
-                    icon: false,
+                  ExpansionTile(
+                    initiallyExpanded: true,
+                    maintainState: true,
+                    title: Text(
+                      'EVALUACIÓN DE CAUSAS',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(16),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    children: [
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      TextFieldSelect(
+                        label: 'Acto Seguro',
+                        hingText: '',
+                        controller: _saveActController,
+                        readOnly: true,
+                        icon: false,
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      Divider(),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      Text('ACTO INSEGURO', style: TextStyle(fontSize: ScreenUtil().setSp(16), fontWeight: FontWeight.w500, color: Colors.indigo)),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      Align(
+                          alignment: Alignment.topLeft,
+                          child:
+                              Text('ACTITUD', style: TextStyle(fontSize: ScreenUtil().setSp(14), fontWeight: FontWeight.w500, color: Colors.indigo))),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      ...actitud.map(buildSingleCheckBox).toList(),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      Align(
+                          alignment: Alignment.topLeft,
+                          child: Text('EPP', style: TextStyle(fontSize: ScreenUtil().setSp(14), fontWeight: FontWeight.w500, color: Colors.indigo))),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      ...epp.map(buildSingleCheckBox).toList(),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      Align(
+                          alignment: Alignment.topLeft,
+                          child: Text('HERRAMIENTAS Y EQUIPOS',
+                              style: TextStyle(fontSize: ScreenUtil().setSp(14), fontWeight: FontWeight.w500, color: Colors.indigo))),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      ...herramientas.map(buildSingleCheckBox).toList(),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      Align(
+                          alignment: Alignment.topLeft,
+                          child: Text('PROCEDIMIENTOS Y NORMAS',
+                              style: TextStyle(fontSize: ScreenUtil().setSp(14), fontWeight: FontWeight.w500, color: Colors.indigo))),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      ...procedimientos.map(buildSingleCheckBox).toList(),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      Divider(),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      TextFieldSelect(
+                        label: 'Otro',
+                        hingText: '',
+                        controller: _othersInsaveController,
+                        readOnly: true,
+                        icon: false,
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      Divider(color: Colors.indigo, thickness: 2),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      TextFieldSelect(
+                        label: 'Condición Segura',
+                        hingText: '',
+                        controller: _saveCondictionController,
+                        readOnly: true,
+                        icon: false,
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      Divider(),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      Text('CONDICIÓN INSEGURA',
+                          style: TextStyle(fontSize: ScreenUtil().setSp(16), fontWeight: FontWeight.w500, color: Colors.indigo)),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      Align(
+                          alignment: Alignment.topLeft,
+                          child: Text('Herramientas y Equipos',
+                              style: TextStyle(fontSize: ScreenUtil().setSp(14), fontWeight: FontWeight.w500, color: Colors.indigo))),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      ...herraEquipos.map(buildSingleCheckBox).toList(),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      Align(
+                          alignment: Alignment.topLeft,
+                          child: Text('AMBIENTES DE TRABAJO',
+                              style: TextStyle(fontSize: ScreenUtil().setSp(14), fontWeight: FontWeight.w500, color: Colors.indigo))),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      ...ambientes.map(buildSingleCheckBox).toList(),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      Divider(),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      TextFieldSelect(
+                        label: 'Otro',
+                        hingText: '',
+                        controller: _othersInsave2Controller,
+                        readOnly: true,
+                        icon: false,
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                    ],
                   ),
                   SizedBox(height: ScreenUtil().setHeight(10)),
-                ],
-              ),
-              SizedBox(height: ScreenUtil().setHeight(10)),
-              ExpansionTile(
-                initiallyExpanded: true,
-                maintainState: true,
-                title: Text(
-                  'ESPACIO PARA HSE',
-                  style: TextStyle(
-                    fontSize: ScreenUtil().setSp(16),
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                children: [
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  TextFieldSelect(
-                    label: 'Comentarios',
-                    hingText: '',
-                    controller: _comentsController,
-                    readOnly: true,
-                    icon: false,
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  TextFieldSelect(
-                    label: 'Firma',
-                    hingText: 'Seleccionar Archivo',
-                    controller: _firmaController,
-                    readOnly: true,
-                    icon: true,
-                    widget: Icon(Icons.upload, color: Colors.indigo),
-                    ontap: () async {
-                      FocusScope.of(context).unfocus();
-                      final path = await PdfApi().seleccionarDoc();
+                  ExpansionTile(
+                    initiallyExpanded: true,
+                    maintainState: true,
+                    title: Text(
+                      'ESPACIO PARA HSE',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(16),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    children: [
+                      SizedBox(height: ScreenUtil().setHeight(10)),
+                      TextFieldSelect(
+                        label: 'Comentarios',
+                        hingText: '',
+                        controller: _comentsController,
+                        readOnly: true,
+                        icon: false,
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      TextFieldSelect(
+                        label: 'Firma',
+                        hingText: 'Seleccionar Archivo',
+                        controller: _firmaController,
+                        readOnly: true,
+                        icon: true,
+                        widget: Icon(Icons.upload, color: Colors.indigo),
+                        ontap: () async {
+                          FocusScope.of(context).unfocus();
+                          final path = await PdfApi().seleccionarDoc();
 
-                      _firmaController.text = path?.path != null ? basename(path!.path) : 'Seleccionar Archivo';
-                      _controller.changeFile(path);
+                          _firmaController.text = path?.path != null ? basename(path!.path) : 'Seleccionar Archivo';
+                          _controller.changeFile(path);
+                        },
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      TextFieldSelect(
+                        label: 'Fecha',
+                        hingText: '',
+                        controller: _dateNewController,
+                        readOnly: true,
+                        icon: true,
+                        widget: Icon(Icons.calendar_month, color: Colors.indigo),
+                        ontap: () {
+                          selectdate(context, _dateNewController);
+                        },
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                      ElevatedButton.icon(
+                        onPressed: () async {
+                          if (_comentsController.text.isEmpty) return showToast2('Debe ingresar un Comentario', Colors.redAccent);
+                          if (_firmaController.text.isEmpty || _firmaController.value.text != 'Seleccionar Archivo')
+                            return showToast2('Debe seleccionar un arcvhio, imagen, etc como firma', Colors.redAccent);
+                          if (_dateNewController.text.isEmpty) return showToast2('Debe ingresar una fecha', Colors.redAccent);
+                        },
+                        style: ButtonStyle(
+                          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18.0),
+                            ),
+                          ),
+                          padding: MaterialStateProperty.all<EdgeInsets>(
+                            EdgeInsets.symmetric(
+                              horizontal: ScreenUtil().setWidth(15),
+                              vertical: ScreenUtil().setHeight(4),
+                            ),
+                          ),
+                        ),
+                        icon: Icon(
+                          Icons.check_circle_outline,
+                          size: ScreenUtil().setHeight(25),
+                        ),
+                        label: Text(
+                          'APROBAR',
+                          style: TextStyle(fontSize: ScreenUtil().setSp(20), fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                      SizedBox(height: ScreenUtil().setHeight(20)),
+                    ],
+                  ),
+                  SizedBox(height: ScreenUtil().setHeight(20)),
+                  StreamBuilder<List<DocumentsAnexadosModel>>(
+                    stream: docsBloc.docsIncidenciasStream,
+                    builder: (_, snapshot) {
+                      if (!snapshot.hasData) return CircularProgressIndicator();
+                      if (snapshot.data!.isEmpty) return Text('No existen archivos para este registro');
+
+                      return ExpansionTile(
+                          initiallyExpanded: true,
+                          maintainState: true,
+                          title: Text(
+                            'ARCHIVOS ANEXADOS',
+                            style: TextStyle(
+                              fontSize: ScreenUtil().setSp(16),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          children: [
+                            ...snapshot.data!.map((dc) {
+                              return buildDocsAnex(context, dc);
+                            }).toList(),
+                          ]);
                     },
                   ),
                   SizedBox(height: ScreenUtil().setHeight(20)),
-                  TextFieldSelect(
-                    label: 'Fecha',
-                    hingText: '',
-                    controller: _dateNewController,
-                    readOnly: true,
-                    icon: true,
-                    widget: Icon(Icons.calendar_month, color: Colors.indigo),
-                    ontap: () {
-                      selectdate(context, _dateNewController);
-                    },
-                  ),
-                  SizedBox(height: ScreenUtil().setHeight(20)),
-                  SizedBox(height: ScreenUtil().setHeight(10)),
-                  ElevatedButton.icon(
-                    onPressed: () async {
-                      if (_comentsController.text.isEmpty) return showToast2('Debe ingresar un Comentario', Colors.redAccent);
-                      if (_firmaController.text.isEmpty || _firmaController.value.text != 'Seleccionar Archivo')
-                        return showToast2('Debe seleccionar un arcvhio, imagen, etc como firma', Colors.redAccent);
-                      if (_dateNewController.text.isEmpty) return showToast2('Debe ingresar una fecha', Colors.redAccent);
-                    },
-                    style: ButtonStyle(
-                      shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                        RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                      ),
-                      padding: MaterialStateProperty.all<EdgeInsets>(
-                        EdgeInsets.symmetric(
-                          horizontal: ScreenUtil().setWidth(15),
-                          vertical: ScreenUtil().setHeight(4),
-                        ),
-                      ),
-                    ),
-                    icon: Icon(
-                      Icons.check_circle_outline,
-                      size: ScreenUtil().setHeight(25),
-                    ),
-                    label: Text(
-                      'APROBAR',
-                      style: TextStyle(fontSize: ScreenUtil().setSp(20), fontWeight: FontWeight.w500),
-                    ),
-                  ),
                 ],
               ),
-              SizedBox(height: ScreenUtil().setHeight(20)),
-            ],
+            ),
           ),
-        ),
+          AnimatedBuilder(
+            animation: _controller,
+            builder: (context, snapshot) {
+              return ShowLoadding(
+                active: _controller.cargando,
+                color: Colors.black.withOpacity(0.4),
+              );
+            },
+          ),
+        ],
       ),
     );
   }
@@ -464,6 +510,65 @@ class _DetailIncidenciaState extends State<DetailIncidencia> {
       title: Text(item.title),
       value: item.value,
       onChanged: (value) {},
+    );
+  }
+
+  Widget buildDocsAnex(BuildContext context, DocumentsAnexadosModel doc) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: InkWell(
+        onTap: () async {
+          _controller.changeCargando(true);
+          final _apiPdf = PdfApi();
+          await _apiPdf.openFile(url: '$API_BASE_URL/${doc.urlDoc ?? ''}');
+          _controller.changeCargando(false);
+        },
+        child: cards(
+          child: Row(
+            children: [
+              SizedBox(width: ScreenUtil().setWidth(50), child: Icon(Icons.remove_red_eye, color: Colors.blueGrey)),
+              Expanded(
+                child: Column(
+                  children: [
+                    Align(
+                      alignment: Alignment.topRight,
+                      child: Text(
+                        obtenerFechaHour(doc.dateCreated ?? ''),
+                        style: TextStyle(
+                          fontSize: ScreenUtil().setSp(10),
+                          fontWeight: FontWeight.w400,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(4)),
+                    Text(
+                      doc.descripcionDoc ?? '',
+                      style: TextStyle(
+                        fontSize: ScreenUtil().setSp(11),
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: ScreenUtil().setHeight(4)),
+                    rows(
+                        titulo: 'Tipo:',
+                        data: doc.typeDoc == '1' ? 'Fotografía' : 'Documento',
+                        st: 9,
+                        sd: 10,
+                        crossAxisAlignment: CrossAxisAlignment.start),
+                    SizedBox(height: ScreenUtil().setHeight(4)),
+                    rows(titulo: 'Fecha del Archivo:', data: doc.dateRegisterDoc ?? '', st: 9, sd: 10, crossAxisAlignment: CrossAxisAlignment.start),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          fondo: Colors.white,
+          color: Colors.deepPurple,
+          height: 40,
+          mtop: 20,
+        ),
+      ),
     );
   }
 

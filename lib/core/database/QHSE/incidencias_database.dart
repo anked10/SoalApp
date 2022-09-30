@@ -33,7 +33,7 @@ class IncidenciasDatabase {
     }
   }
 
-  Future<List<IncidenciaModel>> getRequetsById(String idIncidencia) async {
+  Future<List<IncidenciaModel>> getIncidenciaById(String idIncidencia) async {
     try {
       final Database db = await dbprovider.getDatabase();
       List<IncidenciaModel> list = [];

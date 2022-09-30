@@ -474,13 +474,14 @@ class _GenerateReportState extends State<GenerateReport> {
                 ),
         ),
         AnimatedBuilder(
-            animation: _controller,
-            builder: (context, snapshot) {
-              return ShowLoadding(
-                active: _controller.cargando,
-                color: Colors.black.withOpacity(0.4),
-              );
-            }),
+          animation: _controller,
+          builder: (context, snapshot) {
+            return ShowLoadding(
+              active: _controller.cargando,
+              color: Colors.black.withOpacity(0.4),
+            );
+          },
+        ),
       ],
     );
   }

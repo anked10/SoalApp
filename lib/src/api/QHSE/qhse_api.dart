@@ -1,14 +1,19 @@
 import 'dart:convert';
 
+import 'package:dartz/dartz_unsafe.dart';
 import 'package:http/http.dart' as http;
+import 'package:soal_app/core/database/QHSE/documents_anexado_database.dart';
 import 'package:soal_app/core/database/QHSE/incidencias_database.dart';
 import 'package:soal_app/core/sharedpreferences/storage_manager.dart';
 import 'package:soal_app/core/util/constants.dart';
+import 'package:soal_app/src/models/Rqhse/documentos_anexados_model.dart';
 import 'package:soal_app/src/models/Rqhse/incidencia_model.dart';
 import 'package:soal_app/src/models/api_result_model.dart';
 
 class QHSEApi {
   final incidenciaDB = IncidenciasDatabase();
+  final docAnexoDB = DocumentsAnexadoDatabase();
+
   Future<ApiResultModel> generateIncidencia({
     required String idEmpresa,
     required String idPerido,
@@ -123,8 +128,11 @@ class QHSEApi {
         List<dynamic> incidencias = decodedData["result"]["data"];
 
         incidencias.forEach((element) async {
-          final _incidencia = IncidenciaModel.fromJson2(element);
-          await incidenciaDB.insertIncidencia(_incidencia);
+          await incidenciaDB.insertIncidencia(IncidenciaModel.fromJson2(element));
+          final docs = element["documentos_anexados"];
+          docs.forEach((dc) async {
+            await docAnexoDB.insertDoc(DocumentsAnexadosModel.fromJson2(dc));
+          });
         });
       }
 
