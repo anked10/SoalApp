@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:dartz/dartz_unsafe.dart';
 import 'package:http/http.dart' as http;
@@ -139,6 +140,43 @@ class QHSEApi {
       return 1;
     } catch (e) {
       return 2;
+    }
+  }
+
+  Future<ApiResultModel> aprobarIncidenciaPendienteVerificacion(File documento, String idIncidencia, String comentario, String fecha) async {
+    ApiResultModel result = ApiResultModel();
+    try {
+      final url = Uri.parse('$API_BASE_URL/api/Proveedor/guardar_documento');
+
+      String? token = await StorageManager.readData('token');
+
+      final request = http.MultipartRequest('POST', url);
+
+      request.fields["app"] = "true";
+      request.fields["tn"] = token!;
+      request.fields["id"] = idIncidencia;
+      request.fields["hse_comentario"] = comentario;
+      request.fields["hse_verificacion_fecha"] = fecha;
+
+      request.files.add(await http.MultipartFile.fromPath('hse_verificacion_firma', documento.path));
+
+      final response = await request.send();
+
+      final int code = response.statusCode;
+
+      if (code == 200) {
+        result.message = 'Archivo cargado correctamente';
+      } else {
+        result.message = 'Ocurrió un error, inténtelo nuevamente';
+      }
+      result.code = code;
+
+      return result;
+    } catch (e) {
+      print(e);
+      result.code = 2;
+      result.message = 'Ocurrió un error';
+      return result;
     }
   }
 }
