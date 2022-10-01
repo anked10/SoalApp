@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:path/path.dart';
 import 'package:soal_app/core/util/constants.dart';
 import 'package:soal_app/core/util/utils.dart';
+import 'package:soal_app/src/api/QHSE/qhse_api.dart';
 import 'package:soal_app/src/api/pdf_api.dart';
 import 'package:soal_app/src/bloc/provider_bloc.dart';
 import 'package:soal_app/src/models/Rqhse/documentos_anexados_model.dart';
@@ -396,7 +397,7 @@ class _DetailIncidenciaState extends State<DetailIncidencia> {
                         label: 'Comentarios',
                         hingText: '',
                         controller: _comentsController,
-                        readOnly: true,
+                        readOnly: false,
                         icon: false,
                       ),
                       SizedBox(height: ScreenUtil().setHeight(20)),
@@ -430,10 +431,23 @@ class _DetailIncidenciaState extends State<DetailIncidencia> {
                       SizedBox(height: ScreenUtil().setHeight(20)),
                       ElevatedButton.icon(
                         onPressed: () async {
+                          FocusScope.of(context).unfocus();
                           if (_comentsController.text.isEmpty) return showToast2('Debe ingresar un Comentario', Colors.redAccent);
-                          if (_firmaController.text.isEmpty || _firmaController.value.text != 'Seleccionar Archivo')
-                            return showToast2('Debe seleccionar un arcvhio, imagen, etc como firma', Colors.redAccent);
+                          if (_controller.file == null) return showToast2('Debe seleccionar un archivo, imagen, etc como firma', Colors.redAccent);
                           if (_dateNewController.text.isEmpty) return showToast2('Debe ingresar una fecha', Colors.redAccent);
+
+                          final _api = QHSEApi();
+                          _controller.changeCargando(true);
+                          final res = await _api.aprobarIncidenciaPendienteVerificacion(
+                              _controller.file!, widget.incidencia.idIncidencia!, _comentsController.text, _dateNewController.text);
+
+                          _controller.changeCargando(false);
+
+                          if (res.code != 200) return showToast2(res.message, Colors.redAccent);
+
+                          showToast2(res.message, Colors.green);
+                          Navigator.pop(context);
+                          docsBloc.getIncidenciasPendientes();
                         },
                         style: ButtonStyle(
                           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
