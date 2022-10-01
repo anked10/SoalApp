@@ -128,6 +128,7 @@ class _GenerateReportState extends State<GenerateReport> {
                             icon: true,
                             widget: Icon(Icons.calendar_month, color: Colors.indigo),
                             ontap: () {
+                              FocusScope.of(context).unfocus();
                               selectdate(context, _dateController);
                             },
                           ),
@@ -225,6 +226,7 @@ class _GenerateReportState extends State<GenerateReport> {
                             icon: true,
                             widget: Icon(Icons.watch_later, color: Colors.indigo),
                             ontap: () {
+                              FocusScope.of(context).unfocus();
                               selectHour(context, _hourController);
                             },
                           ),
@@ -378,6 +380,7 @@ class _GenerateReportState extends State<GenerateReport> {
                       SizedBox(height: ScreenUtil().setHeight(10)),
                       ElevatedButton.icon(
                         onPressed: () async {
+                          FocusScope.of(context).unfocus();
                           if (_dateController.text.isEmpty) return showToast2('Debe ingresar una Fecha', Colors.redAccent);
                           if (_locationController.text.isEmpty) return showToast2('Debe ingresar una Locación', Colors.redAccent);
                           if (_hourController.text.isEmpty) return showToast2('Debe ingresar una Hora', Colors.redAccent);

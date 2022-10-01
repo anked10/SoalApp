@@ -425,6 +425,7 @@ class _DetailIncidenciaState extends State<DetailIncidencia> {
                         icon: true,
                         widget: Icon(Icons.calendar_month, color: Colors.indigo),
                         ontap: () {
+                          FocusScope.of(context).unfocus();
                           selectdate(context, _dateNewController);
                         },
                       ),
