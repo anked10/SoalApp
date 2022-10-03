@@ -39,15 +39,16 @@ class _QHSEState extends State<QHSE> {
         elevation: 0,
       ),
       body: StreamBuilder<UserModel>(
-          stream: dataUserBloc.userStream,
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) return Center(child: ShowLoadding(active: true, color: Colors.transparent));
-            return (snapshot.data!.idRoleUser == '9')
-                ? GenerateReport(
-                    datosUsuario: snapshot.data!,
-                  )
-                : PendientesVerificacion();
-          }),
+        stream: dataUserBloc.userStream,
+        builder: (context, snapshot) {
+          if (!snapshot.hasData) return Center(child: ShowLoadding(active: true, color: Colors.transparent));
+          return (snapshot.data!.idRoleUser == '9')
+              ? GenerateReport(
+                  datosUsuario: snapshot.data!,
+                )
+              : PendientesVerificacion();
+        },
+      ),
     );
   }
 }

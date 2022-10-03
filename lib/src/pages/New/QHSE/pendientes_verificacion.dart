@@ -16,12 +16,23 @@ class PendientesVerificacion extends StatelessWidget {
     incidenciasBloc.getIncidenciasPendientes();
 
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(10), horizontal: ScreenUtil().setWidth(16)),
+      padding: EdgeInsets.symmetric(vertical: ScreenUtil().setHeight(5), horizontal: ScreenUtil().setWidth(16)),
       child: Column(
         children: [
-          Text(
-            'Pendientes de Verificación',
-            style: TextStyle(fontSize: ScreenUtil().setSp(16), fontWeight: FontWeight.w500, color: Colors.indigo),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Pendientes de Verificación',
+                style: TextStyle(fontSize: ScreenUtil().setSp(16), fontWeight: FontWeight.w500, color: Colors.indigo),
+              ),
+              IconButton(
+                onPressed: () {
+                  incidenciasBloc.getIncidenciasPendientes();
+                },
+                icon: Icon(Icons.refresh),
+              ),
+            ],
           ),
           SizedBox(height: ScreenUtil().setHeight(10)),
           Expanded(
