@@ -146,7 +146,7 @@ class QHSEApi {
   Future<ApiResultModel> aprobarIncidenciaPendienteVerificacion(File documento, String idIncidencia, String comentario, String fecha) async {
     ApiResultModel result = ApiResultModel();
     try {
-      final url = Uri.parse('$API_BASE_URL/api/Proveedor/guardar_documento');
+      final url = Uri.parse('$API_BASE_URL/api/Incidencia/aprobar');
 
       String? token = await StorageManager.readData('token');
 
