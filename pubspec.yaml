@@ -32,7 +32,6 @@ dependencies:
   cupertino_icons: ^1.0.2
 
   provider: 
-  equatable: ^2.0.3
   # Functional programming thingies
   dartz: ^0.10.0
   # Remote API
