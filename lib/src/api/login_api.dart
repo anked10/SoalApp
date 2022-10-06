@@ -24,6 +24,7 @@ class LoginApi {
       });
 
       final decodedData = json.decode(response.body);
+      print(pass);
       final int code = decodedData['result']['code'];
       if (code == 1) {
         StorageManager.saveData('idUser', decodedData['data']['c_u']);
@@ -43,43 +44,44 @@ class LoginApi {
         StorageManager.saveData('businessID', decodedData['data']['em']);
         StorageManager.saveData('businessName', decodedData['data']['em_n']);
         StorageManager.saveData('token', decodedData['data']['tn']);
+
+        //Guardar Modulos
+        for (var i = 0; i < decodedData['modulos'].length; i++) {
+          var datos = decodedData['modulos'][i];
+
+          if (datos['agrupacion_app'] == '1') {
+            final modulo = ModulosModel();
+
+            modulo.idModulo = datos['id_agrupacion'];
+            modulo.nombreModulo = datos['agrupacion_nombre'];
+            modulo.ordenModulo = datos['agrupacion_orden'];
+            modulo.estadoModulo = datos['agrupacion_estado'];
+            modulo.visibleAppModulo = datos['agrupacion_app'];
+
+            await moduloDB.insertarModulo(modulo);
+          }
+        }
+
+        //Guardar SubModulos
+        for (var i = 0; i < decodedData['submodulos'].length; i++) {
+          var datos = decodedData['submodulos'][i];
+
+          if (datos['menu_app'] == '1') {
+            final subModulo = SubModuloModel();
+
+            subModulo.idSubModulo = datos['id_menu'];
+            subModulo.idModulo = datos['id_agrupacion'];
+            subModulo.nameSubModulo = datos['menu_name'];
+            subModulo.estadoSubModulo = datos['menu_status'];
+            subModulo.visibleAppSubModulo = datos['menu_app'];
+
+            await submoduloDB.insertarSubModulo(subModulo);
+          }
+        }
       }
       result.code = code;
       result.message = decodedData['result']['message'];
 
-      //Guardar Modulos
-      for (var i = 0; i < decodedData['modulos'].length; i++) {
-        var datos = decodedData['modulos'][i];
-
-        if (datos['agrupacion_app'] == '1') {
-          final modulo = ModulosModel();
-
-          modulo.idModulo = datos['id_agrupacion'];
-          modulo.nombreModulo = datos['agrupacion_nombre'];
-          modulo.ordenModulo = datos['agrupacion_orden'];
-          modulo.estadoModulo = datos['agrupacion_estado'];
-          modulo.visibleAppModulo = datos['agrupacion_app'];
-
-          await moduloDB.insertarModulo(modulo);
-        }
-      }
-
-      //Guardar SubModulos
-      for (var i = 0; i < decodedData['submodulos'].length; i++) {
-        var datos = decodedData['submodulos'][i];
-
-        if (datos['menu_app'] == '1') {
-          final subModulo = SubModuloModel();
-
-          subModulo.idSubModulo = datos['id_menu'];
-          subModulo.idModulo = datos['id_agrupacion'];
-          subModulo.nameSubModulo = datos['menu_name'];
-          subModulo.estadoSubModulo = datos['menu_status'];
-          subModulo.visibleAppSubModulo = datos['menu_app'];
-
-          await submoduloDB.insertarSubModulo(subModulo);
-        }
-      }
       return result;
     } catch (e) {
       result.code = 2;

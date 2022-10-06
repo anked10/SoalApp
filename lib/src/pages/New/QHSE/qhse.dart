@@ -42,7 +42,7 @@ class _QHSEState extends State<QHSE> {
         stream: dataUserBloc.userStream,
         builder: (context, snapshot) {
           if (!snapshot.hasData) return Center(child: ShowLoadding(active: true, color: Colors.transparent));
-          return (snapshot.data!.idRoleUser == '9')
+          return (snapshot.data!.idRoleUser == '7')
               ? GenerateReport(
                   datosUsuario: snapshot.data!,
                 )

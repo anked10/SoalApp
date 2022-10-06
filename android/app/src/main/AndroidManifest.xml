@@ -8,8 +8,8 @@
 
    <application
         android:requestLegacyExternalStorage="true"
-        android:label="soal_app"
-        android:icon="@mipmap/ic_launcher">
+        android:label="Soal - Proonix"
+        android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
